@@ -4,8 +4,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import core.Game;
+
 public class Fenstor extends JFrame {
-	Fenstor() {
+	public Fenstor(Game game) {
 		super("Fenst0r");
 		setLayout(null);
 		setSize(1200, 1000);
@@ -43,8 +45,5 @@ public class Fenstor extends JFrame {
 		repaint();
 	}
 
-	public static void main(String args[]) {
-		new Fenstor();
 
-	}
 }
