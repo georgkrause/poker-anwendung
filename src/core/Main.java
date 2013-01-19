@@ -1,10 +1,12 @@
 package core;
 
+import gui.Fenstor;
+
 public class Main {
 
 	public static void main(String Args[]) {
 		Game game = new Game();
-
+		new Fenstor(game);
 		for (int i = 0; i < 10; i++) {
 			Card card = game.deal();
 			System.out.println(card.getName());
