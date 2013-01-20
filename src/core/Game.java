@@ -21,7 +21,7 @@ public class Game {
 	 * initialize a new game
 	 * 	- creates all the cards
 	 * 	- choose five table cards
-	 * TODO: 
+	 * TODO #8: 
 	 * 	- create Players
 	 * 	- distribute the credits
 	 */
@@ -72,7 +72,7 @@ public class Game {
 	
 	/**
 	 * @return the player object which had won the round
-	 * TODO
+	 * TODO #7
 	 */
 	Player getWinner() {
 		Player winner = new Player(new Card[2]);
@@ -81,7 +81,7 @@ public class Game {
 	
 	/**
 	 * changes after every round the small and the big blind
-	 * TODO
+	 * TODO #6
 	 */
 	void changeBlinds() {
 		
@@ -89,7 +89,7 @@ public class Game {
 	
 	/**
 	 * changes the dealer after every round
-	 * TODO
+	 * TODO #6
 	 */
 	void changeDealer() {
 		

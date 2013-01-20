@@ -19,7 +19,7 @@ public class Player {
 	}
 
 	/**
-	 * player leave the current round TODO
+	 * player leave the current round TODO #9
 	 */
 	void fold() {
 		this.cards = null;

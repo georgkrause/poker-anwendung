@@ -18,11 +18,6 @@ public class Card {
 		this.name = allColors[color] + " " + allWorths[worth];
 	}
 
-//	TODO: Später hinzufügen
-//	Card(String color, String worth) {
-//		
-//	}
-
 	/**
 	 * turns card
 	 */
@@ -77,7 +72,7 @@ public class Card {
 	
 	/** 
 	 * @return the picture of the card
-	 * TODO
+	 * TODO #5
 	 */
 	@SuppressWarnings("static-access")
 	public String getPicture() {

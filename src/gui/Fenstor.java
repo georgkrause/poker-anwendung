@@ -102,7 +102,7 @@ public class Fenstor extends JFrame {
 		newText(380, 90, 10000);
 		newText(1010, 530, 10000);
 		
-		//Aktionsbuttons der Spieler: Standard: Call,Raise, Fold:
+		//Aktionsbuttons der Spieler: Standard: Call,Raise, Fold: TODO #1
 		
 	
 		final JButton Button = new JButton("Fold");
@@ -134,12 +134,12 @@ public class Fenstor extends JFrame {
 		
 		
 		
-		//Dealermarke,Small Blind,Big Blind:
+		//Dealermarke,Small Blind,Big Blind: TODO #2
 		
 		Dealer(2); 
 		
 
-		// Hintergrund bzw. Spieltisch und CommunityCard Hintergrund
+		// Hintergrund bzw. Spieltisch und CommunityCard Hintergrund TODO #3
 
 		ImageIcon backgroundccards = new ImageIcon("img/communitycardbg.png");
 		JLabel ccardbereich = new JLabel(backgroundccards);
