@@ -2,9 +2,9 @@ package core;
 
 public class Card {
 
-	public static final String[] allColors = { "Herz", "Kreuz", "Karo", "Piek" };
-	public static final String[] allWorths = { "2", "3", "4", "5", "6", "7", "8",
-			"9", "10", "Bube", "Dame", "König", "Ass" };
+	public static final String[] allColors = { "herz", "kreuz", "karo", "pik" };
+	public static final String[] allWorths = { "zwei", "drei", "vier", "funf", "sechs", "sieben", "acht",
+			"neun", "zehn", "bube", "dame", "koenig", "ass" };
 	
 	private String name;
 	private int worth;
@@ -72,15 +72,14 @@ public class Card {
 	
 	/** 
 	 * @return the picture of the card
-	 * TODO #5
 	 */
 	@SuppressWarnings("static-access")
 	public String getPicture() {
 		if(this.isVisible())
 		{
-			return this.allColors[this.color] + "_" + this.allWorths[this.worth];
+			return this.allColors[this.color] + this.allWorths[this.worth] + ".png";
 		} else {
-			return "invisible_card.png";
+			return "blue_back.jpg";
 		}
 	}
 
