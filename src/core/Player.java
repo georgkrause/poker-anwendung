@@ -4,25 +4,27 @@ public class Player {
 	public String name;
 	private int credit;
 	private int id;
+	public boolean folded = false;
 
 	private Card[] cards = new Card[2];
 	
-	Player(Card[] cards) {
-		this.cards = cards;
+	Player(int credit) {
+		this.credit = credit;
 	}
 
 	/**
 	 * player check the current round
 	 */
-	void check() {
+	public void check() {
 		return;
 	}
 
 	/**
-	 * player leave the current round TODO #9
+	 * player leave the current round 
 	 */
-	void fold() {
-		this.cards = null;
+	public void fold() {
+		this.setCards(null);
+		this.folded = true;
 		return;
 	}
 
@@ -31,8 +33,8 @@ public class Player {
 	 * 
 	 * @return whether action is possible or not
 	 */
-	boolean call(int cue) {
-		if (this.credit > cue) {
+	public boolean call(int cue) {
+		if (this.credit >= cue) {
 			this.credit -= cue;
 			return true;
 		} else {
@@ -45,8 +47,8 @@ public class Player {
 	 * 
 	 * @return whether action is possible or not
 	 */
-	boolean raise(int cue) {
-		if (this.credit > cue) {
+	public boolean raise(int cue) {
+		if (this.credit >= cue) {
 			this.credit -= cue;
 			return true;
 		} else {
@@ -65,9 +67,16 @@ public class Player {
 	 * 
 	 * @param value
 	 */
-	public void raiseCredit(int value) {
+	public void changeCredit(int value) {
 		this.credit += value;
 		return;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
 	}
 
 	/**
@@ -78,9 +87,16 @@ public class Player {
 	}
 
 	/**
-	 * @return the id
+	 * @param cards the cards to set
 	 */
-	public int getId() {
-		return id;
+	public void setCards(Card[] cards) {
+		this.cards = cards;
+	}
+
+	/**
+	 * @return the folded
+	 */
+	public boolean isFolded() {
+		return folded;
 	}
 }
