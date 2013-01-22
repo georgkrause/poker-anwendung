@@ -83,39 +83,63 @@ public class Game {
 
 		Window window = new Window(this);
 
-		while (activePlayerNumber > 1) {
-			int choice = 0;
-			if ((turnPlayer + 1) > 3)
-				turnPlayer = turnPlayer + 1 - 4;
-			else
-				turnPlayer = turnPlayer + 1;
+		while (activePlayerNumber > 1 && !this.tableCards[4].isVisible()) {
+			int movesWithoutRaise = 0;
+			// Wettrunde
+			while (movesWithoutRaise < activePlayerNumber) {
 
-			if (!activePlayers[turnPlayer].folded) {
-				if (turnPlayer != 0) {
-					choice = 1;
-				} else {
-					choice = window.DialogBox();
-				}
+				System.out.println("Spieler " + turnPlayer + " am Zug.");
 
-				switch (choice) {
-				case 0: // raise
-					if (this.activePlayers[turnPlayer].raise(100)) {
-						this.cue = 100;
-						window.updateCredits();
+				int choice = 0;
+
+				if (!activePlayers[turnPlayer].folded) {
+					if (turnPlayer != 0) {
+						choice = 1;
+					} else {
+						choice = window.DialogBox();
 					}
-					break;
-				case 1: // call
-					if (this.activePlayers[turnPlayer].call(cue)) {
-						window.updateCredits();
+
+					switch (choice) {
+					case 0: // raise
+						if (this.activePlayers[turnPlayer].raise(100)) {
+							this.cue = 100;
+							window.updateCredits();
+							movesWithoutRaise = 0;
+						}
+						break;
+					case 1: // call
+						if (this.activePlayers[turnPlayer].call(cue)) {
+							window.updateCredits();
+						}
+						movesWithoutRaise++;
+						break;
+					case 2: // fold
+						this.activePlayers[turnPlayer].fold();
+						window.updatePlayerCards(turnPlayer);
+						this.activePlayerNumber--;
+						movesWithoutRaise++;
+						break;
 					}
-					break;
-				case 2: // fold
-					this.activePlayers[turnPlayer].fold();
-					window.updatePlayerCards(turnPlayer);
-					break;
+					System.out.println("Züge: " + movesWithoutRaise);
 				}
+				if ((turnPlayer + 1) > 3)
+					turnPlayer = turnPlayer + 1 - 4;
+				else
+					turnPlayer = turnPlayer + 1;
 			}
-			System.out.println(turnPlayer);
+			
+			if(!this.tableCards[2].isVisible()) {
+				for(int i = 0; i < 3; i++) {
+					this.tableCards[i].discover();
+					window.updateCommunityCards();
+				} 
+			} else if (!this.tableCards[3].isVisible()) {
+				this.tableCards[3].discover();
+				window.updateCommunityCards();
+			} else if(!this.tableCards[4].isVisible()) {
+				this.tableCards[4].discover();
+				window.updateCommunityCards();
+			}
 		}
 	}
 
