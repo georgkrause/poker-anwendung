@@ -10,10 +10,10 @@ import core.Player;
 public class Game {
 
 	private int credit = 1000;
-	public int cue = 0;
+	public int cue = this.minimumBet;
 
 	private Card[] cards = new Card[52];
-	private int givenCards = this.minimumBet;
+	private int givenCards = 0;
 
 	private final int minimumBet = 100;
 	private int smallBlind;
