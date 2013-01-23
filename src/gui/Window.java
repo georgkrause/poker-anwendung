@@ -51,7 +51,7 @@ public class Window extends JFrame {
 
 		final JTextField Text = new JTextField(money + " $");
 		this.credits[id] = Text;
-		this.credits[id].setBounds(x, y, 150, 50);
+		this.credits[id].setBounds(x, y, 50, 50);
 		this.credits[id].setBorder(BorderFactory.createEmptyBorder());
 		this.credits[id].setHorizontalAlignment(JTextField.CENTER);
 		this.credits[id].setEditable(false);
@@ -66,24 +66,24 @@ public class Window extends JFrame {
 	 *            id of the player who is dealer
 	 */
 	private void Dealer(int d) {
-		int[] x = { 460, 180, 600, 950, 460, 180, 600, 950 };
-		int[] y = { 670, 400, 150, 400, 670, 400, 150, 400 };
+		int[] x = { 260, 100, 270, 700, 260, 100, 270, 700, };
+		int[] y = { 470, 220, 50, 200, 470, 220, 50, 200, };
 
 		ImageIcon background1 = new ImageIcon("img/dealerbutton.png");
 		JLabel bereich1 = new JLabel(background1);
-		bereich1.setBounds(x[d], y[d], 60, 60);
+		bereich1.setBounds(x[d], y[d], 50, 50);
 		add(bereich1);
 		repaint();
 
 		ImageIcon background2 = new ImageIcon("img/smallblind.png");
 		JLabel bereich2 = new JLabel(background2);
-		bereich2.setBounds(x[d + 1], y[d + 1], 60, 60);
+		bereich2.setBounds(x[d + 1], y[d + 1], 50, 50);
 		add(bereich2);
 		repaint();
 
 		ImageIcon background3 = new ImageIcon("img/bigblind.png");
 		JLabel bereich3 = new JLabel(background3);
-		bereich3.setBounds(x[d + 2], y[d + 2], 60, 60);
+		bereich3.setBounds(x[d + 2], y[d + 2], 50, 50);
 		add(bereich3);
 		repaint();
 
@@ -96,35 +96,7 @@ public class Window extends JFrame {
 	 * @param x
 	 * @param y
 	 */
-	private void newButton(final String text, int x, int y) {
-		final JButton Button = new JButton(text);
-		Button.setBounds(x, y, 100, 100);
-		add(Button);
-		repaint();
-		Button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (text.equals("Fold")) {
-					game.activePlayers[0].fold();
-					game.tableCards[0].discover();
-					cards[0].setIcon(new ImageIcon("img/"
-							+ game.tableCards[0].getPicture()));
-				} else if (text.equals("Raise")) {
-					if (game.activePlayers[0].raise(100)) {
-						game.cue = 100;
-						String credit = game.activePlayers[0].getCredit()
-								+ " $";
-						credits[0].setText(credit);
-					}
-				} else if (text.equals("Call")) {
-					if (game.activePlayers[0].call(10)) {
-						String credit = game.activePlayers[0].getCredit()
-								+ " $";
-						credits[0].setText(credit);
-					}
-				}
-			}
-		});
-	}
+
 
 	public int DialogBox() {
 		Object[] options = { "Raise", "Call", "Fold" };
@@ -172,50 +144,56 @@ public class Window extends JFrame {
 	 */
 	public Window(Game game) {
 
-		super("Fenst0r");
+		super("Window");
 
 		this.game = game;
 
 		setLayout(null);
-		setSize(1200, 900);
+		setSize(800, 600);
 		setVisible(true);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Spielerkarten:
 
-		newCard(5, 550, 700, game.activePlayers[0].getCards()[0].getPicture());
-		newCard(6, 630, 700, game.activePlayers[0].getCards()[1].getPicture());
+		newCard(5, 350, 460, game.activePlayers[0].getCards()[0].getPicture());
+		newCard(6, 420, 460, game.activePlayers[0].getCards()[1].getPicture());
 
-		newCard(7, 50, 400, game.activePlayers[1].getCards()[0].getPicture());
-		newCard(8, 120, 400, game.activePlayers[1].getCards()[1].getPicture());
+		newCard(7, 50, 280, game.activePlayers[1].getCards()[0].getPicture());
+		newCard(8, 120, 280, game.activePlayers[1].getCards()[1].getPicture());
 
-		newCard(9, 550, 50, game.activePlayers[2].getCards()[0].getPicture());
-		newCard(10, 620, 50, game.activePlayers[2].getCards()[1].getPicture());
+		newCard(9, 350, 30, game.activePlayers[2].getCards()[0].getPicture());
+		newCard(10, 420, 30, game.activePlayers[2].getCards()[1].getPicture());
 
-		newCard(11, 1030, 400, game.activePlayers[3].getCards()[0].getPicture());
-		newCard(12, 1100, 400, game.activePlayers[3].getCards()[1].getPicture());
+		newCard(11, 630, 280, game.activePlayers[3].getCards()[0].getPicture());
+		newCard(12, 700, 280, game.activePlayers[3].getCards()[1].getPicture());
 
 		// Gemeinschaftskarten:
 
-		newCard(0, 400, 400, game.tableCards[0].getPicture());
-		newCard(1, 470, 400, game.tableCards[1].getPicture());
-		newCard(2, 540, 400, game.tableCards[2].getPicture());
-		newCard(3, 610, 400, game.tableCards[3].getPicture());
-		newCard(4, 680, 400, game.tableCards[4].getPicture());
+		newCard(0, 250, 280, game.tableCards[0].getPicture());
+		newCard(1, 320, 280, game.tableCards[1].getPicture());
+		newCard(2, 390, 280, game.tableCards[2].getPicture());
+		newCard(3, 460, 280, game.tableCards[3].getPicture());
+		newCard(4, 530, 280, game.tableCards[4].getPicture());
 
 		// Guthabenstände der Spieler:
 
-		newText(0, 330, 600, game.activePlayers[0].getCredit());
-		newText(1, 50, 530, game.activePlayers[1].getCredit());
-		newText(2, 380, 90, game.activePlayers[2].getCredit());
-		newText(3, 1010, 530, game.activePlayers[3].getCredit());
+		newText(0, 500, 460, game.activePlayers[0].getCredit());
+		newText(1, 50, 400, game.activePlayers[1].getCredit());
+		newText(2, 500, 50, game.activePlayers[2].getCredit());
+		newText(3, 700, 400, game.activePlayers[3].getCredit());
+		
+		
+		// Pott: (braucht extra Festlegung, da Größe anders sein muss, als die der anderen Textfelder
 
-		// Aktionsbuttons der Spieler: Standard: Call,Raise, Fold
-
-		newButton("Fold", 600, 580);
-		newButton("Call", 720, 580);
-		newButton("Raise", 720, 700);
+		final JTextField pott = new JTextField("10000 $");
+		
+		pott.setBounds(360, 180, 100, 50);
+		pott.setBorder(BorderFactory.createEmptyBorder());
+		pott.setHorizontalAlignment(JTextField.CENTER);
+		pott.setEditable(false);
+		add(pott);
+		
 
 		// Dealermarke,Small Blind,Big Blind
 
@@ -225,13 +203,13 @@ public class Window extends JFrame {
 
 		ImageIcon backgroundccards = new ImageIcon("img/communitycardbg.png");
 		JLabel ccardbereich = new JLabel(backgroundccards);
-		ccardbereich.setBounds(370, 380, 400, 150);
+		ccardbereich.setBounds(230, 250, 370, 150);
 		add(ccardbereich);
 		repaint();
 
 		ImageIcon background = new ImageIcon("img/background.png");
 		JLabel bereich = new JLabel(background);
-		bereich.setBounds(0, 0, 1200, 900);
+		bereich.setBounds(0, 0, 800, 600);
 		add(bereich);
 		repaint();
 
