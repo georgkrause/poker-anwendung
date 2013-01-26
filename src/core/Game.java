@@ -26,6 +26,8 @@ public class Game {
 
 	public Player[] activePlayers = new Player[4];
 	private int activePlayerNumber = 4;
+	
+	Window window;
 
 	Random r = new Random();
 
@@ -59,10 +61,6 @@ public class Game {
 
 		turnPlayer = dealer;
 
-		// Blinds einzahlen
-		this.activePlayers[smallBlind].changeCredit(-this.minimumBet / 2);
-		this.activePlayers[bigBlind].changeCredit(-minimumBet);
-
 		// Karten geben und Spieler wieder ins Spiel bringen
 		for (int i = 0; i < 4; i++) {
 			if (activePlayers[i] != null) {
@@ -81,6 +79,7 @@ public class Game {
 		this.tableCards[3] = this.deal();
 		this.tableCards[4] = this.deal();
 
+//<<<<<<< HEAD
 		Window window = new Window(this);
 		int[] feld=sortworth(tableCards[0].getWorthID(),tableCards[1].getWorthID(),tableCards[2].getWorthID(),tableCards[3].getWorthID(),tableCards[4].getWorthID(),
 				activePlayers[0].getCards()[0].getWorthID(),activePlayers[0].getCards()[1].getWorthID());
@@ -92,6 +91,15 @@ public class Game {
 
 		
 		
+//=======
+		window = new Window(this);
+		sortworth(tableCards[0].getWorthID(),tableCards[1].getWorthID(),tableCards[2].getWorthID(),tableCards[3].getWorthID(),tableCards[4].getWorthID(),
+				activePlayers[0].getCards()[0].getWorthID(),activePlayers[0].getCards()[1].getWorthID());
+		System.out.println(fivecolor(tableCards[0].getColorID(),tableCards[1].getColorID(),tableCards[2].getColorID(),tableCards[3].getColorID(),tableCards[4].getColorID(),
+				activePlayers[0].getCards()[0].getColorID(),activePlayers[0].getCards()[1].getColorID()));
+
+		this.collectBlinds();
+//>>>>>>> dev-basti
 
 		while (activePlayerNumber > 1 && !this.tableCards[4].isVisible()) {
 			int movesWithoutRaise = 0;
@@ -114,12 +122,16 @@ public class Game {
 						if (this.activePlayers[turnPlayer].raise(100)) {
 							this.cue = 100;
 							window.updateCredits();
+							this.raisePot(100);
+							window.updatePot();
 							movesWithoutRaise = 0;
 						}
 						break;
 					case 1: // call
 						if (this.activePlayers[turnPlayer].call(cue)) {
 							window.updateCredits();
+							this.raisePot(cue);
+							window.updatePot();
 						}
 						movesWithoutRaise++;
 						break;
@@ -151,6 +163,13 @@ public class Game {
 				window.updateCommunityCards();
 			}
 		}
+	}
+
+	private void collectBlinds() {
+		this.activePlayers[this.bigBlind].raise(minimumBet);
+		this.activePlayers[this.smallBlind].raise(minimumBet/2);
+		window.updateCredits();
+		this.raisePot((int) (minimumBet*1.5));
 	}
 
 	/**
@@ -233,6 +252,7 @@ public class Game {
 	 */
 	public void raisePot(int pot) {
 		this.pot += pot;
+		window.updatePot();
 	}
 
 	/**
