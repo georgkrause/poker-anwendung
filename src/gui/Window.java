@@ -1,11 +1,9 @@
 package gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Color;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,6 +17,7 @@ public class Window extends JFrame {
 	private Game game;
 	public JTextField[] credits = new JTextField[4];
 	public JLabel[] cards = new JLabel[13];
+	JTextField pot;
 
 	/** 
 	 * 
@@ -48,10 +47,11 @@ public class Window extends JFrame {
 	 * @param money
 	 */
 	private void newText(int id, int x, int y, int money) {
-
+		
 		final JTextField Text = new JTextField(money + " $");
 		this.credits[id] = Text;
 		this.credits[id].setBounds(x, y, 50, 50);
+		this.credits[id].setBackground(Color.blue);
 		this.credits[id].setBorder(BorderFactory.createEmptyBorder());
 		this.credits[id].setHorizontalAlignment(JTextField.CENTER);
 		this.credits[id].setEditable(false);
@@ -116,6 +116,13 @@ public class Window extends JFrame {
 		}
 	}
 
+	public void updatePot() {
+		this.pot.setText(game.getPot()+ " $");
+	}
+	
+	/**
+	 * updates the pictures of the community cards
+	 */
 	public void updateCommunityCards() {
 		for (int i = 0; i < 5; i++) {
 
@@ -186,13 +193,13 @@ public class Window extends JFrame {
 		
 		// Pott: (braucht extra Festlegung, da Größe anders sein muss, als die der anderen Textfelder
 
-		final JTextField pott = new JTextField("10000 $");
+		pot = new JTextField(game.getPot() + " $");
 		
-		pott.setBounds(360, 180, 100, 50);
-		pott.setBorder(BorderFactory.createEmptyBorder());
-		pott.setHorizontalAlignment(JTextField.CENTER);
-		pott.setEditable(false);
-		add(pott);
+		pot.setBounds(360, 180, 100, 50);
+		pot.setBorder(BorderFactory.createEmptyBorder());
+		pot.setHorizontalAlignment(JTextField.CENTER);
+		pot.setEditable(false);
+		add(pot);
 		
 
 		// Dealermarke,Small Blind,Big Blind

@@ -26,6 +26,8 @@ public class Game {
 
 	public Player[] activePlayers = new Player[4];
 	private int activePlayerNumber = 4;
+	
+	Window window;
 
 	Random r = new Random();
 
@@ -80,8 +82,10 @@ public class Game {
 		this.tableCards[2] = this.deal();
 		this.tableCards[3] = this.deal();
 		this.tableCards[4] = this.deal();
-
-		Window window = new Window(this);
+		
+		window = new Window(this);
+		
+		this.collectBlinds();
 
 		while (activePlayerNumber > 1 && !this.tableCards[4].isVisible()) {
 			int movesWithoutRaise = 0;
@@ -104,12 +108,16 @@ public class Game {
 						if (this.activePlayers[turnPlayer].raise(100)) {
 							this.cue = 100;
 							window.updateCredits();
+							this.raisePot(100);
+							window.updatePot();
 							movesWithoutRaise = 0;
 						}
 						break;
 					case 1: // call
 						if (this.activePlayers[turnPlayer].call(cue)) {
 							window.updateCredits();
+							this.raisePot(cue);
+							window.updatePot();
 						}
 						movesWithoutRaise++;
 						break;
@@ -141,6 +149,13 @@ public class Game {
 				window.updateCommunityCards();
 			}
 		}
+	}
+
+	private void collectBlinds() {
+		this.activePlayers[this.bigBlind].raise(minimumBet);
+		this.activePlayers[this.smallBlind].raise(minimumBet/2);
+		window.updateCredits();
+		this.raisePot((int) (minimumBet*1.5));
 	}
 
 	/**
@@ -223,6 +238,7 @@ public class Game {
 	 */
 	public void raisePot(int pot) {
 		this.pot += pot;
+		window.updatePot();
 	}
 
 	/**
