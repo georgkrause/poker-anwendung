@@ -82,10 +82,15 @@ public class Game {
 		this.tableCards[4] = this.deal();
 
 		Window window = new Window(this);
-		sort(tableCards[0].getWorthID(),tableCards[1].getWorthID(),tableCards[2].getWorthID(),tableCards[3].getWorthID(),tableCards[4].getWorthID(),
+		int[] feld=sortworth(tableCards[0].getWorthID(),tableCards[1].getWorthID(),tableCards[2].getWorthID(),tableCards[3].getWorthID(),tableCards[4].getWorthID(),
 				activePlayers[0].getCards()[0].getWorthID(),activePlayers[0].getCards()[1].getWorthID());
-		System.out.println(fivecolor(tableCards[0].getColorID(),tableCards[1].getColorID(),tableCards[2].getColorID(),tableCards[3].getColorID(),tableCards[4].getColorID(),
-				activePlayers[0].getCards()[0].getColorID(),activePlayers[0].getCards()[1].getColorID()));
+		System.out.println(feld[0]); System.out.println(feld[1]); System.out.println(feld[2]); System.out.println(feld[3]); System.out.println(feld[4]); System.out.println(feld[5]); System.out.println(feld[6]); 
+//		System.out.println(fivecolor(tableCards[0].getColorID(),tableCards[1].getColorID(),tableCards[2].getColorID(),tableCards[3].getColorID(),tableCards[4].getColorID(),
+//				activePlayers[0].getCards()[0].getColorID(),activePlayers[0].getCards()[1].getColorID()));
+		int [] feld2=sameworth(feld);
+		System.out.println(feld2[0]); System.out.println(feld2[1]); System.out.println(feld2[2]); System.out.println(feld2[3]);  
+
+		
 		
 
 		while (activePlayerNumber > 1 && !this.tableCards[4].isVisible()) {
@@ -244,7 +249,7 @@ public class Game {
 		return activePlayerNumber;
 	}
 	
-	public int[] sort(int ccard0,int ccard1,int ccard2,int ccard3,int ccard4,int pcard0,int pcard1){
+	public int[] sortworth(int ccard0,int ccard1,int ccard2,int ccard3,int ccard4,int pcard0,int pcard1){
 		int[] allcardsworth = new int[7];
 		allcardsworth[0]=ccard0;
 		allcardsworth[1]=ccard1;
@@ -319,17 +324,45 @@ public class Game {
 		}
 		return 30000;}
 	
-	
+	public int [] sameworth(int [] cardworth){
+		int same=1;
+		int same2=1;
+		int[] sameworth = new int[4];
+		for (int a = 0; a < 7; a++) {
+			if(a!=0 && cardworth[a]==cardworth[a-1]){
+				same=same+1; }
+				if (same>=4){
+					sameworth[0]=same;
+					sameworth[1]=cardworth[a-1];
+					return sameworth; }
+				else {
+					if((same==3) && (a!=6) &&(cardworth[a]!=cardworth[a+1]) && (cardworth[a]==cardworth[a-2])){
+					sameworth[0]=same;
+					sameworth[1]=cardworth[a-1];}
+				else{
+					if((same==2) && (a!=6)&& (cardworth[a]!=cardworth[a+1])){
+					sameworth[0]=same;
+					sameworth[1]=cardworth[a];
+				}
+				
+					}}}
 		
+		for (int a = 0; a < 7; a++) {
+			if(a!=0 && cardworth[a]==cardworth[a-1]&& sameworth[1]!=cardworth[a]){
+				same2=same2+1;
+				sameworth[2]=same2;
+				sameworth[3]=cardworth[a];
+				return sameworth;
+			}
+			}
+		return sameworth;
+		}
+		
+	
 
-		
-		
-		
-	
-		
-		
-	
-	
+
+
+
 }
 
 	
