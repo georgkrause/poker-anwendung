@@ -82,6 +82,11 @@ public class Game {
 		this.tableCards[4] = this.deal();
 
 		Window window = new Window(this);
+		sort(tableCards[0].getWorthID(),tableCards[1].getWorthID(),tableCards[2].getWorthID(),tableCards[3].getWorthID(),tableCards[4].getWorthID(),
+				activePlayers[0].getCards()[0].getWorthID(),activePlayers[0].getCards()[1].getWorthID());
+		System.out.println(fivecolor(tableCards[0].getColorID(),tableCards[1].getColorID(),tableCards[2].getColorID(),tableCards[3].getColorID(),tableCards[4].getColorID(),
+				activePlayers[0].getCards()[0].getColorID(),activePlayers[0].getCards()[1].getColorID()));
+		
 
 		while (activePlayerNumber > 1 && !this.tableCards[4].isVisible()) {
 			int movesWithoutRaise = 0;
@@ -238,5 +243,93 @@ public class Game {
 	public int getActivePlayerNumber() {
 		return activePlayerNumber;
 	}
+	
+	public int[] sort(int ccard0,int ccard1,int ccard2,int ccard3,int ccard4,int pcard0,int pcard1){
+		int[] allcardsworth = new int[7];
+		allcardsworth[0]=ccard0;
+		allcardsworth[1]=ccard1;
+		allcardsworth[2]=ccard2;
+		allcardsworth[3]=ccard3;
+		allcardsworth[4]=ccard4;
+		allcardsworth[5]=pcard0;
+		allcardsworth[6]=pcard1;
+		for (int a = 0; a < 7; a++) {
+			int z = a;
+			while ((z > 0) && (allcardsworth[z] < allcardsworth[z - 1])) {
+				int hilf = allcardsworth[z];
+				allcardsworth[z] = allcardsworth[z - 1];
+				allcardsworth[z - 1] = hilf;
+				z = z - 1;
+			}
+		}
+		
+		return allcardsworth;
+		
+		}
+	
+	public int fivecolor(int ccard0,int ccard1,int ccard2,int ccard3,int ccard4,int pcard0,int pcard1){
+		int[] allcardscolor = new int[7];
+		allcardscolor[0]=ccard0;
+		allcardscolor[1]=ccard1;
+		allcardscolor[2]=ccard2;
+		allcardscolor[3]=ccard3;
+		allcardscolor[4]=ccard4;
+		allcardscolor[5]=pcard0;
+		allcardscolor[6]=pcard1;
+		int herz=0;
+		int kreuz=0;
+		int karo=0;
+		int pik=0;
+		
+		for (int a = 0; a < 7; a++) {
+			
+			switch (allcardscolor[a]) {
+			case 0: 
+				herz=herz+1;
+				break;
+			
+			case 1: 
+				kreuz=kreuz+1;
+				break;
+				
+			case 2: 
+				karo=karo+1;
+				break;
+				
+			case 3: 
+				pik=pik+1;
+				break;
+				
+			}}
+		
+		if(herz>=5){
+			return 0; 
+		}
+		
+		if(kreuz>=5){
+			return 1; 
+		}
 
+		if(karo>=5){
+			return 2; 
+		}
+		
+		if(pik>=5){
+			return 3; 
+		}
+		return 30000;}
+	
+	
+		
+
+		
+		
+		
+	
+		
+		
+	
+	
 }
+
+	
