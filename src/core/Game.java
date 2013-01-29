@@ -10,6 +10,7 @@ import core.Player;
 public class Game {
 
 	public int cue = this.minimumBet;
+	
 	public Card[] tableCards = new Card[5];
 
 	private int credit = 1000;
@@ -82,19 +83,21 @@ public class Game {
 
 					switch (choice) {
 					case 0: // raise
-						if (this.activePlayers[turnPlayer].raise(100)) {
-							this.cue = 100;
+						this.cue += 100; //Wert des Erhöhens einfügen
+						if (this.activePlayers[turnPlayer].raise(100)) { //Wert des Erhöhens einfügen 
 							window.updateCredits();
-							this.raisePot(100);
+							this.raisePot(activePlayers[turnPlayer].debt);
 							window.updatePot();
 							movesWithoutRaise = 0;
+							activePlayers[turnPlayer].debt=cue;
 						}
 						break;
 					case 1: // call
-						if (this.activePlayers[turnPlayer].call(cue)) {
+						if (this.activePlayers[turnPlayer].call(activePlayers[turnPlayer].debt)) {
 							window.updateCredits();
-							this.raisePot(cue);
+							this.raisePot(activePlayers[turnPlayer].debt);
 							window.updatePot();
+							activePlayers[turnPlayer].debt=cue;
 						}
 						movesWithoutRaise++;
 						break;
@@ -177,7 +180,8 @@ public class Game {
 
 	private void collectBlinds() {
 		this.activePlayers[this.bigBlind].raise(minimumBet);
-		this.activePlayers[this.smallBlind].raise(minimumBet / 2);
+		this.activePlayers[this.bigBlind].debt=minimumBet;
+		this.activePlayers[this.smallBlind].debt=minimumBet/2;
 		window.updateCredits();
 		this.raisePot((int) (minimumBet * 1.5));
 	}

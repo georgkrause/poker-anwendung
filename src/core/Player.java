@@ -5,6 +5,7 @@ public class Player {
 	private int credit;
 	private int id;
 	public boolean folded = false;
+	public int debt=0;
 
 	private Card[] cards = new Card[2];
 	
@@ -34,8 +35,9 @@ public class Player {
 	 * @return whether action is possible or not
 	 */
 	public boolean call(int cue) {
-		if (this.credit >= cue) {
-			this.credit -= cue;
+		this.debt=cue-debt;
+		if (this.credit >= debt) {
+			this.credit -= debt;
 			return true;
 		} else {
 			return false;
@@ -48,8 +50,9 @@ public class Player {
 	 * @return whether action is possible or not
 	 */
 	public boolean raise(int cue) {
-		if (this.credit >= cue) {
-			this.credit -= cue;
+		this.debt=cue-debt;
+		if (this.credit >= debt) {
+			this.credit -= debt;
 			return true;
 		} else {
 			return false;
@@ -99,4 +102,6 @@ public class Player {
 	public boolean isFolded() {
 		return folded;
 	}
+	
+	
 }
