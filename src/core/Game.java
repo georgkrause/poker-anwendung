@@ -10,12 +10,12 @@ import core.Player;
 public class Game {
 
 	public int cue = this.minimumBet;
-	
+
 	public Card[] tableCards = new Card[5];
 
 	private int credit = 1000;
 	private final int minimumBet = 100;
-	private int raiseworth=100; //Testzweck, Wert des PC spielers fehlt
+	private int raiseworth = 100; // Testzweck, Wert des PC spielers fehlt
 
 	private Card[] cards = new Card[52];
 	private int givenCards = 0;
@@ -80,20 +80,20 @@ public class Game {
 						do {
 							choice = window.DialogBox();
 						} while (choice < 0);
-						if (choice==0){
-							raiseworth=window.RaiseDialogBox(); 
+						if (choice == 0) {
+							raiseworth = window.RaiseDialogBox();
 						}
 					}
 
 					switch (choice) {
 					case 0: // raise
 						this.cue += raiseworth;
-						if (this.activePlayers[turnPlayer].raise(cue)) {  
+						if (this.activePlayers[turnPlayer].raise(cue)) {
 							window.updateCredits();
 							this.raisePot(activePlayers[turnPlayer].debt);
 							window.updatePot();
 							movesWithoutRaise = 0;
-							activePlayers[turnPlayer].debt=cue;
+							activePlayers[turnPlayer].debt = cue;
 						}
 						break;
 					case 1: // call
@@ -101,9 +101,9 @@ public class Game {
 							window.updateCredits();
 							this.raisePot(activePlayers[turnPlayer].debt);
 							window.updatePot();
-							activePlayers[turnPlayer].debt=cue;
+							activePlayers[turnPlayer].debt = cue;
 						}
-						
+
 						movesWithoutRaise++;
 						break;
 					case 2: // fold
@@ -185,9 +185,9 @@ public class Game {
 
 	private void collectBlinds() {
 		this.activePlayers[this.bigBlind].raise(minimumBet);
-		this.activePlayers[this.bigBlind].debt=minimumBet;
-		this.activePlayers[this.smallBlind].debt=minimumBet/2;
-		this.activePlayers[this.smallBlind].changeCredit(-minimumBet/2);
+		this.activePlayers[this.bigBlind].debt = minimumBet;
+		this.activePlayers[this.smallBlind].debt = minimumBet / 2;
+		this.activePlayers[this.smallBlind].changeCredit(-minimumBet / 2);
 		window.updateCredits();
 		this.raisePot((int) (minimumBet * 1.5));
 	}
@@ -335,7 +335,7 @@ public class Game {
 	}
 
 	/**
-	 * returns wheather there are five cards from the same color
+	 * returns the color id where are 5 cards in the cards or 30000
 	 * 
 	 * @param ccard0
 	 * @param ccard1
@@ -346,54 +346,29 @@ public class Game {
 	 * @param pcard1
 	 * @return
 	 */
-	public int fivecolor(int ccard0, int ccard1, int ccard2, int ccard3,
-			int ccard4, int pcard0, int pcard1) {
-		int[] allcardscolor = new int[7];
-		allcardscolor[0] = ccard0;
-		allcardscolor[1] = ccard1;
-		allcardscolor[2] = ccard2;
-		allcardscolor[3] = ccard3;
-		allcardscolor[4] = ccard4;
-		allcardscolor[5] = pcard0;
-		allcardscolor[6] = pcard1;
-		int herz = 0;
-		int kreuz = 0;
-		int karo = 0;
-		int pik = 0;
+	// public int fivecolor(int ccard0, int ccard1, int ccard2, int ccard3,
+	// int ccard4, int pcard0, int pcard1) {
+	public int fivecolor(Card[] tableCards, Card[] playerCards) {
+		Card[] allCards = new Card[7];
+		for(int i = 0; i < 2; i++) {
+			allCards[i] = playerCards[i];
+		}
+		for(int i = 2; i < 7; i++) {
+			allCards[i] = tableCards[i];
+		}
 
-		for (int a = 0; a < 7; a++) {
+		int[] colors = {0, 0, 0, 0};
+		
+		for(int i = 0; i < 7; i++) {
+			colors[allCards[i].getColorID()]++;
+		}
 
-			switch (allcardscolor[a]) {
-			case 0:
-				herz = herz + 1;
-				break;
-
-			case 1:
-				kreuz = kreuz + 1;
-				break;
-
-			case 2:
-				karo = karo + 1;
-				break;
-
-			case 3:
-				pik = pik + 1;
-				break;
-
+		for(int i = 0; i < 4; i++) {
+			if(colors[i] >= 5) {
+				return i;
 			}
 		}
-
-		if (herz >= 5) {
-			return 0;
-		} else if (kreuz >= 5) {
-			return 1;
-		} else if (karo >= 5) {
-			return 2;
-		} else if (pik >= 5) {
-			return 3;
-		} else {
 			return 30000;
-		}
 	}
 
 	/**
