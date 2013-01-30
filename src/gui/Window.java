@@ -50,7 +50,7 @@ public class Window extends JFrame {
 		final JTextField Text = new JTextField(money + " $");
 		this.credits[id] = Text;
 		this.credits[id].setBounds(x, y, 50, 50);
-		this.credits[id].setBackground(Color.blue);
+//		this.credits[id].setBackground(Color.blue);
 		this.credits[id].setBorder(BorderFactory.createEmptyBorder());
 		this.credits[id].setHorizontalAlignment(JTextField.CENTER);
 		this.credits[id].setEditable(false);
@@ -103,6 +103,17 @@ public class Window extends JFrame {
 				"Welche Aktion möchtest du ausführen?", "Eingabe",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
 				null, options, options[2]);
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public int RaiseDialogBox() {
+		
+		String inputValue;
+		inputValue = JOptionPane.showInputDialog("Um wie viel möchtest du erhöhen?");
+		int intZahl = Integer.parseInt(inputValue);
+		return intZahl;
 	}
 
 	/**

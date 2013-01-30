@@ -10,7 +10,7 @@ public class Alfi extends Player {
 	
 	public int decide() {
 		Random r = new Random();
-		return r.nextInt(4);
+		return r.nextInt(3);
 	}
 
 }

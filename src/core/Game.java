@@ -15,6 +15,7 @@ public class Game {
 
 	private int credit = 1000;
 	private final int minimumBet = 100;
+	private int raiseworth=100; //Testzweck, Wert des PC spielers fehlt
 
 	private Card[] cards = new Card[52];
 	private int givenCards = 0;
@@ -79,12 +80,15 @@ public class Game {
 						do {
 							choice = window.DialogBox();
 						} while (choice < 0);
+						if (choice==0){
+							raiseworth=window.RaiseDialogBox(); 
+						}
 					}
 
 					switch (choice) {
 					case 0: // raise
-						this.cue += 100; //Wert des Erhöhens einfügen
-						if (this.activePlayers[turnPlayer].raise(100)) { //Wert des Erhöhens einfügen 
+						this.cue += raiseworth;
+						if (this.activePlayers[turnPlayer].raise(cue)) {  
 							window.updateCredits();
 							this.raisePot(activePlayers[turnPlayer].debt);
 							window.updatePot();
@@ -93,12 +97,13 @@ public class Game {
 						}
 						break;
 					case 1: // call
-						if (this.activePlayers[turnPlayer].call(activePlayers[turnPlayer].debt)) {
+						if (this.activePlayers[turnPlayer].call(cue)) {
 							window.updateCredits();
 							this.raisePot(activePlayers[turnPlayer].debt);
 							window.updatePot();
 							activePlayers[turnPlayer].debt=cue;
 						}
+						
 						movesWithoutRaise++;
 						break;
 					case 2: // fold
@@ -182,6 +187,7 @@ public class Game {
 		this.activePlayers[this.bigBlind].raise(minimumBet);
 		this.activePlayers[this.bigBlind].debt=minimumBet;
 		this.activePlayers[this.smallBlind].debt=minimumBet/2;
+		this.activePlayers[this.smallBlind].changeCredit(-minimumBet/2);
 		window.updateCredits();
 		this.raisePot((int) (minimumBet * 1.5));
 	}
