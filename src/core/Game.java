@@ -68,7 +68,7 @@ public class Game {
 			// Wettrunde
 			while (movesWithoutRaise < activePlayerNumber) {
 
-				System.out.println("Spieler " + turnPlayer + " am Zug.");
+//				System.out.println("Spieler " + turnPlayer + " am Zug.");
 
 				int choice = 0;
 
@@ -81,10 +81,11 @@ public class Game {
 							choice = window.DialogBox();
 						} while (choice < 0);
 						if (choice == 0) {
-							raiseworth = window.RaiseDialogBox();
+							
+								raiseworth = window.RaiseDialogBox();
+								
 						}
-					}
-
+				}
 					switch (choice) {
 					case 0: // raise
 						this.cue += raiseworth;
@@ -113,7 +114,7 @@ public class Game {
 						movesWithoutRaise++;
 						break;
 					}
-					System.out.println("Züge: " + movesWithoutRaise);
+//					System.out.println("Züge: " + movesWithoutRaise);
 				}
 				if ((turnPlayer + 1) > 3)
 					turnPlayer = turnPlayer + 1 - 4;
@@ -134,7 +135,18 @@ public class Game {
 				window.updateCommunityCards();
 			}
 		}
-
+		if(this.tableCards[4].isVisible()){
+			for (int i = 0; i < 4; i++) {
+				if(!activePlayers[i].folded){
+					int [] sortedcards=sortworth(tableCards[0].getWorthID(),tableCards[1].getWorthID(),tableCards[2].getWorthID(),tableCards[3].getWorthID(),tableCards[4].getWorthID(),
+							activePlayers[i].getCards()[0].getWorthID(),activePlayers[i].getCards()[1].getWorthID());
+					int fivecolor= fivecolor(tableCards,activePlayers[i].getCards());
+					int [] sameworthfield=sameworth(sortedcards);
+					int followfive=followfive(sortedcards);
+					System.out.println(handworth(sortedcards,fivecolor,followfive, sameworthfield));
+				}
+			}
+		}
 	}
 
 	private void prepairPlayers() {
@@ -350,12 +362,19 @@ public class Game {
 	// int ccard4, int pcard0, int pcard1) {
 	public int fivecolor(Card[] tableCards, Card[] playerCards) {
 		Card[] allCards = new Card[7];
-		for(int i = 0; i < 2; i++) {
-			allCards[i] = playerCards[i];
-		}
-		for(int i = 2; i < 7; i++) {
-			allCards[i] = tableCards[i];
-		}
+//		for(int i = 0; i < 2; i++) {
+//			allCards[i] = playerCards[i];
+//		}
+//		for(int i = 2; i < 7; i++) {
+//			allCards[i] = tableCards[i];
+//		}
+		allCards[0]=playerCards[0];
+		allCards[1]=playerCards[1];
+		allCards[2]=tableCards[0];
+		allCards[3]=tableCards[1];
+		allCards[4]=tableCards[2];
+		allCards[5]=tableCards[3];
+		allCards[6]=tableCards[4];
 
 		int[] colors = {0, 0, 0, 0};
 		
@@ -433,5 +452,37 @@ public class Game {
 		return 0;
 
 	}
+	
+	/**
+	 * gives back the worth of the hand
+	 * @param cardworth
+	 * @param fivecolor
+	 * @param followfive
+	 * @param sameworth
+	 * @return
+	 */
+	
+	public int handworth(int [] cardworth, int fivecolor, int followfive, int [] sameworth){
+		
+		if((followfive==12) & (fivecolor !=30000)){
+			return 10;
+		}else{ if(followfive!=0 && fivecolor!= 30000){
+			return 9;
+		}else{ if(sameworth[0]==4){
+			return 8;
+		}else { if(sameworth[0]==3 && sameworth[2]==2){
+			return 7;
+		}else { if(fivecolor!=30000){
+			return 6;
+		}else { if(sameworth[0]==3 || sameworth[2]==3){
+			return 5;
+		}else { if(sameworth[0]==2 && sameworth[2]==2){
+			return 4;
+		}else { if(sameworth [0]==2 || sameworth [2]==2){
+			return 3;
+		}else return 2;
+		
+		
+	}}}}}}}}
 
 }

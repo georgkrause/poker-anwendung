@@ -110,10 +110,11 @@ public class Window extends JFrame {
 	 */
 	public int RaiseDialogBox() {
 		
-		String inputValue;
+		String inputValue = null;
+		while (inputValue==null)
 		inputValue = JOptionPane.showInputDialog("Um wie viel möchtest du erhöhen?");
 		int intZahl = Integer.parseInt(inputValue);
-		return intZahl;
+		return intZahl; 
 	}
 
 	/**
