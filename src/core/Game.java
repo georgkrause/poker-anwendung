@@ -136,7 +136,7 @@ public class Game {
 			}
 		}
 		if(this.tableCards[4].isVisible()){
-			int []feld=new int [activePlayerNumber];
+			int []feld=new int [4];
 			for (int i = 0; i < 4; i++) {
 				if(!activePlayers[i].folded){
 					int [] sortedcards=sortworth(tableCards[0].getWorthID(),tableCards[1].getWorthID(),tableCards[2].getWorthID(),tableCards[3].getWorthID(),tableCards[4].getWorthID(),
@@ -150,16 +150,20 @@ public class Game {
 					this.activePlayers[i].getCards()[1].getPicture();
 					window.updatePlayerCards(i);
 					window.updatePlayerCards(i);
-					if(i==3 && activePlayerNumber<4 || i==2 && activePlayerNumber<3){
-						feld[activePlayerNumber-1]= handworth(sortedcards,fivecolor,followfive, sameworthfield);
-					}else{
-					feld[i]= handworth(sortedcards,fivecolor,followfive, sameworthfield);
+					for (int a = 0; a < 7; a++) {
+						System.out.print(sortedcards[a]+ " "); }
+					System.out.println();
+					for (int a = 0; a < 4; a++) {
+					System.out.print(sameworthfield[a]+ " "); }
 					
-				}}
+					feld[i]= handworth(sortedcards,fivecolor,followfive, sameworthfield);
+					System.out.println(feld[i]);
+					
+				}
 			}
-	
+			
 			getWinner(feld);
-			System.out.println(getWinner(feld).getId());
+			System.out.println(getWinner(feld));
 		}
 	}
 
@@ -254,17 +258,16 @@ public class Game {
 	/**
 	 * @return the player object which had won the round
 	 */
-	Player getWinner(int [] handresults) {
+	int getWinner(int [] handresults) {
 		int winners=0;
 		
 		for (int a = 0; a < handresults.length-1; a++) {
-			if(handresults[a]<handresults[a+1]){
-				winners=a+1;
+			if(handresults[a]>handresults[winners]){
+				winners=a;
 			}
 		}
 		
-		Player winner = new Player(winners);
-		return winner;
+		return winners;
 	}
 
 	/**
@@ -428,21 +431,21 @@ public class Game {
 			if (a != 0 && cardworth[a] == cardworth[a - 1]) {
 				same = same + 1;
 			}
-			if (same >= 4) {
+			if (same >= 4 && cardworth[a]==cardworth[a-3]) {
 				sameworth[0] = same;
 				sameworth[1] = cardworth[a - 1];
 				return sameworth;
 			} else {
-				if ((same == 3) && (a != 6)
-						&& (cardworth[a] != cardworth[a + 1])
-						&& (cardworth[a] == cardworth[a - 2])) {
+				if (same == 3 && a != 6
+						&& cardworth[a] != cardworth[a + 1]
+						&& cardworth[a] == cardworth[a - 2]) {
 					sameworth[0] = same;
 					sameworth[1] = cardworth[a - 1];
 				} else {
-					if ((same == 2) && (a != 6)
-							&& (cardworth[a] != cardworth[a + 1])) {
+					if (same == 2 && a != 6
+							&& cardworth[a] != cardworth[a + 1]) {
 						sameworth[0] = same;
-						sameworth[1] = cardworth[a];
+						sameworth[1] = cardworth[a-1];
 					}
 
 				}
@@ -455,7 +458,7 @@ public class Game {
 				same2 = same2 + 1;
 				sameworth[2] = same2;
 				sameworth[3] = cardworth[a];
-				return sameworth;
+				
 			}
 		}
 		return sameworth;
@@ -464,7 +467,7 @@ public class Game {
 	public int followfive(int[] cardworth) {
 		int follow = 1;
 		for (int a = 0; a < 7; a++) {
-			if (a != 0 && cardworth[a] == cardworth[a - 1] + 1) {
+			if ((a != 0 && a!=6 && cardworth[a] == cardworth[a - 1] + 1 && cardworth[a]==cardworth[a+1]-1 )|| (a==6 && cardworth[6]==cardworth[5]+1 )) {
 				follow = follow + 1;
 			}
 			if (follow >= 5) {
@@ -486,28 +489,30 @@ public class Game {
 	
 	public int handworth(int [] cardworth, int fivecolor, int followfive, int [] sameworth){
 		
-		if((followfive==12) & (fivecolor !=30000)){
+		if((followfive==12) & (fivecolor !=30000)){ //RoyalFlush
 			return 10;
-		}else{ if(followfive!=0 && fivecolor!= 30000){
+		}else{ if(followfive!=0 && fivecolor!= 30000){ //Flush
 			return 9;
-		}else{ if(sameworth[0]==4){
+		}else{ if(sameworth[0]==4){	//Vierling
 			return 8;
-		}else { if(sameworth[0]==3 && sameworth[2]==2){
+		}else { if(sameworth[0]==3 && sameworth[2]==2){ //drilling+pair
 			return 7;
-		}else { if(fivecolor!=30000){
+		}else { if(fivecolor!=30000){	//5 from one color
 			return 6;
-		}else { if(sameworth[0]==3 || sameworth[2]==3){
+		}else { if(followfive!=0){	//street
 			return 5;
-		}else { if(sameworth[0]==2 && sameworth[2]==2){
+		}else { if(sameworth[0]==3 || sameworth[2]==3){ //drilling
 			return 4;
-		}else { if(sameworth [0]==2 || sameworth [2]==2){
+		}else { if(sameworth[0]==2 && sameworth[2]==2){ //two pairs
 			return 3;
-		}else return 2; 
+		}else { if(sameworth [0]==2 || sameworth [2]==2){ //pair
+			return 2;	
+		}else return 1;  //Highcard
 		
 		}}}}}}}
 		
 		}
 		
-	
+	}
 
 }
