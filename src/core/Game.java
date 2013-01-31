@@ -24,6 +24,7 @@ public class Game {
 	private int smallBlind;
 	private int bigBlind;
 	private int dealer;
+	private int round=1;
 	private int turnPlayer;
 	private boolean end = true;
 	public boolean windowcreated = false;
@@ -53,10 +54,11 @@ public class Game {
 		windowcreated = true;
 
 		while (end == true) {
-			poorplayers = 0;
+			poorplayers = 4;
 			for (int i = 0; i < 4; i++) {
-				if (activePlayers[i].getCredit() > 0) {
-					poorplayers++;
+				if (activePlayers[i].getCredit() <= 0) {
+					this.activePlayers[i].isFolded();
+					poorplayers--;
 				}
 			}
 			if (poorplayers == 1) {
@@ -69,11 +71,12 @@ public class Game {
 	}
 
 	private void round() throws InterruptedException {
-
+		
 		this.prepairPlayers();
 		this.activePlayerNumber = 4;
-		System.out.println(activePlayerNumber);
-
+//		System.out.println(activePlayerNumber);
+		window.Dealer(this.getDealer());
+		System.out.println(dealer);
 		// choose table cards
 		this.tableCards[0] = this.deal();
 		this.tableCards[1] = this.deal();
@@ -160,9 +163,17 @@ public class Game {
 		if (activePlayerNumber == 1) {
 			for (int i = 0; i < 4; i++) {
 				if (!activePlayers[i].folded) {
+					Thread.sleep(4000);
 					disburseAsset(activePlayers[i]);
 					window.updatePot();
 					window.updateCredits();
+					this.givenCards = 0;
+					this.activePlayerNumber = 4;
+					for (int x = 0; x < 4; x++) {
+						this.activePlayers[i].folded = false;
+					}
+					round++;
+					this.generateCards();
 				}
 			}
 		} else {
@@ -189,18 +200,19 @@ public class Game {
 						this.activePlayers[i].getCards()[1].getPicture();
 						window.updatePlayerCards(i);
 						window.updatePlayerCards(i);
+						Thread.sleep(6000);
 						for (int a = 0; a < 7; a++) {
-							System.out.print(sortedcards[a] + " ");
+//							System.out.print(sortedcards[a] + " ");
 						}
-						System.out.println();
+//						System.out.println();
 						for (int a = 0; a < 4; a++) {
-							System.out.print(sameworthfield[a] + " ");
+//							System.out.print(sameworthfield[a] + " ");
 						}
 
 						feld[i] = handworth(sortedcards, fivecolor, followfive,
 								sameworthfield);
 						highcards[i] = sortedcards[6];
-						System.out.println(feld[i]);
+//						System.out.println(feld[i]);
 
 					}
 				}
@@ -212,8 +224,10 @@ public class Game {
 				this.givenCards = 0;
 				this.activePlayerNumber = 4;
 				for (int i = 0; i < 4; i++) {
-					activePlayers[i].folded = false;
+					this.activePlayers[i].folded = false;
 				}
+				round++;
+				this.generateCards();
 			}
 		}
 
@@ -221,25 +235,35 @@ public class Game {
 
 	private void prepairPlayers() {
 		// Karten geben und Spieler wieder ins Spiel bringen
+		
 		for (int i = 0; i < 4; i++) {
 			if (activePlayers[i] != null) {
 				Card[] cards = { deal(), deal() };
 				activePlayers[i].setCards(cards);
 				activePlayers[i].folded = false;
-				window.updatePlayerCards(i);
+				
 			}
 		}
 		// show cards of the human player
-		activePlayers[0].getCards()[0].discover();
-		activePlayers[0].getCards()[1].discover();
-
+		this.activePlayers[0].getCards()[0].discover();
+		this.activePlayers[0].getCards()[1].discover();
+		
+		for (int i = 0; i < 4; i++) {
+			window.updatePlayerCards(i);
+		}
+		
 	}
 
 	private void assignRoles() {
 		// choose dealer
+		if(round==1){
 		dealer = r.nextInt(4);
-
+		}else {dealer++;}
 		// choose Blinds
+		if(dealer==4){
+			dealer=0;
+		}
+		
 		if ((dealer + 1) > 3)
 			smallBlind = dealer + 1 - 4;
 		else

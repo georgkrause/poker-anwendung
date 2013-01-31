@@ -64,7 +64,7 @@ public class Window extends JFrame {
 	 * @param d
 	 *            id of the player who is dealer
 	 */
-	private void Dealer(int d) {
+	public void Dealer(int d) {
 		int[] x = { 260, 100, 270, 700, 260, 100, 270, 700, };
 		int[] y = { 470, 220, 50, 200, 470, 220, 50, 200, };
 
