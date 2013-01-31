@@ -16,7 +16,7 @@ public class Game {
 	private int credit = 1000;
 	private final int minimumBet = 100;
 	private int raiseworth = 100; // Testzweck, Wert des PC spielers fehlt
-	private int poorplayers=0;
+	private int poorplayers = 0;
 
 	private Card[] cards = new Card[52];
 	private int givenCards = 0;
@@ -25,8 +25,8 @@ public class Game {
 	private int bigBlind;
 	private int dealer;
 	private int turnPlayer;
-	private boolean end=true;
-	public boolean windowcreated=false;
+	private boolean end = true;
+	public boolean windowcreated = false;
 
 	private int pot;
 	public Player[] activePlayers = new Player[4];
@@ -38,33 +38,42 @@ public class Game {
 
 	/**
 	 * initialize a new game - creates all the cards - choose five table cards
-	 * @throws InterruptedException 
+	 * 
+	 * @throws InterruptedException
 	 */
 	Game() throws InterruptedException {
-		
+
 		// Generate all cards
 		this.generateCards();
 
 		// create objects of the players
 		this.generatePlayers();
-		while (end == true){
-		for (int i = 0; i < 4; i++) {
-			if(activePlayers[i].getCredit()>0){
-				poorplayers=poorplayers-1;
+
+		this.window = new Window(this);
+		windowcreated = true;
+
+		while (end == true) {
+			poorplayers = 0;
+			for (int i = 0; i < 4; i++) {
+				if (activePlayers[i].getCredit() > 0) {
+					poorplayers++;
+				}
 			}
+			if (poorplayers == 1) {
+				end = false;
+				window.dispose();
+				return;
+			}
+			this.round();
 		}
-		if (poorplayers==1){
-			end=false;
-			window.dispose();
-		}
-		
-		this.round();
-	}}
+	}
 
 	private void round() throws InterruptedException {
 		this.assignRoles();
 
 		this.prepairPlayers();
+		this.activePlayerNumber = 4;
+		System.out.println(activePlayerNumber);
 
 		// choose table cards
 		this.tableCards[0] = this.deal();
@@ -72,9 +81,7 @@ public class Game {
 		this.tableCards[2] = this.deal();
 		this.tableCards[3] = this.deal();
 		this.tableCards[4] = this.deal();
-
-		window = new Window(this);
-		windowcreated=true;
+		window.updateCommunityCards();
 
 		this.collectBlinds();
 
@@ -83,7 +90,7 @@ public class Game {
 			// Wettrunde
 			while (movesWithoutRaise < activePlayerNumber) {
 
-//				System.out.println("Spieler " + turnPlayer + " am Zug.");
+				// System.out.println("Spieler " + turnPlayer + " am Zug.");
 
 				int choice = 0;
 
@@ -95,12 +102,13 @@ public class Game {
 						do {
 							choice = window.DialogBox();
 						} while (choice < 0);
+						
 						if (choice == 0) {
-							
-								raiseworth = window.RaiseDialogBox();
-								
+
+							raiseworth = window.RaiseDialogBox();
+
 						}
-				}
+					}
 					switch (choice) {
 					case 0: // raise
 						this.cue += raiseworth;
@@ -129,7 +137,7 @@ public class Game {
 						movesWithoutRaise++;
 						break;
 					}
-//					System.out.println("Züge: " + movesWithoutRaise);
+					// System.out.println("Züge: " + movesWithoutRaise);
 				}
 				if ((turnPlayer + 1) > 3)
 					turnPlayer = turnPlayer + 1 - 4;
@@ -150,56 +158,67 @@ public class Game {
 				window.updateCommunityCards();
 			}
 		}
-		if(activePlayerNumber==1){
+		if (activePlayerNumber == 1) {
 			for (int i = 0; i < 4; i++) {
-				if(!activePlayers[i].folded){
+				if (!activePlayers[i].folded) {
 					disburseAsset(activePlayers[i]);
 					window.updatePot();
 					window.updateCredits();
 				}
-		}}
-		else{ if(this.tableCards[4].isVisible()){
-			int []feld=new int [4];
-			int []highcards=new int [4];
-			for (int i = 0; i < 4; i++) {
-				if(!activePlayers[i].folded){
-					int [] sortedcards=sortworth(tableCards[0].getWorthID(),tableCards[1].getWorthID(),tableCards[2].getWorthID(),tableCards[3].getWorthID(),tableCards[4].getWorthID(),
-							activePlayers[i].getCards()[0].getWorthID(),activePlayers[i].getCards()[1].getWorthID());
-					int fivecolor= fivecolor(tableCards,activePlayers[i].getCards());
-					int [] sameworthfield=sameworth(sortedcards);
-					int followfive=followfive(sortedcards);
-					this.activePlayers[i].getCards()[0].discover();
-					this.activePlayers[i].getCards()[1].discover();
-					this.activePlayers[i].getCards()[0].getPicture();
-					this.activePlayers[i].getCards()[1].getPicture();
-					window.updatePlayerCards(i);
-					window.updatePlayerCards(i);
-					for (int a = 0; a < 7; a++) {
-						System.out.print(sortedcards[a]+ " "); }
-					System.out.println();
-					for (int a = 0; a < 4; a++) {
-					System.out.print(sameworthfield[a]+ " "); }
-					
-					feld[i]= handworth(sortedcards,fivecolor,followfive, sameworthfield);
-					highcards[i]=sortedcards[6];
-					System.out.println(feld[i]);
-					
+			}
+		} else {
+			if (this.tableCards[4].isVisible()) {
+				int[] feld = new int[4];
+				int[] highcards = new int[4];
+				for (int i = 0; i < 4; i++) {
+					if (!activePlayers[i].folded) {
+						int[] sortedcards = sortworth(
+								tableCards[0].getWorthID(),
+								tableCards[1].getWorthID(),
+								tableCards[2].getWorthID(),
+								tableCards[3].getWorthID(),
+								tableCards[4].getWorthID(),
+								activePlayers[i].getCards()[0].getWorthID(),
+								activePlayers[i].getCards()[1].getWorthID());
+						int fivecolor = fivecolor(tableCards,
+								activePlayers[i].getCards());
+						int[] sameworthfield = sameworth(sortedcards);
+						int followfive = followfive(sortedcards);
+						this.activePlayers[i].getCards()[0].discover();
+						this.activePlayers[i].getCards()[1].discover();
+						this.activePlayers[i].getCards()[0].getPicture();
+						this.activePlayers[i].getCards()[1].getPicture();
+						window.updatePlayerCards(i);
+						window.updatePlayerCards(i);
+						for (int a = 0; a < 7; a++) {
+							System.out.print(sortedcards[a] + " ");
+						}
+						System.out.println();
+						for (int a = 0; a < 4; a++) {
+							System.out.print(sameworthfield[a] + " ");
+						}
+
+						feld[i] = handworth(sortedcards, fivecolor, followfive,
+								sameworthfield);
+						highcards[i] = sortedcards[6];
+						System.out.println(feld[i]);
+
+					}
+				}
+
+				int z = getWinner(feld, highcards);
+				disburseAsset(activePlayers[z]);
+				window.updatePot();
+				window.updateCredits();
+				this.givenCards = 0;
+				this.activePlayerNumber = 4;
+				for (int i = 0; i < 4; i++) {
+					activePlayers[i].folded = false;
 				}
 			}
-			
-			int z=getWinner(feld,highcards);
-			disburseAsset(activePlayers[z]);
-			window.updatePot();
-			window.updateCredits();
-			this.givenCards=0;
-			this.activePlayerNumber=4;
-			for (int i = 0; i < 4; i++) {
-				activePlayers[i].folded=false;
-			}}}
-		
+		}
+
 	}
-	
-	
 
 	private void prepairPlayers() {
 		// Karten geben und Spieler wieder ins Spiel bringen
@@ -208,6 +227,7 @@ public class Game {
 				Card[] cards = { deal(), deal() };
 				activePlayers[i].setCards(cards);
 				activePlayers[i].folded = false;
+				window.updatePlayerCards(i);
 			}
 		}
 		// show cards of the human player
@@ -292,16 +312,18 @@ public class Game {
 	/**
 	 * @return the player object which had won the round
 	 */
-	int getWinner(int [] handresults, int [] highcards) {
-		int winners=0;
-		
-		for (int a = 1; a < handresults.length-1; a++) {
-			if(handresults[a]>handresults[winners]){
-				winners=a;
-			}else { if(handresults[a]==handresults[winners] && highcards[a]>highcards[winners]){
-				winners=a;
+	int getWinner(int[] handresults, int[] highcards) {
+		int winners = 0;
+
+		for (int a = 1; a < handresults.length - 1; a++) {
+			if (handresults[a] > handresults[winners]) {
+				winners = a;
+			} else {
+				if (handresults[a] == handresults[winners]
+						&& highcards[a] > highcards[winners]) {
+					winners = a;
+				}
 			}
-		}
 		}
 		return winners;
 	}
@@ -423,32 +445,32 @@ public class Game {
 	// int ccard4, int pcard0, int pcard1) {
 	public int fivecolor(Card[] tableCards, Card[] playerCards) {
 		Card[] allCards = new Card[7];
-//		for(int i = 0; i < 2; i++) {
-//			allCards[i] = playerCards[i];
-//		}
-//		for(int i = 2; i < 7; i++) {
-//			allCards[i] = tableCards[i];
-//		}
-		allCards[0]=playerCards[0];
-		allCards[1]=playerCards[1];
-		allCards[2]=tableCards[0];
-		allCards[3]=tableCards[1];
-		allCards[4]=tableCards[2];
-		allCards[5]=tableCards[3];
-		allCards[6]=tableCards[4];
+		// for(int i = 0; i < 2; i++) {
+		// allCards[i] = playerCards[i];
+		// }
+		// for(int i = 2; i < 7; i++) {
+		// allCards[i] = tableCards[i];
+		// }
+		allCards[0] = playerCards[0];
+		allCards[1] = playerCards[1];
+		allCards[2] = tableCards[0];
+		allCards[3] = tableCards[1];
+		allCards[4] = tableCards[2];
+		allCards[5] = tableCards[3];
+		allCards[6] = tableCards[4];
 
-		int[] colors = {0, 0, 0, 0};
-		
-		for(int i = 0; i < 7; i++) {
+		int[] colors = { 0, 0, 0, 0 };
+
+		for (int i = 0; i < 7; i++) {
 			colors[allCards[i].getColorID()]++;
 		}
 
-		for(int i = 0; i < 4; i++) {
-			if(colors[i] >= 5) {
+		for (int i = 0; i < 4; i++) {
+			if (colors[i] >= 5) {
 				return i;
 			}
 		}
-			return 30000;
+		return 30000;
 	}
 
 	/**
@@ -467,21 +489,19 @@ public class Game {
 			if (a != 0 && cardworth[a] == cardworth[a - 1]) {
 				same = same + 1;
 			}
-			if (same >= 4 && cardworth[a]==cardworth[a-3]) {
+			if (same >= 4 && cardworth[a] == cardworth[a - 3]) {
 				sameworth[0] = same;
 				sameworth[1] = cardworth[a - 1];
 				return sameworth;
 			} else {
-				if (same == 3 && a != 6
-						&& cardworth[a] != cardworth[a + 1]
+				if (same == 3 && a != 6 && cardworth[a] != cardworth[a + 1]
 						&& cardworth[a] == cardworth[a - 2]) {
 					sameworth[0] = same;
 					sameworth[1] = cardworth[a - 1];
 				} else {
-					if (same == 2 && a != 6
-							&& cardworth[a] != cardworth[a + 1]) {
+					if (same == 2 && a != 6 && cardworth[a] != cardworth[a + 1]) {
 						sameworth[0] = same;
-						sameworth[1] = cardworth[a-1];
+						sameworth[1] = cardworth[a - 1];
 					}
 
 				}
@@ -494,7 +514,7 @@ public class Game {
 				same2 = same2 + 1;
 				sameworth[2] = same2;
 				sameworth[3] = cardworth[a];
-				
+
 			}
 		}
 		return sameworth;
@@ -503,7 +523,8 @@ public class Game {
 	public int followfive(int[] cardworth) {
 		int follow = 1;
 		for (int a = 0; a < 7; a++) {
-			if ((a != 0 && a!=6 && cardworth[a] == cardworth[a - 1] + 1 && cardworth[a]==cardworth[a+1]-1 )|| (a==6 && cardworth[6]==cardworth[5]+1 )) {
+			if ((a != 0 && a != 6 && cardworth[a] == cardworth[a - 1] + 1 && cardworth[a] == cardworth[a + 1] - 1)
+					|| (a == 6 && cardworth[6] == cardworth[5] + 1)) {
 				follow = follow + 1;
 			}
 			if (follow >= 5) {
@@ -513,42 +534,61 @@ public class Game {
 		return 0;
 
 	}
-	
+
 	/**
 	 * gives back the worth of the hand
+	 * 
 	 * @param cardworth
 	 * @param fivecolor
 	 * @param followfive
 	 * @param sameworth
 	 * @return
 	 */
-	
-	public int handworth(int [] cardworth, int fivecolor, int followfive, int [] sameworth){
-		
-		if((followfive==12) & (fivecolor !=30000)){ //RoyalFlush
+
+	public int handworth(int[] cardworth, int fivecolor, int followfive,
+			int[] sameworth) {
+
+		if ((followfive == 12) & (fivecolor != 30000)) { // RoyalFlush
 			return 10;
-		}else{ if(followfive!=0 && fivecolor!= 30000){ //Flush
-			return 9;
-		}else{ if(sameworth[0]==4){	//Vierling
-			return 8;
-		}else { if(sameworth[0]==3 && sameworth[2]==2){ //drilling+pair
-			return 7;
-		}else { if(fivecolor!=30000){	//5 from one color
-			return 6;
-		}else { if(followfive!=0){	//street
-			return 5;
-		}else { if(sameworth[0]==3 || sameworth[2]==3){ //drilling
-			return 4;
-		}else { if(sameworth[0]==2 && sameworth[2]==2){ //two pairs
-			return 3;
-		}else { if(sameworth [0]==2 || sameworth [2]==2){ //pair
-			return 2;	
-		}else return 1;  //Highcard
-		
-		}}}}}}}
-		
+		} else {
+			if (followfive != 0 && fivecolor != 30000) { // Flush
+				return 9;
+			} else {
+				if (sameworth[0] == 4) { // Vierling
+					return 8;
+				} else {
+					if (sameworth[0] == 3 && sameworth[2] == 2) { // drilling+pair
+						return 7;
+					} else {
+						if (fivecolor != 30000) { // 5 from one color
+							return 6;
+						} else {
+							if (followfive != 0) { // street
+								return 5;
+							} else {
+								if (sameworth[0] == 3 || sameworth[2] == 3) { // drilling
+									return 4;
+								} else {
+									if (sameworth[0] == 2 && sameworth[2] == 2) { // two
+																					// pairs
+										return 3;
+									} else {
+										if (sameworth[0] == 2
+												|| sameworth[2] == 2) { // pair
+											return 2;
+										} else
+											return 1; // Highcard
+
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
 		}
-		
+
 	}
 
 }

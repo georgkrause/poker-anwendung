@@ -8,7 +8,7 @@ public class Alfi extends Player {
 		super(credit);
 	}
 	
-	public int decide() throws InterruptedException {
+	public int decide() throws InterruptedException  {
 		Thread.sleep(5000);
 		Random r = new Random();
 		return r.nextInt(3);
