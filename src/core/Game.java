@@ -136,6 +136,7 @@ public class Game {
 			}
 		}
 		if(this.tableCards[4].isVisible()){
+			int []feld=new int [activePlayerNumber];
 			for (int i = 0; i < 4; i++) {
 				if(!activePlayers[i].folded){
 					int [] sortedcards=sortworth(tableCards[0].getWorthID(),tableCards[1].getWorthID(),tableCards[2].getWorthID(),tableCards[3].getWorthID(),tableCards[4].getWorthID(),
@@ -143,9 +144,22 @@ public class Game {
 					int fivecolor= fivecolor(tableCards,activePlayers[i].getCards());
 					int [] sameworthfield=sameworth(sortedcards);
 					int followfive=followfive(sortedcards);
-					System.out.println(handworth(sortedcards,fivecolor,followfive, sameworthfield));
-				}
+					this.activePlayers[i].getCards()[0].discover();
+					this.activePlayers[i].getCards()[1].discover();
+					this.activePlayers[i].getCards()[0].getPicture();
+					this.activePlayers[i].getCards()[1].getPicture();
+					window.updatePlayerCards(i);
+					window.updatePlayerCards(i);
+					if(i==3 && activePlayerNumber<4 || i==2 && activePlayerNumber<3){
+						feld[activePlayerNumber-1]= handworth(sortedcards,fivecolor,followfive, sameworthfield);
+					}else{
+					feld[i]= handworth(sortedcards,fivecolor,followfive, sameworthfield);
+					
+				}}
 			}
+	
+			getWinner(feld);
+			System.out.println(getWinner(feld).getId());
 		}
 	}
 
@@ -240,8 +254,16 @@ public class Game {
 	/**
 	 * @return the player object which had won the round
 	 */
-	Player getWinner() {
-		Player winner = new Player(1);
+	Player getWinner(int [] handresults) {
+		int winners=0;
+		
+		for (int a = 0; a < handresults.length-1; a++) {
+			if(handresults[a]<handresults[a+1]){
+				winners=a+1;
+			}
+		}
+		
+		Player winner = new Player(winners);
 		return winner;
 	}
 
@@ -480,9 +502,12 @@ public class Game {
 			return 4;
 		}else { if(sameworth [0]==2 || sameworth [2]==2){
 			return 3;
-		}else return 2;
+		}else return 2; 
 		
+		}}}}}}}
 		
-	}}}}}}}}
+		}
+		
+	
 
 }
