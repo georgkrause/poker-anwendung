@@ -16,6 +16,7 @@ public class Game {
 	private int credit = 1000;
 	private final int minimumBet = 100;
 	private int raiseworth = 100; // Testzweck, Wert des PC spielers fehlt
+	private int poorplayers=0;
 
 	private Card[] cards = new Card[52];
 	private int givenCards = 0;
@@ -24,6 +25,8 @@ public class Game {
 	private int bigBlind;
 	private int dealer;
 	private int turnPlayer;
+	private boolean end=true;
+	public boolean windowcreated=false;
 
 	private int pot;
 	public Player[] activePlayers = new Player[4];
@@ -35,19 +38,30 @@ public class Game {
 
 	/**
 	 * initialize a new game - creates all the cards - choose five table cards
+	 * @throws InterruptedException 
 	 */
-	Game() {
-
+	Game() throws InterruptedException {
+		
 		// Generate all cards
 		this.generateCards();
 
 		// create objects of the players
 		this.generatePlayers();
-
+		while (end == true){
+		for (int i = 0; i < 4; i++) {
+			if(activePlayers[i].getCredit()>0){
+				poorplayers=poorplayers-1;
+			}
+		}
+		if (poorplayers==1){
+			end=false;
+			window.dispose();
+		}
+		
 		this.round();
-	}
+	}}
 
-	private void round() {
+	private void round() throws InterruptedException {
 		this.assignRoles();
 
 		this.prepairPlayers();
@@ -60,6 +74,7 @@ public class Game {
 		this.tableCards[4] = this.deal();
 
 		window = new Window(this);
+		windowcreated=true;
 
 		this.collectBlinds();
 
@@ -135,8 +150,17 @@ public class Game {
 				window.updateCommunityCards();
 			}
 		}
-		if(this.tableCards[4].isVisible()){
+		if(activePlayerNumber==1){
+			for (int i = 0; i < 4; i++) {
+				if(!activePlayers[i].folded){
+					disburseAsset(activePlayers[i]);
+					window.updatePot();
+					window.updateCredits();
+				}
+		}}
+		else{ if(this.tableCards[4].isVisible()){
 			int []feld=new int [4];
+			int []highcards=new int [4];
 			for (int i = 0; i < 4; i++) {
 				if(!activePlayers[i].folded){
 					int [] sortedcards=sortworth(tableCards[0].getWorthID(),tableCards[1].getWorthID(),tableCards[2].getWorthID(),tableCards[3].getWorthID(),tableCards[4].getWorthID(),
@@ -157,15 +181,25 @@ public class Game {
 					System.out.print(sameworthfield[a]+ " "); }
 					
 					feld[i]= handworth(sortedcards,fivecolor,followfive, sameworthfield);
+					highcards[i]=sortedcards[6];
 					System.out.println(feld[i]);
 					
 				}
 			}
 			
-			getWinner(feld);
-			System.out.println(getWinner(feld));
-		}
+			int z=getWinner(feld,highcards);
+			disburseAsset(activePlayers[z]);
+			window.updatePot();
+			window.updateCredits();
+			this.givenCards=0;
+			this.activePlayerNumber=4;
+			for (int i = 0; i < 4; i++) {
+				activePlayers[i].folded=false;
+			}}}
+		
 	}
+	
+	
 
 	private void prepairPlayers() {
 		// Karten geben und Spieler wieder ins Spiel bringen
@@ -177,8 +211,8 @@ public class Game {
 			}
 		}
 		// show cards of the human player
-		this.activePlayers[0].getCards()[0].discover();
-		this.activePlayers[0].getCards()[1].discover();
+		activePlayers[0].getCards()[0].discover();
+		activePlayers[0].getCards()[1].discover();
 
 	}
 
@@ -258,15 +292,17 @@ public class Game {
 	/**
 	 * @return the player object which had won the round
 	 */
-	int getWinner(int [] handresults) {
+	int getWinner(int [] handresults, int [] highcards) {
 		int winners=0;
 		
-		for (int a = 0; a < handresults.length-1; a++) {
+		for (int a = 1; a < handresults.length-1; a++) {
 			if(handresults[a]>handresults[winners]){
+				winners=a;
+			}else { if(handresults[a]==handresults[winners] && highcards[a]>highcards[winners]){
 				winners=a;
 			}
 		}
-		
+		}
 		return winners;
 	}
 

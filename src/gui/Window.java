@@ -17,6 +17,8 @@ public class Window extends JFrame {
 	public JTextField[] credits = new JTextField[4];
 	public JLabel[] cards = new JLabel[13];
 	JTextField pot;
+	String credit="wurst";
+	
 
 	/** 
 	 * 
@@ -122,7 +124,7 @@ public class Window extends JFrame {
 	 */
 	public void updateCredits() {
 		for (int i = 0; i < 4; i++) {
-			String credit = game.activePlayers[i].getCredit() + " $";
+			credit = game.activePlayers[i].getCredit() + " $";
 			credits[i].setText(credit);
 		}
 	}
@@ -161,9 +163,11 @@ public class Window extends JFrame {
 	 * @param game
 	 */
 	public Window(Game game) {
-
+		
 		super("Window");
-
+if(game.windowcreated==false){
+			
+		
 		this.game = game;
 
 		setLayout(null);
@@ -232,6 +236,61 @@ public class Window extends JFrame {
 		repaint();
 		
 		
+}else {newCard(5, 350, 460, game.activePlayers[0].getCards()[0].getPicture());
+newCard(6, 420, 460, game.activePlayers[0].getCards()[1].getPicture());
 
+newCard(7, 50, 280, game.activePlayers[1].getCards()[0].getPicture());
+newCard(8, 120, 280, game.activePlayers[1].getCards()[1].getPicture());
+
+newCard(9, 350, 30, game.activePlayers[2].getCards()[0].getPicture());
+newCard(10, 420, 30, game.activePlayers[2].getCards()[1].getPicture());
+
+newCard(11, 630, 280, game.activePlayers[3].getCards()[0].getPicture());
+newCard(12, 700, 280, game.activePlayers[3].getCards()[1].getPicture());
+
+// Gemeinschaftskarten:
+
+newCard(0, 250, 280, game.tableCards[0].getPicture());
+newCard(1, 320, 280, game.tableCards[1].getPicture());
+newCard(2, 390, 280, game.tableCards[2].getPicture());
+newCard(3, 460, 280, game.tableCards[3].getPicture());
+newCard(4, 530, 280, game.tableCards[4].getPicture());
+
+// Guthabenstände der Spieler:
+
+newText(0, 500, 460, game.activePlayers[0].getCredit());
+newText(1, 50, 400, game.activePlayers[1].getCredit());
+newText(2, 500, 50, game.activePlayers[2].getCredit());
+newText(3, 700, 400, game.activePlayers[3].getCredit());
+
+
+// Pott: (braucht extra Festlegung, da Größe anders sein muss, als die der anderen Textfelder
+
+pot = new JTextField(game.getPot() + " $");
+
+pot.setBounds(360, 180, 100, 50);
+pot.setBorder(BorderFactory.createEmptyBorder());
+pot.setHorizontalAlignment(JTextField.CENTER);
+pot.setEditable(false);
+add(pot);
+
+
+// Dealermarke,Small Blind,Big Blind
+
+Dealer(game.getDealer());
+
+// Hintergrund bzw. Spieltisch und CommunityCard Hintergrund
+
+ImageIcon backgroundccards = new ImageIcon("img/communitycardbg.png");
+JLabel ccardbereich = new JLabel(backgroundccards);
+ccardbereich.setBounds(230, 250, 370, 150);
+add(ccardbereich);
+repaint();
+
+ImageIcon background = new ImageIcon("img/background.png");
+JLabel bereich = new JLabel(background);
+bereich.setBounds(0, 0, 800, 600);
+add(bereich);
+repaint();
 	}
-}
+}}
