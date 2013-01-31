@@ -16,7 +16,7 @@ public class Window extends JFrame {
 	public JTextField[] credits = new JTextField[4];
 	public JLabel[] cards = new JLabel[13];
 	JTextField pot;
-	String credit = "wurst";
+//	String credit = "wurst";
 
 	/** 
 	 * 
@@ -123,7 +123,7 @@ public class Window extends JFrame {
 	 */
 	public void updateCredits() {
 		for (int i = 0; i < 4; i++) {
-			credit = game.activePlayers[i].getCredit() + " $";
+			String credit = game.activePlayers[i].getCredit() + " $";
 			credits[i].setText(credit);
 		}
 	}

@@ -49,7 +49,7 @@ public class Game {
 		// create objects of the players
 		this.generatePlayers();
 
-		this.window = new Window(this);
+		window = new Window(this);
 		windowcreated = true;
 
 		while (end == true) {
@@ -69,7 +69,6 @@ public class Game {
 	}
 
 	private void round() throws InterruptedException {
-		this.assignRoles();
 
 		this.prepairPlayers();
 		this.activePlayerNumber = 4;
@@ -383,6 +382,7 @@ public class Game {
 	 * @return the dealer
 	 */
 	public int getDealer() {
+		assignRoles();
 		return dealer;
 	}
 
