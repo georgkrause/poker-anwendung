@@ -13,10 +13,13 @@ import core.Game;
 public class Window extends JFrame {
 
 	private Game game;
-	public JTextField[] credits = new JTextField[4];
-	public JLabel[] cards = new JLabel[13];
+	private JTextField[] credits = new JTextField[4];
+	private JLabel[] cards = new JLabel[13];
+	private JLabel[] marks = new JLabel[3];
 	JTextField pot;
-//	String credit = "wurst";
+
+	private int[] x = { 260, 100, 270, 700, 260, 100, 270, 700, };
+	private int[] y = { 470, 220, 50, 200, 470, 220, 50, 200, };
 
 	/** 
 	 * 
@@ -64,28 +67,30 @@ public class Window extends JFrame {
 	 * @param d
 	 *            id of the player who is dealer
 	 */
-	public void Dealer(int d) {
-		int[] x = { 260, 100, 270, 700, 260, 100, 270, 700, };
-		int[] y = { 470, 220, 50, 200, 470, 220, 50, 200, };
-
+	private void Dealer() {
 		ImageIcon background1 = new ImageIcon("img/dealerbutton.png");
-		JLabel bereich1 = new JLabel(background1);
-		bereich1.setBounds(x[d], y[d], 50, 50);
-		add(bereich1);
+		marks[0] = new JLabel(background1);
+		add(marks[0]);
 		repaint();
 
 		ImageIcon background2 = new ImageIcon("img/smallblind.png");
-		JLabel bereich2 = new JLabel(background2);
-		bereich2.setBounds(x[d + 1], y[d + 1], 50, 50);
-		add(bereich2);
+		marks[1] = new JLabel(background2);
+		add(marks[1]);
 		repaint();
 
 		ImageIcon background3 = new ImageIcon("img/bigblind.png");
-		JLabel bereich3 = new JLabel(background3);
-		bereich3.setBounds(x[d + 2], y[d + 2], 50, 50);
-		add(bereich3);
+		marks[2] = new JLabel(background3);
+		add(marks[2]);
 		repaint();
 
+	}
+
+	public void updateDealer() {
+		int dealer = game.getDealer();
+		marks[0].setBounds(x[dealer], y[dealer], 50, 50);
+		marks[1].setBounds(x[dealer + 1], y[dealer + 1], 50, 50);
+		marks[2].setBounds(x[dealer + 2], y[dealer + 2], 50, 50);
+		repaint();
 	}
 
 	/**
@@ -111,11 +116,14 @@ public class Window extends JFrame {
 	public int RaiseDialogBox() {
 
 		String inputValue = null;
-		while (inputValue == null)
-			inputValue = JOptionPane
-					.showInputDialog("Um wie viel möchtest du erhöhen?");
-		int intZahl = Integer.parseInt(inputValue);
-		return intZahl;
+		inputValue = JOptionPane
+				.showInputDialog("Um wie viel möchtest du erhöhen?");
+		if (inputValue != null) {
+			int intZahl = Integer.parseInt(inputValue);
+
+			return intZahl;
+		}
+		return 0;
 	}
 
 	/**
@@ -214,7 +222,7 @@ public class Window extends JFrame {
 
 		// Dealermarke,Small Blind,Big Blind
 
-		Dealer(game.getDealer());
+		Dealer();
 
 		// Hintergrund bzw. Spieltisch und CommunityCard Hintergrund
 

@@ -16,9 +16,9 @@ public class Alfi extends Player {
 		if(random < 6) {
 			return 1;
 		} else if (random < 8) {
-			return 1;
+			return 0;
 		} else {
-			return 1;
+			return 2;
 		}
 	}
 

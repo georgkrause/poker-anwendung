@@ -21,9 +21,9 @@ public class Game {
 	private Card[] cards = new Card[52];
 	private int givenCards = 0;
 
-	private int smallBlind;
-	private int bigBlind;
-	private int dealer;
+	private int smallBlind = 0;
+	private int bigBlind = 0;
+	private int dealer = 0;
 
 	private int turnPlayer;
 	private boolean end = true;
@@ -43,12 +43,8 @@ public class Game {
 	 */
 	Game() throws InterruptedException {
 
-		// Generate all cards
-		this.generateCards();
-
 		// create objects of the players
 		this.generatePlayers();
-		this.assignRoles();
 
 		window = new Window(this);
 
@@ -71,12 +67,16 @@ public class Game {
 
 	private void round() throws InterruptedException {
 
+		this.generateCards();
+
 		this.prepairPlayers();
+
+		this.assignRoles();
+
 		this.activePlayerNumber = 4;
 		// System.out.println(activePlayerNumber);
 
-		window.Dealer(this.getDealer());
-		System.out.println(dealer);
+		window.updateDealer();
 
 		// choose table cards
 		this.tableCards[0] = this.deal();
@@ -94,7 +94,7 @@ public class Game {
 		while (activePlayerNumber > 1 && !this.tableCards[4].isVisible()) {
 			int movesWithoutRaise = 0;
 			// Wettrunde
-			while (movesWithoutRaise < activePlayerNumber - 1) {
+			while (movesWithoutRaise < activePlayerNumber) {
 
 				int choice = 0;
 
@@ -108,8 +108,9 @@ public class Game {
 						} while (choice < 0);
 
 						if (choice == 0) {
-
-							raiseworth = window.RaiseDialogBox();
+							do {
+								raiseworth = window.RaiseDialogBox();
+							} while(raiseworth == 0 || (raiseworth % 50 != 0));
 
 						}
 					}
@@ -207,19 +208,10 @@ public class Game {
 						window.updatePlayerCards(i);
 						window.updatePlayerCards(i);
 						Thread.sleep(6000);
-						for (int a = 0; a < 7; a++) {
-							// System.out.print(sortedcards[a] + " ");
-						}
-						// System.out.println();
-						for (int a = 0; a < 4; a++) {
-							// System.out.print(sameworthfield[a] + " ");
-						}
 
 						feld[i] = handworth(sortedcards, fivecolor, followfive,
 								sameworthfield);
 						highcards[i] = sortedcards[6];
-						// System.out.println(feld[i]);
-
 					}
 				}
 
@@ -233,7 +225,6 @@ public class Game {
 				for (int i = 0; i < 4; i++) {
 					this.activePlayers[i].folded = false;
 				}
-				this.generateCards();
 			}
 		}
 
@@ -265,7 +256,11 @@ public class Game {
 
 	private void assignRoles() {
 		// choose dealer
-		dealer = r.nextInt(4);
+		if (dealer == smallBlind) {
+			dealer = r.nextInt(4);
+		} else {
+			dealer++;
+		}
 
 		// choose Blinds
 		if (dealer == 4) {
@@ -288,7 +283,11 @@ public class Game {
 	}
 
 	private int getTurnPlayer() {
-		return this.dealer;
+		int turnPlayer = this.dealer - 1;
+		if(turnPlayer < 0) {
+			turnPlayer = 3;
+		} 
+		return turnPlayer;
 	}
 
 	private void generatePlayers() {
