@@ -17,7 +17,7 @@ public class Player {
 	 * player check the current round
 	 */
 	public void check() {
-		return;
+		return;	//brauchen wir zurzeit nicht
 	}
 
 	/**
@@ -26,7 +26,7 @@ public class Player {
 	public void fold() {
 		this.setCards(null);
 		this.folded = true;
-		return;
+		return; //?
 	}
 
 	/**
