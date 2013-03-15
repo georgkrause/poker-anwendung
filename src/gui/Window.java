@@ -102,9 +102,21 @@ public class Window extends JFrame {
 	 */
 
 	public int DialogBox() {
-		Object[] options = { "Raise", "Call", "Fold" };
+		Object[] options = new Object[3];
+		if (game.cue > game.activePlayers[0].debt) {
+			options[0] = "Raise";
+			options[1] = "Call";
+			options[2] = "Fold";
+		} else {
+			options[0] = "Raise";
+			options[1] = "Check";
+			options[2] = "Fold";
+		}
 		return JOptionPane.showOptionDialog(this,
-				"Welche Aktion möchtest du ausführen?", "Eingabe",
+				"Welche Aktion möchtest du ausführen?\n "
+						+ "Der aktuelle Einsatz liegt bei " + game.cue + "$.\n"
+						+ "Du hast bereits " + game.activePlayers[0].debt
+						+ "$ gesetzt.", "Eingabe",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
 				null, options, options[2]);
 	}
