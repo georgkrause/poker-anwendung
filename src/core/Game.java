@@ -108,9 +108,16 @@ public class Game {
 						} while (choice < 0);
 
 						if (choice == 0) {
+<<<<<<< HEAD
 							do {
 								raiseworth = window.RaiseDialogBox();
 							} while (raiseworth == 0 || (raiseworth % 50 != 0));
+=======
+							do {if(cue - activePlayers[turnPlayer].debt==0){
+								raiseworth = window.RaiseDialogBox();}
+							else{raiseworth = window.RaiseDialogBox();}
+							} while(raiseworth == 0 || (raiseworth % 50 != 0));
+>>>>>>> 1f2d5bcf6e22d7564b2e29f91b7e8f82d2d9d612
 
 						}
 					}
