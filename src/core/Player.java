@@ -50,8 +50,8 @@ public class Player {
 	 * @return whether action is possible or not
 	 */
 	public boolean raise(int cue) {
-		this.debt=cue-debt;
 		if (this.credit >= debt) {
+			this.debt=cue-debt;
 			this.credit -= debt;
 			return true;
 		} else {

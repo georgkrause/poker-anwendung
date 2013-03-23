@@ -16,7 +16,7 @@ public class Game {
 	private int credit = 10000;
 	private final int minimumBet = 100;
 	private int raiseworth = 100; // Testzweck, Wert des PC spielers fehlt TODO
-	private int poorplayers = 0;
+	private int richplayers = 0;
 
 	private Card[] cards = new Card[52];
 	private int givenCards = 0;
@@ -26,7 +26,7 @@ public class Game {
 	private int dealer = 0;
 
 	private int turnPlayer;
-	private boolean end = true;
+	private boolean end = false;
 
 	private int pot;
 	public Player[] activePlayers = new Player[4];
@@ -48,16 +48,16 @@ public class Game {
 
 		window = new Window(this);
 
-		while (end) {
-			poorplayers = 4;
+		while (!end) {
+			richplayers = 4;
 			for (int i = 0; i < 4; i++) {
 				if (activePlayers[i].getCredit() <= 0) {
 					this.activePlayers[i].fold();
-					poorplayers--;
+					richplayers--;
 				}
 			}
-			if (poorplayers == 1) {
-				end = false;
+			if (richplayers == 1) {
+				end = true;
 				window.dispose();
 				return;
 			}
@@ -98,7 +98,7 @@ public class Game {
 
 				int choice = 0;
 
-				if (!activePlayers[turnPlayer].folded) {
+				if (!activePlayers[turnPlayer].isFolded()) {
 					if (turnPlayer != 0) {
 						choice = ((Alfi) this.activePlayers[turnPlayer])
 								.decide();
@@ -110,7 +110,7 @@ public class Game {
 						if (choice == 0) {
 							do {
 								raiseworth = window.RaiseDialogBox();
-							} while(raiseworth == 0 || (raiseworth % 50 != 0));
+							} while (raiseworth == 0 || (raiseworth % 50 != 0));
 
 						}
 					}
@@ -170,7 +170,7 @@ public class Game {
 		}
 		if (activePlayerNumber == 1) {
 			for (int i = 0; i < 4; i++) {
-				if (!activePlayers[i].folded) {
+				if (!activePlayers[i].isFolded()) {
 					Thread.sleep(4000);
 					disburseAsset(activePlayers[i]);
 					window.updatePot();
@@ -188,7 +188,7 @@ public class Game {
 				int[] feld = new int[4];
 				int[] highcards = new int[4];
 				for (int i = 0; i < 4; i++) {
-					if (!activePlayers[i].folded) {
+					if (!activePlayers[i].isFolded()) {
 						int[] sortedcards = sortworth(
 								tableCards[0].getWorthID(),
 								tableCards[1].getWorthID(),
@@ -237,7 +237,7 @@ public class Game {
 		this.turnPlayer = getTurnPlayer();
 
 		for (int i = 0; i < 4; i++) {
-			if (activePlayers[i] != null) {
+			if (!activePlayers[i].isFolded()) {
 				Card[] cards = { deal(), deal() };
 				activePlayers[i].setCards(cards);
 				activePlayers[i].folded = false;
@@ -245,8 +245,10 @@ public class Game {
 			}
 		}
 		// show cards of the human player
-		this.activePlayers[0].getCards()[0].discover();
-		this.activePlayers[0].getCards()[1].discover();
+		if (!this.activePlayers[0].isFolded()) {
+			this.activePlayers[0].getCards()[0].discover();
+			this.activePlayers[0].getCards()[1].discover();
+		}
 
 		for (int i = 0; i < 4; i++) {
 			window.updatePlayerCards(i);
@@ -284,9 +286,9 @@ public class Game {
 
 	private int getTurnPlayer() {
 		int turnPlayer = this.dealer - 1;
-		if(turnPlayer < 0) {
+		if (turnPlayer < 0) {
 			turnPlayer = 3;
-		} 
+		}
 		return turnPlayer;
 	}
 
@@ -303,7 +305,6 @@ public class Game {
 
 	private void collectBlinds() {
 		this.activePlayers[this.bigBlind].raise(minimumBet);
-		this.activePlayers[this.bigBlind].debt = minimumBet;
 		this.activePlayers[this.smallBlind].debt = minimumBet / 2;
 		this.activePlayers[this.smallBlind].changeCredit(-minimumBet / 2);
 		window.updateCredits();

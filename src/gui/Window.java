@@ -165,7 +165,7 @@ public class Window extends JFrame {
 	}
 
 	public void updatePlayerCards(int id) {
-		if (!game.activePlayers[id].folded) {
+		if (!game.activePlayers[id].isFolded()) {
 			this.cards[id * 2 + 5].setIcon(new ImageIcon("img/"
 					+ game.activePlayers[id].getCards()[0].getPicture()));
 			this.cards[id * 2 + 6].setIcon(new ImageIcon("img/"
