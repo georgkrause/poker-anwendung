@@ -15,8 +15,8 @@ public class Game {
 
 	private int credit = 10000;
 	private final int minimumBet = 100;
-	private int raiseworth = 100; // Testzweck, Wert des PC spielers fehlt TODO
-	private int richplayers = 0;
+	private int raiseWorth = 100; // Testzweck, Wert des PC spielers fehlt TODO
+	private int richPlayers = 0;
 
 	private Card[] cards = new Card[52];
 	private int givenCards = 0;
@@ -49,14 +49,14 @@ public class Game {
 		window = new Window(this);
 
 		while (!end) {
-			richplayers = 4;
+			richPlayers = 4;
 			for (int i = 0; i < 4; i++) {
 				if (activePlayers[i].getCredit() <= 0) {
 					this.activePlayers[i].fold();
-					richplayers--;
+					richPlayers--;
 				}
 			}
-			if (richplayers == 1) {
+			if (richPlayers == 1) {
 				end = true;
 				window.dispose();
 				return;
@@ -108,22 +108,25 @@ public class Game {
 						} while (choice < 0);
 
 						if (choice == 0) {
-<<<<<<< HEAD
+							
 							do {
-								raiseworth = window.RaiseDialogBox();
-							} while (raiseworth == 0 || (raiseworth % 50 != 0));
-=======
-							do {if(cue - activePlayers[turnPlayer].debt==0){
-								raiseworth = window.RaiseDialogBox();}
-							else{raiseworth = window.RaiseDialogBox();}
-							} while(raiseworth == 0 || (raiseworth % 50 != 0));
->>>>>>> 1f2d5bcf6e22d7564b2e29f91b7e8f82d2d9d612
+								raiseWorth = window.RaiseDialogBox();
+							} while (raiseWorth == 0 || (raiseWorth % 50 != 0));
+						
+							do {
+								if (cue - activePlayers[turnPlayer].debt == 0) {
+									raiseWorth = window.RaiseDialogBox();
+								} else {
+									raiseWorth = window.RaiseDialogBox();
+								}
+							} while (raiseWorth == 0 || (raiseWorth % 50 != 0));
+							
 
 						}
 					}
 					switch (choice) {
 					case 0: // raise
-						this.cue += raiseworth;
+						this.cue += raiseWorth;
 						if (this.activePlayers[turnPlayer].raise(cue)) {
 							window.updateCredits();
 							this.raisePot(activePlayers[turnPlayer].debt);
@@ -196,7 +199,7 @@ public class Game {
 				int[] highcards = new int[4];
 				for (int i = 0; i < 4; i++) {
 					if (!activePlayers[i].isFolded()) {
-						int[] sortedcards = sortworth(
+						int[] sortedcards = sortWorth(
 								tableCards[0].getWorthID(),
 								tableCards[1].getWorthID(),
 								tableCards[2].getWorthID(),
@@ -204,10 +207,10 @@ public class Game {
 								tableCards[4].getWorthID(),
 								activePlayers[i].getCards()[0].getWorthID(),
 								activePlayers[i].getCards()[1].getWorthID());
-						int fivecolor = fivecolor(tableCards,
+						int fivecolor = fiveColor(tableCards,
 								activePlayers[i].getCards());
-						int[] sameworthfield = sameworth(sortedcards);
-						int followfive = followfive(sortedcards);
+						int[] sameworthfield = sameWorth(sortedcards);
+						int followfive = followFive(sortedcards);
 						this.activePlayers[i].getCards()[0].discover();
 						this.activePlayers[i].getCards()[1].discover();
 						this.activePlayers[i].getCards()[0].getPicture();
@@ -221,14 +224,18 @@ public class Game {
 						highcards[i] = sortedcards[6];
 					}
 				}
-
+				
 				int z = getWinner(feld, highcards);
+				if(z<10){
 				System.out.println("Winner: " + z + " " + feld[z]);
 				disburseAsset(activePlayers[z]);
 				window.updatePot();
 				window.updateCredits();
 				this.givenCards = 0;
-				this.activePlayerNumber = 4;
+				this.activePlayerNumber = 4; }
+				else {System.out.println("Es gibt 2 Gewinner!");
+				//In der Fkt. getWinner muss gesagt werden, WER die beiden Gewinner sind. TODO 
+				}
 				for (int i = 0; i < 4; i++) {
 					this.activePlayers[i].folded = false;
 				}
@@ -286,7 +293,7 @@ public class Game {
 		else
 			bigBlind = dealer + 2;
 
-		// choose first Player TODO
+		
 		turnPlayer = getTurnPlayer();
 
 	}
@@ -354,20 +361,29 @@ public class Game {
 	/**
 	 * @return the player object which had won the round
 	 */
-	int getWinner(int[] handresults, int[] highcards) {
+	int getWinner(int[] handResults, int[] highCards) {
 		int winners = 0;
+		boolean twoWinners = false;
 
-		for (int a = 1; a < handresults.length - 1; a++) {
-			if (handresults[a] > handresults[winners]) {
+		for (int a = 1; a < handResults.length - 1; a++) {
+			if (handResults[a] > handResults[winners]) {
 				winners = a;
+
 			} else {
-				if (handresults[a] == handresults[winners]
-						&& highcards[a] > highcards[winners]) {
+				if (handResults[a] == handResults[winners]
+						&& highCards[a] > highCards[winners]) {
 					winners = a;
+
+				} else {
+					if (handResults[a] == handResults[winners]
+							&& highCards[a] == highCards[winners])
+						twoWinners=true;
 				}
 			}
 		}
-		return winners;
+		if(twoWinners==true)
+		return 1337;
+		else return winners;
 	}
 
 	/**
@@ -447,27 +463,27 @@ public class Game {
 	 * @param pcard1
 	 * @return
 	 */
-	public int[] sortworth(int ccard0, int ccard1, int ccard2, int ccard3,
+	public int[] sortWorth(int ccard0, int ccard1, int ccard2, int ccard3,
 			int ccard4, int pcard0, int pcard1) {
-		int[] allcardsworth = new int[7];
-		allcardsworth[0] = ccard0;
-		allcardsworth[1] = ccard1;
-		allcardsworth[2] = ccard2;
-		allcardsworth[3] = ccard3;
-		allcardsworth[4] = ccard4;
-		allcardsworth[5] = pcard0;
-		allcardsworth[6] = pcard1;
+		int[] allCardsWorth = new int[7];
+		allCardsWorth[0] = ccard0;
+		allCardsWorth[1] = ccard1;
+		allCardsWorth[2] = ccard2;
+		allCardsWorth[3] = ccard3;
+		allCardsWorth[4] = ccard4;
+		allCardsWorth[5] = pcard0;
+		allCardsWorth[6] = pcard1;
 		for (int a = 0; a < 7; a++) {
 			int z = a;
-			while ((z > 0) && (allcardsworth[z] < allcardsworth[z - 1])) {
-				int hilf = allcardsworth[z];
-				allcardsworth[z] = allcardsworth[z - 1];
-				allcardsworth[z - 1] = hilf;
+			while ((z > 0) && (allCardsWorth[z] < allCardsWorth[z - 1])) {
+				int hilf = allCardsWorth[z];
+				allCardsWorth[z] = allCardsWorth[z - 1];
+				allCardsWorth[z - 1] = hilf;
 				z = z - 1;
 			}
 		}
 
-		return allcardsworth;
+		return allCardsWorth;
 
 	}
 
@@ -485,7 +501,7 @@ public class Game {
 	 */
 	// public int fivecolor(int ccard0, int ccard1, int ccard2, int ccard3,
 	// int ccard4, int pcard0, int pcard1) {
-	public int fivecolor(Card[] tableCards, Card[] playerCards) {
+	public int fiveColor(Card[] tableCards, Card[] playerCards) {
 		Card[] allCards = new Card[7];
 		// for(int i = 0; i < 2; i++) {
 		// allCards[i] = playerCards[i];
@@ -518,32 +534,32 @@ public class Game {
 	/**
 	 * counts pairs, threelings and fourlings
 	 * 
-	 * @param cardworth
+	 * @param cardWorth
 	 * @return
 	 */
-	public int[] sameworth(int[] cardworth) {
+	public int[] sameWorth(int[] cardWorth) {
 		int same = 1;
 		int same2 = 1;
-		int[] sameworth = new int[4];
+		int[] sameWorth = new int[4];
 
 		// Durchläuft alle Karten
 		for (int a = 0; a < 7; a++) {
-			if (a != 0 && cardworth[a] == cardworth[a - 1]) {
+			if (a != 0 && cardWorth[a] == cardWorth[a - 1]) {
 				same = same + 1;
 			}
-			if (same >= 4 && cardworth[a] == cardworth[a - 3]) {
-				sameworth[0] = same;
-				sameworth[1] = cardworth[a - 1];
-				return sameworth;
+			if (same >= 4 && cardWorth[a] == cardWorth[a - 3]) {
+				sameWorth[0] = same;
+				sameWorth[1] = cardWorth[a - 1];
+				return sameWorth;
 			} else {
-				if (same == 3 && a != 6 && cardworth[a] != cardworth[a + 1]
-						&& cardworth[a] == cardworth[a - 2]) {
-					sameworth[0] = same;
-					sameworth[1] = cardworth[a - 1];
+				if (same == 3 && a != 6 && cardWorth[a] != cardWorth[a + 1]
+						&& cardWorth[a] == cardWorth[a - 2]) {
+					sameWorth[0] = same;
+					sameWorth[1] = cardWorth[a - 1];
 				} else {
-					if (same == 2 && a != 6 && cardworth[a] != cardworth[a + 1]) {
-						sameworth[0] = same;
-						sameworth[1] = cardworth[a - 1];
+					if (same == 2 && a != 6 && cardWorth[a] != cardWorth[a + 1]) {
+						sameWorth[0] = same;
+						sameWorth[1] = cardWorth[a - 1];
 					}
 
 				}
@@ -551,26 +567,26 @@ public class Game {
 		}
 
 		for (int a = 0; a < 7; a++) {
-			if (a != 0 && cardworth[a] == cardworth[a - 1]
-					&& sameworth[1] != cardworth[a]) {
+			if (a != 0 && cardWorth[a] == cardWorth[a - 1]
+					&& sameWorth[1] != cardWorth[a]) {
 				same2 = same2 + 1;
-				sameworth[2] = same2;
-				sameworth[3] = cardworth[a];
+				sameWorth[2] = same2;
+				sameWorth[3] = cardWorth[a];
 
 			}
 		}
-		return sameworth;
+		return sameWorth;
 	}
 
-	public int followfive(int[] cardworth) {
+	public int followFive(int[] cardWorth) {
 		int follow = 1;
 		for (int a = 0; a < 7; a++) {
-			if ((a != 0 && a != 6 && cardworth[a] == cardworth[a - 1] + 1 && cardworth[a] == cardworth[a + 1] - 1)
-					|| (a == 6 && cardworth[6] == cardworth[5] + 1)) {
+			if ((a != 0 && a != 6 && cardWorth[a] == cardWorth[a - 1] + 1 && cardWorth[a] == cardWorth[a + 1] - 1)
+					|| (a == 6 && cardWorth[6] == cardWorth[5] + 1)) {
 				follow = follow + 1;
 			}
 			if (follow >= 5) {
-				return cardworth[a];
+				return cardWorth[a];
 			}
 		}
 		return 0;
@@ -580,43 +596,43 @@ public class Game {
 	/**
 	 * gives back the worth of the hand
 	 * 
-	 * @param cardworth
-	 * @param fivecolor
-	 * @param followfive
-	 * @param sameworth
+	 * @param cardWorth
+	 * @param fiveColor
+	 * @param followFive
+	 * @param sameWorth
 	 * @return
 	 */
 
-	public int handworth(int[] cardworth, int fivecolor, int followfive,
-			int[] sameworth) {
+	public int handworth(int[] cardWorth, int fiveColor, int followFive,
+			int[] sameWorth) {
 
-		if ((followfive == 12) & (fivecolor != 30000)) { // RoyalFlush
+		if ((followFive == 12) & (fiveColor != 30000)) { // RoyalFlush
 			return 10;
 		} else {
-			if (followfive != 0 && fivecolor != 30000) { // Flush
+			if (followFive != 0 && fiveColor != 30000) { // Flush
 				return 9;
 			} else {
-				if (sameworth[0] == 4) { // Vierling
+				if (sameWorth[0] == 4) { // Vierling
 					return 8;
 				} else {
-					if (sameworth[0] == 3 && sameworth[2] == 2) { // drilling+pair
+					if (sameWorth[0] == 3 && sameWorth[2] == 2) { // drilling+pair
 						return 7;
 					} else {
-						if (fivecolor != 30000) { // 5 from one color
+						if (fiveColor != 30000) { // 5 from one color
 							return 6;
 						} else {
-							if (followfive != 0) { // street
+							if (followFive != 0) { // street
 								return 5;
 							} else {
-								if (sameworth[0] == 3 || sameworth[2] == 3) { // drilling
+								if (sameWorth[0] == 3 || sameWorth[2] == 3) { // drilling
 									return 4;
 								} else {
-									if (sameworth[0] == 2 && sameworth[2] == 2) { // two
+									if (sameWorth[0] == 2 && sameWorth[2] == 2) { // two
 																					// pairs
 										return 3;
 									} else {
-										if (sameworth[0] == 2
-												|| sameworth[2] == 2) { // pair
+										if (sameWorth[0] == 2
+												|| sameWorth[2] == 2) { // pair
 											return 2;
 										} else
 											return 1; // Highcard
