@@ -525,6 +525,7 @@ public class Game {
 	public int[] sameWorth(int[] cardWorth) {
 		int same = 1;
 		int same2 = 1;
+		int twins=0;
 		int[] sameWorth = new int[4];
 
 		// Durchläuft alle Karten
@@ -542,13 +543,12 @@ public class Game {
 					sameWorth[0] = same;
 					sameWorth[1] = cardWorth[a - 1];
 				} else {
-					if ((same == 2) && (a != 6) && (cardWorth[a] != cardWorth[a + 1])) {
-						System.out.print("A"+a+" ");
+					if ((same == 2) && (a != 6) && (twins==0)&& (cardWorth[a] != cardWorth[a + 1])) {
+						twins=1;
 						sameWorth[0] = same;
 						sameWorth[1] = cardWorth[a - 1];
-						same=100;
-						System.out.print("B"+same+" ");
-						System.out.print("C"+sameWorth[1]+" ");
+					
+						
 					}
 
 				}
@@ -574,7 +574,7 @@ public class Game {
 					|| (a == 6 && cardWorth[6] == cardWorth[5] + 1)) {
 				follow = follow + 1;
 			}
-			if (follow >= 5) {
+			if (follow >= 4) {
 				return cardWorth[a];
 			}
 		}
