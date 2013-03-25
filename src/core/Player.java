@@ -1,38 +1,42 @@
 package core;
 
 public class Player {
-	public String name;
-	private int credit;
-	private int id;
-	public boolean folded = false;
-	public int debt=0;
+	public String name; // Name 
+	private int credit; // Kontostand
+	private int id; // ID
+	public boolean folded = false; // ob Spieler das Spiel verlassen hat
+	public int debt=0; // Schulden (aktueller Einsatz - bereits gezahlter Einsatz)
 
-	private Card[] cards = new Card[2];
+	private Card[] cards = new Card[2]; // Handkarten
 	
+	/**
+	 * erzeugt neuen Spieler
+	 * @param credit
+	 */
 	Player(int credit) {
 		this.credit = credit;
 	}
 
 	/**
-	 * player check the current round
+	 * Spieler checkt
 	 */
 	public void check() {
 		return;
 	}
 
 	/**
-	 * player leave the current round 
+	 * Spieler verlässt die aktuelle Runde
 	 */
 	public void fold() {
-		this.setCards(null);
+		this.setCards(null); // Karten werden gelöscht
 		this.folded = true;
 		return;
 	}
 
 	/**
-	 * player pays the current cue
+	 * Spieler bezahlt den aktuellen Einsatz
 	 * 
-	 * @return whether action is possible or not
+	 * @return Gibt zurück ob möglich oder nicht
 	 */
 	public boolean call(int cue) {
 		this.debt=cue-debt;
@@ -45,9 +49,9 @@ public class Player {
 	}
 
 	/**
-	 * player raise the current cue
+	 * Spieler erhöht den aktuellen Einsatz
 	 * 
-	 * @return whether action is possible or not
+	 * @return Gibt zurück, ob die Aktion möglich ist oder nicht
 	 */
 	public boolean raise(int cue) {
 		if (this.credit >= debt) {
@@ -60,14 +64,14 @@ public class Player {
 	}
 
 	/**
-	 * @return the credit
+	 * @return aktueller Kontostand
 	 */
 	public int getCredit() {
 		return credit;
 	}
 
 	/**
-	 * 
+	 * ändert den Kontostand
 	 * @param value
 	 */
 	public void changeCredit(int value) {
@@ -76,28 +80,28 @@ public class Player {
 	}
 
 	/**
-	 * @return the id
+	 * @return Spieler-ID
 	 */
 	public int getId() {
 		return id;
 	}
 
 	/**
-	 * @return the cards
+	 * @return Handkarten
 	 */
 	public Card[] getCards() {
 		return cards;
 	}
 
 	/**
-	 * @param cards the cards to set
+	 * @param Setzt Handkarten
 	 */
 	public void setCards(Card[] cards) {
 		this.cards = cards;
 	}
 
 	/**
-	 * @return the folded
+	 * @return ob Spieler die Runde verlassen hat
 	 */
 	public boolean isFolded() {
 		return folded;
