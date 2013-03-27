@@ -497,8 +497,11 @@ public class Game {
 							winners=a;
 							System.out.println("Gewinn durch" +activePlayers[a].pairWorth[1]);
 						if(activePlayers[a].pairWorth[3]==activePlayers[winners].pairWorth[3])
+							if(activePlayers[a].pairWorth[1]>activePlayers[winners].pairWorth[1])
+								winners=a;
+							else{
 							winnerAmount++;
-							multipleWinners=3;
+							multipleWinners=3; }
 						break;
 						
 					case 2: //Paar
@@ -506,8 +509,11 @@ public class Game {
 							winners=a;
 							System.out.println("Gewinn durch" +activePlayers[a].pairWorth[1]);
 						if(activePlayers[a].pairWorth[1]==activePlayers[winners].pairWorth[1])
+							if(activePlayers[a].highCard>activePlayers[winners].highCard)
+								winners=a;
+							else{
 							winnerAmount++;
-							multipleWinners=2;
+							multipleWinners=8;}
 						break;
 					}
 				}
