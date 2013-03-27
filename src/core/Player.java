@@ -6,6 +6,9 @@ public class Player {
 	private int id; // ID
 	public boolean folded = false; // ob Spieler das Spiel verlassen hat
 	public int debt=0; // Schulden (aktueller Einsatz - bereits gezahlter Einsatz)
+	public int [] pairWorth= new int [4]; //wird für Vierling,Drilling,Pair,ZweiPairs und FullHouse verwendet
+	public int highCard=0;
+	public int handWorth=0;
 
 	private Card[] cards = new Card[2]; // Handkarten
 	

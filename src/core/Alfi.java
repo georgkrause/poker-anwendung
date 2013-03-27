@@ -9,7 +9,7 @@ public class Alfi extends Player {
 	}
 	
 	public int decide() throws InterruptedException  {
-		Thread.sleep(5000);
+//		Thread.sleep(5000);
 		Random r = new Random();
 		int random = r.nextInt(10);
 		

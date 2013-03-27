@@ -15,7 +15,7 @@ public class Game {
 
 	private int credit = 10000; // Startkapital des Spieler
 	private final int minimumBet = 100; // Mindesteinsatz
-	private int raiseWorth = 100; // TODO Testzweck, Wert des PC spielers fehlt 
+	private int raiseWorth = 100; // TODO Testzweck, Wert des PC spielers fehlt
 
 	private Card[] cards = new Card[52]; // Array für die Spielkarten
 	private int givenCards = 0; // Anzahl der Karten die bereits ausgegeben
@@ -35,6 +35,8 @@ public class Game {
 	private Window window; // Fenster-Objekt
 
 	private Random r = new Random(); // Objekt zum generieren von Zufallszahlen
+
+	
 
 	/**
 	 * initialisiert ein neues Spiel - bringt Spieler neu ins Spiel - startet
@@ -85,7 +87,7 @@ public class Game {
 		this.generateCards();
 
 		// gibt Handkarten
-		this.prepairPlayers();
+		this.preparePlayers();
 
 		// verteilt Blinds, Dealer und TurnPlayer
 		this.assignRoles();
@@ -224,28 +226,30 @@ public class Game {
 					Thread.sleep(4000);
 					disburseAsset(activePlayers[i]); // Schütte Gewinn aus
 				}
+
 			}
+			for (int i = 0; i < 4; i++) {
+				this.activePlayers[i].folded = false;
+			}
+
 			window.updatePot(); // Aktualisiere die Pot-Anzeige
-			window.updateCredits(); // Aktualisiere die Anzeige der Spieler-Guthaben
+			window.updateCredits(); // Aktualisiere die Anzeige der
+									// Spieler-Guthaben
 
 		} else {
 			if (this.tableCards[4].isVisible()) {
-				int[] feld = new int[4];
-				int[] highCards = new int[4];
+
 				for (int i = 0; i < 4; i++) {
 					if (!activePlayers[i].isFolded()) {
-						int[] sortedcards = sortWorth(
-								tableCards[0].getWorthID(),
-								tableCards[1].getWorthID(),
-								tableCards[2].getWorthID(),
-								tableCards[3].getWorthID(),
-								tableCards[4].getWorthID(),
-								activePlayers[i].getCards()[0].getWorthID(),
-								activePlayers[i].getCards()[1].getWorthID());
+						int[] sortedcards = sortWorth(tableCards,
+								activePlayers[i].getCards());
 						int fiveColor = fiveColor(tableCards,
 								activePlayers[i].getCards());
-						int[] sameworthfield = sameWorth(sortedcards);
+						this.activePlayers[i].pairWorth = sameWorth(sortedcards);
 						int followfive = followFive(sortedcards);
+						if (followfive != 0)
+							activePlayers[i].highCard = followfive;
+
 						this.activePlayers[i].getCards()[0].discover();
 						this.activePlayers[i].getCards()[1].discover();
 						this.activePlayers[i].getCards()[0].getPicture();
@@ -254,16 +258,18 @@ public class Game {
 						window.updatePlayerCards(i);
 						Thread.sleep(10000);
 
-						feld[i] = handWorth(sortedcards, fiveColor, followfive,
-								sameworthfield);
-						highCards[i] = sortedcards[6];
+						activePlayers[i].handWorth = handWorth(sortedcards,
+								fiveColor, followfive,
+								this.activePlayers[i].pairWorth);
+
 					}
 				}
 
-				int z = getWinner(feld, highCards);
+				int[] z = getWinner();
 
-				System.out.println("Winner: " + z + " " + feld[z]);
-				disburseAsset(activePlayers[z]);
+				System.out.println("Winner: " + z[0] + " "
+						+ activePlayers[z[0]].handWorth+" Es gibt "+z[1]+" Gewinner.");
+				disburseAsset(activePlayers[z[0]]);
 				window.updatePot();
 				window.updateCredits();
 				this.givenCards = 0;
@@ -281,7 +287,7 @@ public class Game {
 	/**
 	 * gibt Handkarten
 	 */
-	private void prepairPlayers() {
+	private void preparePlayers() {
 
 		// gebe jedem Spieler 2 Karten
 		for (int i = 0; i < 4; i++) {
@@ -290,6 +296,8 @@ public class Game {
 				activePlayers[i].setCards(cards);
 				activePlayers[i].folded = false;
 				activePlayers[i].debt = 0;
+				activePlayers[i].handWorth=0;
+				activePlayers[i].highCard=0;
 			}
 		}
 
@@ -390,7 +398,7 @@ public class Game {
 				this.cards[id] = new Card(colorCounter, worthCounter);
 			}
 		}
-		
+
 		// setze die Anzahl der ausgegebenen Karten auf 0 zurück
 		this.givenCards = 0;
 	}
@@ -425,24 +433,95 @@ public class Game {
 	/**
 	 * @return Spieler, der die Runde gewonnen hat
 	 */
-	int getWinner(int[] handresults, int[] highcards) {
+	int[] getWinner() {
+		int []winnerArray=new int [2];
+		int winnerAmount=1;
+		int multipleWinners=-1;
 		int winners = 0;
 
-		for (int a = 1; a < handresults.length - 1; a++) {
-			if (handresults[a] > handresults[winners]) {
+		for (int a = 1; a < 4; a++) {
+			if (activePlayers[a].handWorth > activePlayers[winners].handWorth) {
 				winners = a;
 			} else {
-				if (handresults[a] == handresults[winners]
-						&& highcards[a] > highcards[winners]) {
+				if (activePlayers[a].handWorth == activePlayers[winners].handWorth
+						&& activePlayers[a].highCard > activePlayers[winners].highCard
+						&& activePlayers[a].handWorth != 2 && activePlayers[a].handWorth != 3
+						&& activePlayers[a].handWorth != 4 && activePlayers[a].handWorth != 7
+						&& activePlayers[a].handWorth != 8) {
 					winners = a;
+				} else if (activePlayers[a].handWorth == activePlayers[winners].handWorth
+						&& (activePlayers[a].handWorth == 2 || activePlayers[a].handWorth == 3
+								|| activePlayers[a].handWorth == 4 || activePlayers[a].handWorth == 7 
+								|| activePlayers[a].handWorth == 8)) {
+					
+					switch(activePlayers[a].handWorth){
+					
+					case 8: //Vierling
+						if(activePlayers[a].pairWorth[1]>activePlayers[winners].pairWorth[1])
+							winners=a;
+							System.out.println("Gewinn durch" +activePlayers[a].pairWorth[1]);
+						if(activePlayers[a].pairWorth[1]==activePlayers[winners].pairWorth[1])
+							if(activePlayers[a].highCard>activePlayers[winners].highCard)
+								winners=a;
+							else{
+							winnerAmount++;
+							multipleWinners=8;}
+						break;
+						
+					case 7: //FullHouse
+						if(activePlayers[a].pairWorth[1]>activePlayers[winners].pairWorth[1])
+							winners=a;
+							System.out.println("Gewinn durch" +activePlayers[a].pairWorth[1]);
+						if(activePlayers[a].pairWorth[1]==activePlayers[winners].pairWorth[1])
+							if(activePlayers[a].pairWorth[3]>activePlayers[winners].pairWorth[3])
+								winners=a;
+							else{
+							winnerAmount++;
+							multipleWinners=7;}
+						break;
+						
+					case 4: //Drilling
+						if(activePlayers[a].pairWorth[1]>activePlayers[winners].pairWorth[1])
+							winners=a;
+							System.out.println("Gewinn durch" +activePlayers[a].pairWorth[1]);
+						if(activePlayers[a].pairWorth[1]==activePlayers[winners].pairWorth[1])
+							if(activePlayers[a].highCard>activePlayers[winners].highCard)
+								winners=a;
+							else{
+							winnerAmount++;
+							multipleWinners=8;}
+						break;
+						
+					case 3: //Zwei Paare
+						if(activePlayers[a].pairWorth[3]>activePlayers[winners].pairWorth[3])
+							winners=a;
+							System.out.println("Gewinn durch" +activePlayers[a].pairWorth[1]);
+						if(activePlayers[a].pairWorth[3]==activePlayers[winners].pairWorth[3])
+							winnerAmount++;
+							multipleWinners=3;
+						break;
+						
+					case 2: //Paar
+						if(activePlayers[a].pairWorth[1]>activePlayers[winners].pairWorth[1])
+							winners=a;
+							System.out.println("Gewinn durch" +activePlayers[a].pairWorth[1]);
+						if(activePlayers[a].pairWorth[1]==activePlayers[winners].pairWorth[1])
+							winnerAmount++;
+							multipleWinners=2;
+						break;
+					}
 				}
 			}
 		}
-		return winners;
+		if(activePlayers[winners].handWorth==multipleWinners){
+			System.out.println("Es gibt " +winnerAmount+" Gewinner");}
+			winnerArray[0]=winners;
+			winnerArray[1]=winnerAmount;
+		return winnerArray;
 	}
 
 	/**
-	 * TODO wechselt Blinds nach jeder Runde 
+	 * TODO wechselt Blinds nach jeder Runde
 	 */
 	void changeBlinds() {
 
@@ -485,6 +564,7 @@ public class Game {
 
 	/**
 	 * erhöht den Pot
+	 * 
 	 * @param Pot
 	 */
 	public void raisePot(int pot) {
@@ -518,16 +598,17 @@ public class Game {
 	 * @param pcard1
 	 * @return
 	 */
-	public int[] sortWorth(int ccard0, int ccard1, int ccard2, int ccard3,
-			int ccard4, int pcard0, int pcard1) {
+	public int[] sortWorth(Card[] tableCards, Card[] cards) {
+		// TODO Auto-generated method stub
+
 		int[] allCardsWorth = new int[7];
-		allCardsWorth[0] = ccard0;
-		allCardsWorth[1] = ccard1;
-		allCardsWorth[2] = ccard2;
-		allCardsWorth[3] = ccard3;
-		allCardsWorth[4] = ccard4;
-		allCardsWorth[5] = pcard0;
-		allCardsWorth[6] = pcard1;
+		allCardsWorth[0] = cards[0].getWorthID();
+		allCardsWorth[1] = cards[1].getWorthID();
+		allCardsWorth[2] = tableCards[0].getWorthID();
+		allCardsWorth[3] = tableCards[1].getWorthID();
+		allCardsWorth[4] = tableCards[2].getWorthID();
+		allCardsWorth[5] = tableCards[3].getWorthID();
+		allCardsWorth[6] = tableCards[4].getWorthID();
 		for (int a = 0; a < 7; a++) {
 			int z = a;
 			while ((z > 0) && (allCardsWorth[z] < allCardsWorth[z - 1])) {
@@ -598,7 +679,7 @@ public class Game {
 	public int[] sameWorth(int[] cardWorth) {
 		int same = 1;
 		int same2 = 1;
-		int twins=0;
+		int twins = 0;
 		int[] sameWorth = new int[4];
 
 		// Durchläuft alle Karten
@@ -616,8 +697,9 @@ public class Game {
 					sameWorth[0] = same;
 					sameWorth[1] = cardWorth[a - 1];
 				} else {
-					if ((same == 2) && (a != 6) && (twins==0)&& (cardWorth[a] != cardWorth[a + 1])) {
-						twins=1;
+					if ((same == 2) && (a != 6) && (twins == 0)
+							&& (cardWorth[a] != cardWorth[a + 1])) {
+						twins = 1;
 						sameWorth[0] = same;
 						sameWorth[1] = cardWorth[a - 1];
 					}
@@ -644,9 +726,11 @@ public class Game {
 			if ((a != 0 && a != 6 && cardWorth[a] == cardWorth[a - 1] + 1 && cardWorth[a] == cardWorth[a + 1] - 1)
 					|| (a == 6 && cardWorth[6] == cardWorth[5] + 1)) {
 				follow = follow + 1;
-			}
-			if (follow >= 4) {
-				return cardWorth[a];
+
+				if (follow >= 4) {
+
+					return cardWorth[a];
+				}
 			}
 		}
 		return 0;
@@ -669,7 +753,7 @@ public class Game {
 		if ((followFive == 12) & (fiveColor != 30000)) { // RoyalFlush
 			return 10;
 		} else {
-			if (followFive != 0 && fiveColor != 30000) { // Flush
+			if (followFive != 0 && fiveColor != 30000) { //Straight Flush
 				return 9;
 			} else {
 				if (sameWorth[0] == 4) { // Vierling
@@ -699,7 +783,7 @@ public class Game {
 										System.out.println(sameWorth[0] + " "
 												+ sameWorth[1] + " "
 												+ sameWorth[2] + " "
-												+ sameWorth[3] + " "); // pairs
+												+ sameWorth[3] + " "); 
 										return 3;
 									} else {
 										if (sameWorth[0] == 2
