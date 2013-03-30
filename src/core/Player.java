@@ -1,19 +1,23 @@
 package core;
 
 public class Player {
-	public String name; // Name 
+	public String name; // Name
 	private int credit; // Kontostand
 	private int id; // ID
 	public boolean folded = false; // ob Spieler das Spiel verlassen hat
-	public int debt=0; // Schulden (aktueller Einsatz - bereits gezahlter Einsatz)
-	public int [] pairWorth= new int [4]; //wird für Vierling,Drilling,Pair,ZweiPairs und FullHouse verwendet
-	public int highCard=0;
-	public int handWorth=0;
+	public int debt = 0; // Schulden (aktueller Einsatz - bereits gezahlter
+							// Einsatz)
+	public int[] pairWorth = new int[4]; // wird für
+											// Vierling,Drilling,Pair,ZweiPairs
+											// und FullHouse verwendet
+	public int highCard = 0;
+	public int handWorth = 0;
 
 	private Card[] cards = new Card[2]; // Handkarten
-	
+
 	/**
 	 * erzeugt neuen Spieler
+	 * 
 	 * @param credit
 	 */
 	Player(int credit) {
@@ -42,7 +46,7 @@ public class Player {
 	 * @return Gibt zurück ob möglich oder nicht
 	 */
 	public boolean call(int cue) {
-		this.debt=cue-debt;
+		this.debt = cue - debt;
 		if (this.credit >= debt) {
 			this.credit -= debt;
 			return true;
@@ -58,7 +62,7 @@ public class Player {
 	 */
 	public boolean raise(int cue) {
 		if (this.credit >= debt) {
-			this.debt=cue-debt;
+			this.debt = cue - debt;
 			this.credit -= debt;
 			return true;
 		} else {
@@ -75,6 +79,7 @@ public class Player {
 
 	/**
 	 * ändert den Kontostand
+	 * 
 	 * @param value
 	 */
 	public void changeCredit(int value) {
@@ -97,7 +102,8 @@ public class Player {
 	}
 
 	/**
-	 * @param Setzt Handkarten
+	 * @param Setzt
+	 *            Handkarten
 	 */
 	public void setCards(Card[] cards) {
 		this.cards = cards;
@@ -109,10 +115,10 @@ public class Player {
 	public boolean isFolded() {
 		return folded;
 	}
-	
+
 	public int[] sortWorth(int r, Card[] tableCards, Card[] cards) {
 		// TODO Auto-generated method stub
-		System.out.print("Da");
+
 		int[] allCardsWorth = new int[7];
 		allCardsWorth[0] = cards[0].getWorthID();
 		allCardsWorth[1] = cards[1].getWorthID();
@@ -160,12 +166,7 @@ public class Player {
 	// int ccard4, int pcard0, int pcard1) {
 	public int fiveColor(int r, Card[] tableCards, Card[] playerCards) {
 		Card[] allCards = new Card[7];
-		// for(int i = 0; i < 2; i++) {
-		// allCards[i] = playerCards[i];
-		// }
-		// for(int i = 2; i < 7; i++) {
-		// allCards[i] = tableCards[i];
-		// }
+
 		allCards[0] = playerCards[0];
 		allCards[1] = playerCards[1];
 		allCards[2] = tableCards[0];
@@ -185,7 +186,7 @@ public class Player {
 				return i;
 			}
 		}
-		return 30000;
+		return -30000;
 	}
 
 	/**
@@ -254,14 +255,14 @@ public class Player {
 		return 0;
 
 	}
-	
+
 	public int handWorth(int[] cardWorth, int fiveColor, int followFive,
 			int[] sameWorth) {
 
-		if ((followFive == 12) & (fiveColor != 30000)) { // RoyalFlush
+		if ((followFive == 12) & (fiveColor != -30000)) { // RoyalFlush
 			return 10;
 		} else {
-			if (followFive != 0 && fiveColor != 30000) { // Straight Flush
+			if (followFive != 0 && fiveColor != -30000) { // Straight Flush
 				return 9;
 			} else {
 				if (sameWorth[0] == 4) { // Vierling
@@ -274,7 +275,7 @@ public class Player {
 										+ sameWorth[3] + " ");
 						return 7;
 					} else {
-						if (fiveColor != 30000) { // 5 from one color
+						if (fiveColor != -30000) { // 5 from one color
 							return 6;
 						} else {
 							if (followFive != 0) { // street
@@ -312,7 +313,4 @@ public class Player {
 
 	}
 
-
-	
-	
 }

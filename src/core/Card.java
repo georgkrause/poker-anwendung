@@ -3,9 +3,10 @@ package core;
 public class Card {
 
 	public static final String[] allColors = { "herz", "kreuz", "karo", "pik" };
-	public static final String[] allWorths = { "zwei", "drei", "vier", "funf", "sechs", "sieben", "acht",
-			"neun", "zehn", "bube", "dame", "koenig", "ass" };
-	
+	public static final String[] allWorths = { "zwei", "drei", "vier", "funf",
+			"sechs", "sieben", "acht", "neun", "zehn", "bube", "dame",
+			"koenig", "ass" };
+
 	private String name;
 	private int worth;
 	private int color;
@@ -14,7 +15,7 @@ public class Card {
 	Card(int color, int worth) {
 		this.worth = worth;
 		this.color = color;
-		
+
 		this.name = allColors[color] + " " + allWorths[worth];
 	}
 
@@ -45,7 +46,7 @@ public class Card {
 	public int getWorthID() {
 		return worth;
 	}
-	
+
 	/**
 	 * @return the worth
 	 */
@@ -69,15 +70,15 @@ public class Card {
 	public int getColorID() {
 		return color;
 	}
-	
-	/** 
+
+	/**
 	 * @return the picture of the card
 	 */
 	@SuppressWarnings("static-access")
 	public String getPicture() {
-		if(this.isVisible())
-		{
-			return this.allColors[this.color] + this.allWorths[this.worth] + ".png";
+		if (this.isVisible()) {
+			return this.allColors[this.color] + this.allWorths[this.worth]
+					+ ".png";
 		} else {
 			return "blue_back.jpg";
 		}
