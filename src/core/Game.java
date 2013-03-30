@@ -170,11 +170,12 @@ public class Game {
 					// TODO #27: Das muss hier unbedingt überarbeitet werden!
 					switch (choice) {
 					case 0: // raise/erhöhen
-						if (this.activePlayers[turnPlayer].raise(cue)) {
-							// erhöht den Einsatz
+						if (this.activePlayers[turnPlayer].raise(cue+raiseWorth)) {
+//							 erhöht den Einsatz
 							this.cue += raiseWorth;
 							window.updateCredits();
 							this.raisePot(activePlayers[turnPlayer].debt);
+							
 							window.updatePot();
 							movesWithoutRaise = 0;
 							activePlayers[turnPlayer].debt = cue;
