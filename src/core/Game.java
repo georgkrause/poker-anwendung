@@ -136,20 +136,21 @@ public class Game {
 									.decideSecond(
 											this.activePlayers[turnPlayer]
 													.getCredit(),
+											this.tableCards,
 											this.activePlayers[turnPlayer]
-													.getCards());
+													.getCards(), 6);
 						else if (!this.tableCards[4].isVisible())
 							choice = ((Alfi) this.activePlayers[turnPlayer])
 									.decideThird(this.activePlayers[turnPlayer]
-											.getCredit(),
+											.getCredit(), this.tableCards,
 											this.activePlayers[turnPlayer]
-													.getCards());
+													.getCards(), 6);
 						else
 							choice = ((Alfi) this.activePlayers[turnPlayer])
 									.decideLast(this.activePlayers[turnPlayer]
-											.getCredit(),
+											.getCredit(), this.tableCards,
 											this.activePlayers[turnPlayer]
-													.getCards());
+													.getCards(), 7);
 					} else {
 						do {
 							// Lässt Spieler entscheiden was getan werden soll
@@ -262,12 +263,13 @@ public class Game {
 
 				for (int i = 0; i < 4; i++) {
 					if (!activePlayers[i].isFolded()) {
-						int[] sortedcards = sortWorth(tableCards,
+						int[] sortedcards = sortWorth(7, tableCards,
 								activePlayers[i].getCards());
-						int fiveColor = fiveColor(tableCards,
+						int fiveColor = fiveColor(7, tableCards,
 								activePlayers[i].getCards());
-						this.activePlayers[i].pairWorth = sameWorth(sortedcards);
-						int followfive = followFive(sortedcards);
+						this.activePlayers[i].pairWorth = sameWorth(7,
+								sortedcards);
+						int followfive = followFive(7, sortedcards);
 						if (followfive != 0)
 							activePlayers[i].highCard = followfive;
 
@@ -640,7 +642,7 @@ public class Game {
 	 * @param pcard1
 	 * @return
 	 */
-	public int[] sortWorth(Card[] tableCards, Card[] cards) {
+	public int[] sortWorth(int r, Card[] tableCards, Card[] cards) {
 		// TODO Auto-generated method stub
 
 		int[] allCardsWorth = new int[7];
@@ -649,8 +651,14 @@ public class Game {
 		allCardsWorth[2] = tableCards[0].getWorthID();
 		allCardsWorth[3] = tableCards[1].getWorthID();
 		allCardsWorth[4] = tableCards[2].getWorthID();
-		allCardsWorth[5] = tableCards[3].getWorthID();
-		allCardsWorth[6] = tableCards[4].getWorthID();
+		if (r > 5)
+			allCardsWorth[5] = tableCards[3].getWorthID();
+		else
+			allCardsWorth[5] = -10;
+		if (r > 6)
+			allCardsWorth[6] = tableCards[4].getWorthID();
+		else
+			allCardsWorth[6] = -20;
 		for (int a = 0; a < 7; a++) {
 			int z = a;
 			while ((z > 0) && (allCardsWorth[z] < allCardsWorth[z - 1])) {
@@ -682,7 +690,7 @@ public class Game {
 	 */
 	// public int fivecolor(int ccard0, int ccard1, int ccard2, int ccard3,
 	// int ccard4, int pcard0, int pcard1) {
-	public int fiveColor(Card[] tableCards, Card[] playerCards) {
+	public int fiveColor(int r, Card[] tableCards, Card[] playerCards) {
 		Card[] allCards = new Card[7];
 		// for(int i = 0; i < 2; i++) {
 		// allCards[i] = playerCards[i];
@@ -700,7 +708,7 @@ public class Game {
 
 		int[] colors = { 0, 0, 0, 0 };
 
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < r; i++) {
 			colors[allCards[i].getColorID()]++;
 		}
 
@@ -718,14 +726,14 @@ public class Game {
 	 * @param cardWorth
 	 * @return
 	 */
-	public int[] sameWorth(int[] cardWorth) {
+	public int[] sameWorth(int r, int[] cardWorth) {
 		int same = 1;
 		int same2 = 1;
 		int twins = 0;
 		int[] sameWorth = new int[4];
 
 		// Durchläuft alle Karten
-		for (int a = 0; a < 7; a++) {
+		for (int a = 0; a < r; a++) {
 			if (a != 0 && cardWorth[a] == cardWorth[a - 1]) {
 				same = same + 1;
 			}
@@ -734,12 +742,12 @@ public class Game {
 				sameWorth[1] = cardWorth[a - 1];
 				return sameWorth;
 			} else {
-				if (same == 3 && a != 6 && cardWorth[a] != cardWorth[a + 1]
+				if (same == 3 && a != r - 1 && cardWorth[a] != cardWorth[a + 1]
 						&& cardWorth[a] == cardWorth[a - 2]) {
 					sameWorth[0] = same;
 					sameWorth[1] = cardWorth[a - 1];
 				} else {
-					if ((same == 2) && (a != 6) && (twins == 0)
+					if ((same == 2) && (a != r - 1) && (twins == 0)
 							&& (cardWorth[a] != cardWorth[a + 1])) {
 						twins = 1;
 						sameWorth[0] = same;
@@ -750,7 +758,7 @@ public class Game {
 			}
 		}
 
-		for (int a = 0; a < 7; a++) {
+		for (int a = 0; a < r; a++) {
 			if (a != 0 && cardWorth[a] == cardWorth[a - 1]
 					&& sameWorth[1] != cardWorth[a]) {
 				same2 = same2 + 1;
@@ -762,11 +770,11 @@ public class Game {
 		return sameWorth;
 	}
 
-	public int followFive(int[] cardWorth) {
+	public int followFive(int r, int[] cardWorth) {
 		int follow = 1;
-		for (int a = 0; a < 7; a++) {
-			if ((a != 0 && a != 6 && cardWorth[a] == cardWorth[a - 1] + 1 && cardWorth[a] == cardWorth[a + 1] - 1)
-					|| (a == 6 && cardWorth[6] == cardWorth[5] + 1)) {
+		for (int a = 0; a < r; a++) {
+			if ((a != 0 && a != r - 1 && cardWorth[a] == cardWorth[a - 1] + 1 && cardWorth[a] == cardWorth[a + 1] - 1)
+					|| (a == r - 1 && cardWorth[r - 1] == cardWorth[r - 2] + 1)) {
 				follow = follow + 1;
 
 				if (follow >= 4) {
