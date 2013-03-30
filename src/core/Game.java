@@ -108,8 +108,10 @@ public class Game {
 
 		// Setzt den aktuellen Einsatz auf den Mindesteinsatz
 		this.cue = minimumBet;
+		
+		boolean endOfBetRound = false;
 
-		while (activePlayerNumber > 1 && !this.tableCards[4].isVisible()) {
+		while (activePlayerNumber > 1 && !endOfBetRound) {
 			int movesWithoutRaise = 0; // Zählt Runden, in denen nicht erhöht
 										// wurde
 
@@ -241,6 +243,8 @@ public class Game {
 
 				// TODO: Vor der Abgabe entfernen
 				System.out.println("neue Karte");
+			} else {
+				endOfBetRound = true;
 			}
 		}
 
