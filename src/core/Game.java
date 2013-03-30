@@ -36,8 +36,6 @@ public class Game {
 
 	private Random r = new Random(); // Objekt zum generieren von Zufallszahlen
 
-	
-
 	/**
 	 * initialisiert ein neues Spiel - bringt Spieler neu ins Spiel - startet
 	 * die Main-Loop
@@ -127,8 +125,31 @@ public class Game {
 				if (!activePlayers[turnPlayer].isFolded()) {
 					if (turnPlayer != 0) {
 						// Lässt KI entscheiden was getan werden soll
-						choice = ((Alfi) this.activePlayers[turnPlayer])
-								.decide();
+						if (!this.tableCards[1].isVisible())
+							choice = ((Alfi) this.activePlayers[turnPlayer])
+									.decideFirst(this.activePlayers[turnPlayer]
+											.getCredit(),
+											this.activePlayers[turnPlayer]
+													.getCards());
+						else if (!this.tableCards[3].isVisible())
+							choice = ((Alfi) this.activePlayers[turnPlayer])
+									.decideSecond(
+											this.activePlayers[turnPlayer]
+													.getCredit(),
+											this.activePlayers[turnPlayer]
+													.getCards());
+						else if (!this.tableCards[4].isVisible())
+							choice = ((Alfi) this.activePlayers[turnPlayer])
+									.decideThird(this.activePlayers[turnPlayer]
+											.getCredit(),
+											this.activePlayers[turnPlayer]
+													.getCards());
+						else
+							choice = ((Alfi) this.activePlayers[turnPlayer])
+									.decideLast(this.activePlayers[turnPlayer]
+											.getCredit(),
+											this.activePlayers[turnPlayer]
+													.getCards());
 					} else {
 						do {
 							// Lässt Spieler entscheiden was getan werden soll
@@ -268,7 +289,8 @@ public class Game {
 				int[] z = getWinner();
 
 				System.out.println("Winner: " + z[0] + " "
-						+ activePlayers[z[0]].handWorth+" Es gibt "+z[1]+" Gewinner.");
+						+ activePlayers[z[0]].handWorth + " Es gibt " + z[1]
+						+ " Gewinner.");
 				disburseAsset(activePlayers[z[0]]);
 				window.updatePot();
 				window.updateCredits();
@@ -296,8 +318,8 @@ public class Game {
 				activePlayers[i].setCards(cards);
 				activePlayers[i].folded = false;
 				activePlayers[i].debt = 0;
-				activePlayers[i].handWorth=0;
-				activePlayers[i].highCard=0;
+				activePlayers[i].handWorth = 0;
+				activePlayers[i].highCard = 0;
 			}
 		}
 
@@ -434,9 +456,9 @@ public class Game {
 	 * @return Spieler, der die Runde gewonnen hat
 	 */
 	int[] getWinner() {
-		int []winnerArray=new int [2];
-		int winnerAmount=1;
-		int multipleWinners=-1;
+		int[] winnerArray = new int[2];
+		int winnerAmount = 1;
+		int multipleWinners = -1;
 		int winners = 0;
 
 		for (int a = 1; a < 4; a++) {
@@ -445,84 +467,98 @@ public class Game {
 			} else {
 				if (activePlayers[a].handWorth == activePlayers[winners].handWorth
 						&& activePlayers[a].highCard > activePlayers[winners].highCard
-						&& activePlayers[a].handWorth != 2 && activePlayers[a].handWorth != 3
-						&& activePlayers[a].handWorth != 4 && activePlayers[a].handWorth != 7
+						&& activePlayers[a].handWorth != 2
+						&& activePlayers[a].handWorth != 3
+						&& activePlayers[a].handWorth != 4
+						&& activePlayers[a].handWorth != 7
 						&& activePlayers[a].handWorth != 8) {
 					winners = a;
 				} else if (activePlayers[a].handWorth == activePlayers[winners].handWorth
-						&& (activePlayers[a].handWorth == 2 || activePlayers[a].handWorth == 3
-								|| activePlayers[a].handWorth == 4 || activePlayers[a].handWorth == 7 
-								|| activePlayers[a].handWorth == 8)) {
-					
-					switch(activePlayers[a].handWorth){
-					
-					case 8: //Vierling
-						if(activePlayers[a].pairWorth[1]>activePlayers[winners].pairWorth[1])
-							winners=a;
-							System.out.println("Gewinn durch" +activePlayers[a].pairWorth[1]);
-						if(activePlayers[a].pairWorth[1]==activePlayers[winners].pairWorth[1])
-							if(activePlayers[a].highCard>activePlayers[winners].highCard)
-								winners=a;
-							else{
-							winnerAmount++;
-							multipleWinners=8;}
+						&& (activePlayers[a].handWorth == 2
+								|| activePlayers[a].handWorth == 3
+								|| activePlayers[a].handWorth == 4
+								|| activePlayers[a].handWorth == 7 || activePlayers[a].handWorth == 8)) {
+
+					switch (activePlayers[a].handWorth) {
+
+					case 8: // Vierling
+						if (activePlayers[a].pairWorth[1] > activePlayers[winners].pairWorth[1])
+							winners = a;
+						System.out.println("Gewinn durch"
+								+ activePlayers[a].pairWorth[1]);
+						if (activePlayers[a].pairWorth[1] == activePlayers[winners].pairWorth[1])
+							if (activePlayers[a].highCard > activePlayers[winners].highCard)
+								winners = a;
+							else {
+								winnerAmount++;
+								multipleWinners = 8;
+							}
 						break;
-						
-					case 7: //FullHouse
-						if(activePlayers[a].pairWorth[1]>activePlayers[winners].pairWorth[1])
-							winners=a;
-							System.out.println("Gewinn durch" +activePlayers[a].pairWorth[1]);
-						if(activePlayers[a].pairWorth[1]==activePlayers[winners].pairWorth[1])
-							if(activePlayers[a].pairWorth[3]>activePlayers[winners].pairWorth[3])
-								winners=a;
-							else{
-							winnerAmount++;
-							multipleWinners=7;}
+
+					case 7: // FullHouse
+						if (activePlayers[a].pairWorth[1] > activePlayers[winners].pairWorth[1])
+							winners = a;
+						System.out.println("Gewinn durch"
+								+ activePlayers[a].pairWorth[1]);
+						if (activePlayers[a].pairWorth[1] == activePlayers[winners].pairWorth[1])
+							if (activePlayers[a].pairWorth[3] > activePlayers[winners].pairWorth[3])
+								winners = a;
+							else {
+								winnerAmount++;
+								multipleWinners = 7;
+							}
 						break;
-						
-					case 4: //Drilling
-						if(activePlayers[a].pairWorth[1]>activePlayers[winners].pairWorth[1])
-							winners=a;
-							System.out.println("Gewinn durch" +activePlayers[a].pairWorth[1]);
-						if(activePlayers[a].pairWorth[1]==activePlayers[winners].pairWorth[1])
-							if(activePlayers[a].highCard>activePlayers[winners].highCard)
-								winners=a;
-							else{
-							winnerAmount++;
-							multipleWinners=8;}
+
+					case 4: // Drilling
+						if (activePlayers[a].pairWorth[1] > activePlayers[winners].pairWorth[1])
+							winners = a;
+						System.out.println("Gewinn durch"
+								+ activePlayers[a].pairWorth[1]);
+						if (activePlayers[a].pairWorth[1] == activePlayers[winners].pairWorth[1])
+							if (activePlayers[a].highCard > activePlayers[winners].highCard)
+								winners = a;
+							else {
+								winnerAmount++;
+								multipleWinners = 8;
+							}
 						break;
-						
-					case 3: //Zwei Paare
-						if(activePlayers[a].pairWorth[3]>activePlayers[winners].pairWorth[3])
-							winners=a;
-							System.out.println("Gewinn durch" +activePlayers[a].pairWorth[1]);
-						if(activePlayers[a].pairWorth[3]==activePlayers[winners].pairWorth[3])
-							if(activePlayers[a].pairWorth[1]>activePlayers[winners].pairWorth[1])
-								winners=a;
-							else{
-							winnerAmount++;
-							multipleWinners=3; }
+
+					case 3: // Zwei Paare
+						if (activePlayers[a].pairWorth[3] > activePlayers[winners].pairWorth[3])
+							winners = a;
+						System.out.println("Gewinn durch"
+								+ activePlayers[a].pairWorth[1]);
+						if (activePlayers[a].pairWorth[3] == activePlayers[winners].pairWorth[3])
+							if (activePlayers[a].pairWorth[1] > activePlayers[winners].pairWorth[1])
+								winners = a;
+							else {
+								winnerAmount++;
+								multipleWinners = 3;
+							}
 						break;
-						
-					case 2: //Paar
-						if(activePlayers[a].pairWorth[1]>activePlayers[winners].pairWorth[1])
-							winners=a;
-							System.out.println("Gewinn durch" +activePlayers[a].pairWorth[1]);
-						if(activePlayers[a].pairWorth[1]==activePlayers[winners].pairWorth[1])
-							if(activePlayers[a].highCard>activePlayers[winners].highCard)
-								winners=a;
-							else{
-							winnerAmount++;
-							multipleWinners=8;}
+
+					case 2: // Paar
+						if (activePlayers[a].pairWorth[1] > activePlayers[winners].pairWorth[1])
+							winners = a;
+						System.out.println("Gewinn durch"
+								+ activePlayers[a].pairWorth[1]);
+						if (activePlayers[a].pairWorth[1] == activePlayers[winners].pairWorth[1])
+							if (activePlayers[a].highCard > activePlayers[winners].highCard)
+								winners = a;
+							else {
+								winnerAmount++;
+								multipleWinners = 8;
+							}
 						break;
 					}
 				}
 			}
 		}
-		if(activePlayers[winners].handWorth==multipleWinners){
-			System.out.println("Es gibt " +winnerAmount+" Gewinner");}
-			winnerArray[0]=winners;
-			winnerArray[1]=winnerAmount;
+		if (activePlayers[winners].handWorth == multipleWinners) {
+			System.out.println("Es gibt " + winnerAmount + " Gewinner");
+		}
+		winnerArray[0] = winners;
+		winnerArray[1] = winnerAmount;
 		return winnerArray;
 	}
 
@@ -759,7 +795,7 @@ public class Game {
 		if ((followFive == 12) & (fiveColor != 30000)) { // RoyalFlush
 			return 10;
 		} else {
-			if (followFive != 0 && fiveColor != 30000) { //Straight Flush
+			if (followFive != 0 && fiveColor != 30000) { // Straight Flush
 				return 9;
 			} else {
 				if (sameWorth[0] == 4) { // Vierling
@@ -789,7 +825,7 @@ public class Game {
 										System.out.println(sameWorth[0] + " "
 												+ sameWorth[1] + " "
 												+ sameWorth[2] + " "
-												+ sameWorth[3] + " "); 
+												+ sameWorth[3] + " ");
 										return 3;
 									} else {
 										if (sameWorth[0] == 2
