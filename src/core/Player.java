@@ -1,5 +1,7 @@
 package core;
 
+import gui.Window;
+
 public class Player {
 	public String name; // Name
 	private int credit; // Kontostand
@@ -22,6 +24,33 @@ public class Player {
 	 */
 	Player(int credit) {
 		this.credit = credit;
+	}
+	
+	/**
+	 * Fragt den Spielzug des Spielers ab
+	 * @param window
+	 * @return
+	 */
+	public int[] decide(Window window) {
+		int[] choice = new int[2];
+		boolean valid = false;
+		do {
+			// Lässt Spieler entscheiden was getan werden soll
+			choice[0] = window.DialogBox();
+			if(choice[0] >= 0) {
+				valid = true;
+			}
+		} while (!valid);
+
+		// Wenn Spieler erhöhen möchte, frage neuen Wert ab
+		if (choice[0] == 0) {
+			do {
+				choice[1] = window.RaiseDialogBox();
+			} while (choice[1] == 0 || (choice[1] % 50 != 0));
+
+		}
+		
+		return choice;
 	}
 
 	/**
