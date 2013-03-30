@@ -108,7 +108,7 @@ public class Game {
 
 		// Setzt den aktuellen Einsatz auf den Mindesteinsatz
 		this.cue = minimumBet;
-		
+
 		boolean endOfBetRound = false;
 
 		while (activePlayerNumber > 1 && !endOfBetRound) {
@@ -127,35 +127,8 @@ public class Game {
 				if (!activePlayers[turnPlayer].isFolded()) {
 					if (turnPlayer != 0) {
 						// Lässt KI entscheiden was getan werden soll
-						if (!this.tableCards[1].isVisible())
-							choice = ((Alfi) this.activePlayers[turnPlayer])
-									.decideFirst(this.activePlayers[turnPlayer]
-											.getCredit(),
-											this.activePlayers[turnPlayer]
-													.getCards());
-						else if (!this.tableCards[3].isVisible())
-							choice = ((Alfi) this.activePlayers[turnPlayer])
-									.decideSecond(
-											this.activePlayers[turnPlayer]
-													.getCredit(),
-											this.tableCards,
-											this.activePlayers[turnPlayer]
-													.getCards(), 5, this
-													.getPot());
-						else if (!this.tableCards[4].isVisible())
-							choice = ((Alfi) this.activePlayers[turnPlayer])
-									.decideThird(this.activePlayers[turnPlayer]
-											.getCredit(), this.tableCards,
-											this.activePlayers[turnPlayer]
-													.getCards(), 6, this
-													.getPot());
-						else
-							choice = ((Alfi) this.activePlayers[turnPlayer])
-									.decideLast(this.activePlayers[turnPlayer]
-											.getCredit(), this.tableCards,
-											this.activePlayers[turnPlayer]
-													.getCards(), 7, this
-													.getPot());
+						choice = ((Alfi) this.activePlayers[turnPlayer])
+								.decide(this.tableCards, this.getPot());
 					} else {
 						do {
 							// Lässt Spieler entscheiden was getan werden soll

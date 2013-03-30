@@ -9,6 +9,25 @@ public class Alfi extends Player {
 		super(credit);
 
 	}
+	
+	public int decide(Card[] tableCards, int pot) {
+		int choice;
+		if (!tableCards[1].isVisible())
+			choice = this.decideFirst(this.getCredit(),
+							this.getCards());
+		else if (!tableCards[3].isVisible())
+			choice = this.decideSecond(
+							this.getCredit(),
+							tableCards,
+							this.getCards(), 5, pot);
+		else if (!tableCards[4].isVisible())
+			choice =  this.decideThird(this.getCredit(), tableCards,
+							this.getCards(), 6, pot);
+		else
+			choice = this.decideLast(this.getCredit(), tableCards,
+							this.getCards(), 7, pot);
+		return choice;
+	}
 
 	public int decideFirst(int money, Card[] playerCards) { // 1.Wettrunde,nur 2
 															// Handkarten
