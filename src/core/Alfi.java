@@ -27,7 +27,7 @@ public class Alfi extends Player {
 
 	public int decideSecond(int money, Card[] tableCards, Card[] playerCards,
 			int round) {
-		return round; // 2.Wettrunde, Handkarten+Flop
+		return 1; // 2.Wettrunde, Handkarten+Flop
 		// //(this.activePlayers[turnPlayer]
 		// .getCredit(), this.tableCards,
 		// this.activePlayers[turnPlayer]
@@ -37,7 +37,7 @@ public class Alfi extends Player {
 
 	public int decideThird(int money, Card[] tableCards, Card[] playerCards,
 			int round) {
-		return round;
+		return 1;
 		// Thread.sleep(5000);
 		// Random r = new Random();
 		// int random = r.nextInt(10);
@@ -53,7 +53,7 @@ public class Alfi extends Player {
 
 	public int decideLast(int money, Card[] tableCards, Card[] playerCards,
 			int round) {
-		return round;
+		return 1;
 		// Thread.sleep(5000);
 		// Random r = new Random();
 		// int random = r.nextInt(10);
