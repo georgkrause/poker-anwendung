@@ -3,9 +3,10 @@ package core;
 import java.util.Random;
 
 public class Alfi extends Player {
-
+	
 	Alfi(int credit) {
 		super(credit);
+		
 	}
 
 	public int decideFirst(int money, Card[] playerCards) { // 1.Wettrunde,nur 2
@@ -27,44 +28,71 @@ public class Alfi extends Player {
 
 	public int decideSecond(int money, Card[] tableCards, Card[] playerCards,
 			int round) {
-		return 1; // 2.Wettrunde, Handkarten+Flop
-		// //(this.activePlayers[turnPlayer]
-		// .getCredit(), this.tableCards,
-		// this.activePlayers[turnPlayer]
-		// .getCards(), 6);
-		//
+		Random r = new Random();
+		System.out.println("Ja");
+		int[] sortedcards = sortWorth(round, tableCards,
+				playerCards);
+		int fiveColor = fiveColor(round, tableCards,
+				playerCards);
+		pairWorth = sameWorth(round,
+				sortedcards);
+		int followfive = followFive(round, sortedcards);
+		handWorth = handWorth(sortedcards,
+				fiveColor, followfive,
+				pairWorth);
+		if(handWorth>3)
+			return 0;
+		else {
+			int random = r.nextInt(10);
+			if(random > 7)
+				return 2;
+		}return 1;
 	}
 
 	public int decideThird(int money, Card[] tableCards, Card[] playerCards,
 			int round) {
-		return 1;
-		// Thread.sleep(5000);
-		// Random r = new Random();
-		// int random = r.nextInt(10);
-		//
-		// if(random < 6) {
-		// return 1;
-		// } else if (random < 8) {
-		// return 0;
-		// } else {
-		// return 2;
-		// }
+		Random r = new Random();
+		int[] sortedcards = sortWorth(round, tableCards,
+				playerCards);
+		int fiveColor = fiveColor(round, tableCards,
+				playerCards);
+		pairWorth = sameWorth(round,
+				sortedcards);
+		int followfive = followFive(round, sortedcards);
+		handWorth = handWorth(sortedcards,
+				fiveColor, followfive,
+				pairWorth);
+		if(handWorth>3)
+			return 0;
+		else {
+			int random = r.nextInt(10);
+			if(random > 7)
+				return 2;
+		}return 1;
+	
 	}
 
 	public int decideLast(int money, Card[] tableCards, Card[] playerCards,
 			int round) {
-		return 1;
-		// Thread.sleep(5000);
-		// Random r = new Random();
-		// int random = r.nextInt(10);
-		//
-		// if(random < 6) {
-		// return 1;
-		// } else if (random < 8) {
-		// return 0;
-		// } else {
-		// return 2;
-		// }
+		Random r = new Random();
+		int[] sortedcards = sortWorth(round, tableCards,
+				playerCards);
+		int fiveColor = fiveColor(round, tableCards,
+				playerCards);
+		pairWorth = sameWorth(round,
+				sortedcards);
+		int followfive = followFive(round, sortedcards);
+		handWorth = handWorth(sortedcards,
+				fiveColor, followfive,
+				pairWorth);
+		if(handWorth>3)
+			return 0;
+		else {
+			int random = r.nextInt(10);
+			if(random > 7)
+				return 2;
+		}return 1;
 	}
+	
 
 }
