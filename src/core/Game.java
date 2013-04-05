@@ -143,6 +143,7 @@ public class Game {
 						choice = ((Alfi) this.activePlayers[turnPlayer])
 								.decide(this.tableCards, this.getPot());
 					} else {
+<<<<<<< HEAD
 						if (this.activePlayers[0].getCredit() > 0) {
 							do {
 								// Lässt Spieler entscheiden was getan werden
@@ -160,6 +161,11 @@ public class Game {
 
 							}
 						}
+=======
+						int[] decision = this.activePlayers[turnPlayer].decide(window);
+						choice = decision[0];
+						raiseWorth = decision[1];
+>>>>>>> 852266522487946094a58b27a9087c480ee9bd1e
 					}
 
 					// TODO #27: Das muss hier unbedingt überarbeitet werden!
