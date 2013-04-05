@@ -13,7 +13,7 @@ public class Game {
 
 	public Card[] tableCards = new Card[5];
 
-	private int credit = 10000; // Startkapital des Spieler
+	private int credit = 1000; // Startkapital des Spieler
 	private final int minimumBet = 100; // Mindesteinsatz
 	private int raiseWorth = 100; // TODO Testzweck, Wert des PC spielers fehlt
 
@@ -31,6 +31,8 @@ public class Game {
 	private int pot; // Enthält Betrag des Pots
 	public Player[] activePlayers = new Player[4]; // Array mit aktiven Spielern
 	private int activePlayerNumber = 4; // Anzahl der aktiven Spieler
+	private int validPlayers = 4; // Anzahl der Spieler, die noch genug Geld
+									// haben
 
 	private Window window; // Fenster-Objekt
 
@@ -52,18 +54,23 @@ public class Game {
 
 		// Main-Loop bis Spiel beendet ist
 		while (!end) {
-			activePlayerNumber = 4; // Anzahl der Spieler, die noch Geld haben
+			activePlayerNumber = 4; // Anzahl der Spieler, die noch in der Runde
+									// haben
+			validPlayers = 4; // Anzahl der Spieler, die noch Geld haben
 
 			// durchläuft alle Spieler und prüft ihren Kontostand
 			for (int i = 0; i < 4; i++) {
+				System.out.println(this.activePlayers[i].getCredit() + " ");
 				if (activePlayers[i].getCredit() <= 0) {
+
 					this.activePlayers[i].fold();
 					activePlayerNumber--;
+					validPlayers--;
 				}
 			}
 
 			// beende das Spiel, wenn nur noch ein Spieler Geld hat
-			if (activePlayerNumber == 1) {
+			if (validPlayers == 1) {
 				end = true;
 				window.dispose(); // schließe das Fenster
 				return;
@@ -88,11 +95,13 @@ public class Game {
 		this.preparePlayers();
 
 		// verteilt Blinds, Dealer und TurnPlayer
-		this.assignRoles();
+		if (validPlayers > 3) {
+			this.assignRoles();
 
-		// Aktualisiert die Anzeige der Rollen
-		window.updateDealer();
-
+			// Aktualisiert die Anzeige der Rollen
+			window.updateDealer();
+		} else
+			window.deleteDealer();
 		// gebe Community-Cards
 		this.tableCards[0] = this.deal();
 		this.tableCards[1] = this.deal();
@@ -104,7 +113,9 @@ public class Game {
 		window.updateCommunityCards();
 
 		// zieht den Spielern die Blinds ab
-		this.collectBlinds();
+		if (validPlayers > 3) {
+			this.collectBlinds();
+		}
 
 		// Setzt den aktuellen Einsatz auf den Mindesteinsatz
 		this.cue = minimumBet;
@@ -127,55 +138,87 @@ public class Game {
 				if (!activePlayers[turnPlayer].isFolded()) {
 					if (turnPlayer != 0) {
 						// Lässt KI entscheiden was getan werden soll
+						// Thread.sleep(5009);
+						raiseWorth = 100;
 						choice = ((Alfi) this.activePlayers[turnPlayer])
 								.decide(this.tableCards, this.getPot());
 					} else {
-						do {
-							// Lässt Spieler entscheiden was getan werden soll
-							choice = window.DialogBox();
-						} while (choice < 0);
-
-						// Wenn Spieler erhöhen möchte, frage neuen Wert ab
-						if (choice == 0) {
-
+						if (this.activePlayers[0].getCredit() > 0) {
 							do {
-								raiseWorth = window.RaiseDialogBox();
-							} while (raiseWorth == 0 || (raiseWorth % 50 != 0));
+								// Lässt Spieler entscheiden was getan werden
+								// soll
+								choice = window.DialogBox();
+							} while (choice < 0);
 
+							// Wenn Spieler erhöhen möchte, frage neuen Wert ab
+							if (choice == 0) {
+
+								do {
+									raiseWorth = window.RaiseDialogBox();
+								} while (raiseWorth == 0
+										|| (raiseWorth % 50 != 0));
+
+							}
 						}
 					}
 
 					// TODO #27: Das muss hier unbedingt überarbeitet werden!
-					switch (choice) {
-					case 0: // raise/erhöhen
-						if (this.activePlayers[turnPlayer].raise(cue
-								+ raiseWorth)) {
-							// erhöht den Einsatz
-							this.cue += raiseWorth;
-							window.updateCredits();
-							this.raisePot(activePlayers[turnPlayer].debt);
+					if (this.activePlayers[turnPlayer].getCredit() > 0) {
+						switch (choice) {
 
+						case 0: // raise/erhöhen
+							if (this.activePlayers[turnPlayer].raise(cue
+									+ raiseWorth)) {
+								// erhöht den Einsatz
+								this.cue += raiseWorth;
+								window.updateCredits();
+								this.raisePot(raiseWorth);
+								window.updatePot();
+								movesWithoutRaise = 0;
+								activePlayers[turnPlayer].debt = cue;
+							} else
+								this.cue = this.activePlayers[turnPlayer]
+										.getCredit();
+							// raiseWorth=this.activePlayers[turnPlayer].getCredit();
+							this.activePlayers[turnPlayer]
+									.changeCredit(-this.activePlayers[turnPlayer]
+											.getCredit());
+							window.updateCredits();
+							this.raisePot(cue);
 							window.updatePot();
 							movesWithoutRaise = 0;
 							activePlayers[turnPlayer].debt = cue;
-						}
-						break;
-					case 1: // call
-						if (this.activePlayers[turnPlayer].call(cue)) {
-							window.updateCredits();
-							this.raisePot(activePlayers[turnPlayer].debt);
-							window.updatePot();
-							activePlayers[turnPlayer].debt = cue;
-						}
+							break;
 
+						case 1: // call
+							if (this.activePlayers[turnPlayer].call(cue)) {
+								window.updateCredits();
+								this.raisePot(activePlayers[turnPlayer].debt);
+								window.updatePot();
+								activePlayers[turnPlayer].debt = cue;
+							} else {
+								this.activePlayers[turnPlayer]
+										.changeCredit(-this.activePlayers[turnPlayer]
+												.getCredit());
+								window.updateCredits();
+								window.updatePot();
+							}
+
+							movesWithoutRaise++;
+							break;
+
+						case 2: // fold
+							this.activePlayers[turnPlayer].fold();
+							window.updatePlayerCards(turnPlayer);
+							this.activePlayerNumber--;
+							movesWithoutRaise++;
+							break;
+
+						}
+					}
+
+					else {
 						movesWithoutRaise++;
-						break;
-					case 2: // fold
-						this.activePlayers[turnPlayer].fold();
-						window.updatePlayerCards(turnPlayer);
-						this.activePlayerNumber--;
-						movesWithoutRaise++;
-						break;
 					}
 
 					// TODO: Vor der Abgabe entfernen
@@ -226,14 +269,16 @@ public class Game {
 		if (activePlayerNumber == 1) {
 			for (int i = 0; i < 4; i++) {
 				if (!activePlayers[i].isFolded()) {
-					// TODO: Muss die Pause hier sein?
-					Thread.sleep(4000);
 					disburseAsset(activePlayers[i]); // Schütte Gewinn aus
 				}
 
 			}
+
 			for (int i = 0; i < 4; i++) {
-				this.activePlayers[i].folded = false;
+				if (this.activePlayers[i].getCredit() <= 0) {
+					this.activePlayers[i].folded = true;
+				} else
+					this.activePlayers[i].folded = false;
 			}
 
 			window.updatePot(); // Aktualisiere die Pot-Anzeige
@@ -283,7 +328,10 @@ public class Game {
 				this.activePlayerNumber = 4;
 
 				for (int i = 0; i < 4; i++) {
-					this.activePlayers[i].folded = false;
+					if (this.activePlayers[i].getCredit() <= 0) {
+						this.activePlayers[i].folded = true;
+					} else
+						this.activePlayers[i].folded = false;
 				}
 			}
 		}
@@ -613,16 +661,4 @@ public class Game {
 		return activePlayerNumber;
 	}
 
-	/**
-	 * sorts the cards
-	 * 
-	 * @param ccard0
-	 * @param ccard1
-	 * @param ccard2
-	 * @param ccard3
-	 * @param ccard4
-	 * @param pcard0
-	 * @param pcard1
-	 * @return
-	 */
 }

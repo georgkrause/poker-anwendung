@@ -250,4 +250,12 @@ public class Window extends JFrame {
 		add(bereich);
 		repaint();
 	}
+
+	public void deleteDealer() {
+		marks[0].setBounds(0, 0, 0, 0);
+		marks[1].setBounds(0, 0, 0, 0);
+		marks[2].setBounds(0, 0, 0, 0);
+		repaint();
+		
+	}
 }

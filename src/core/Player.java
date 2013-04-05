@@ -61,8 +61,8 @@ public class Player {
 	 * @return Gibt zurück, ob die Aktion möglich ist oder nicht
 	 */
 	public boolean raise(int cue) {
-		if (this.credit >= debt) {
 			this.debt = cue - debt;
+		if (this.credit >= debt) {
 			this.credit -= debt;
 			return true;
 		} else {
@@ -246,7 +246,7 @@ public class Player {
 					|| (a == r - 1 && cardWorth[r - 1] == cardWorth[r - 2] + 1)) {
 				follow = follow + 1;
 
-				if (follow >= 4) {
+				if (follow >= 5) {
 
 					return cardWorth[a];
 				}
