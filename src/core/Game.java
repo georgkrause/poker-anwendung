@@ -141,7 +141,7 @@ public class Game {
 						// Thread.sleep(5009);
 						raiseWorth = 100;
 						choice = ((Alfi) this.activePlayers[turnPlayer])
-								.decide(this.tableCards, this.getPot());
+								.decide(this.tableCards, this.getPot(), this.cue);
 					} else {
 						if (this.activePlayers[0].getCredit() > 0) {
 							int[] decision = this.activePlayers[turnPlayer]
