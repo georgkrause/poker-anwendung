@@ -13,7 +13,7 @@ public class Game {
 
 	public Card[] tableCards = new Card[5];
 
-	private int credit = 1000; // Startkapital des Spieler
+	private int credit = 10000; // Startkapital des Spieler
 	private final int minimumBet = 100; // Mindesteinsatz
 	private int raiseWorth = 100; // TODO Testzweck, Wert des PC spielers fehlt
 
@@ -138,7 +138,7 @@ public class Game {
 				if (!activePlayers[turnPlayer].isFolded()) {
 					if (turnPlayer != 0) {
 						// Lässt KI entscheiden was getan werden soll
-						// Thread.sleep(5009);
+						Thread.sleep(5009);
 						raiseWorth = 100;
 						choice = ((Alfi) this.activePlayers[turnPlayer])
 								.decide(this.tableCards, this.getPot(), this.cue);

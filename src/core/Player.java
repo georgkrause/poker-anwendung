@@ -171,10 +171,10 @@ public class Player {
 				z = z - 1;
 			}
 		}
-		for (int a = 0; a < 7; a++) {
-			System.out.print(allCardsWorth[a]);
-		}
-		System.out.println();
+//		for (int a = 0; a < 7; a++) {
+//			System.out.print(allCardsWorth[a]);
+//		}
+//		System.out.println();
 		return allCardsWorth;
 
 	}
@@ -298,10 +298,10 @@ public class Player {
 					return 8;
 				} else {
 					if (sameWorth[0] == 3 && sameWorth[2] == 2) { // drilling+pair
-						System.out
-								.println(sameWorth[0] + " " + sameWorth[1]
-										+ " " + sameWorth[2] + " "
-										+ sameWorth[3] + " ");
+//						System.out
+//								.println(sameWorth[0] + " " + sameWorth[1]
+//										+ " " + sameWorth[2] + " "
+//										+ sameWorth[3] + " ");
 						return 7;
 					} else {
 						if (fiveColor != -30000) { // 5 from one color
@@ -311,17 +311,17 @@ public class Player {
 								return 5;
 							} else {
 								if (sameWorth[0] == 3 || sameWorth[2] == 3) { // drilling
-									System.out.println(sameWorth[0] + " "
-											+ sameWorth[1] + " " + sameWorth[2]
-											+ " " + sameWorth[3] + " ");
+//									System.out.println(sameWorth[0] + " "
+//											+ sameWorth[1] + " " + sameWorth[2]
+//											+ " " + sameWorth[3] + " ");
 									return 4;
 								} else {
 									if (sameWorth[0] == 2 && sameWorth[2] == 2) { // two
 																					// pairs
-										System.out.println(sameWorth[0] + " "
-												+ sameWorth[1] + " "
-												+ sameWorth[2] + " "
-												+ sameWorth[3] + " ");
+//										System.out.println(sameWorth[0] + " "
+//												+ sameWorth[1] + " "
+//												+ sameWorth[2] + " "
+//												+ sameWorth[3] + " ");
 										return 3;
 									} else {
 										if (sameWorth[0] == 2

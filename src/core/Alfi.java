@@ -37,7 +37,7 @@ public class Alfi extends Player {
 				return 0;
 		} else if (money < 3000) {
 			int random = r.nextInt(10);
-			if (random > 6)
+			if (random > 7)
 				return 2;
 		}
 		return 1;
@@ -64,7 +64,8 @@ public class Alfi extends Player {
 			}
 		} else {
 			calculateOuts(5, fiveColor, tableCards, playerCards);
-			System.out.println(outs + " ");
+			System.out.println("Outs: "+outs + " ");
+			System.out.println("PotOdds: "+((cue - debt) / pot) * 100);
 			if (outs > ((cue - debt) / pot) * 100) {
 				int random = r.nextInt(10);
 				if (random > 9)
@@ -79,7 +80,12 @@ public class Alfi extends Player {
 				if (random > 7 && outs * 1.5 > ((cue - debt) / pot) * 100
 						&& money > 4000)
 					return 1;
-				else
+				else if(outs==0){
+					int random1 = r.nextInt(10);
+					if(random1>5)
+						return 1;
+					else return 2;
+				}else
 					return 2;
 			}
 		}
@@ -105,7 +111,8 @@ public class Alfi extends Player {
 			}
 		} else {
 			calculateOuts(5, fiveColor, tableCards, playerCards);
-			System.out.println(outs + " ");
+			System.out.println("Outs: "+outs + " ");
+			System.out.println("PotOdds: "+((cue - debt) / pot) * 100);
 			if (outs > ((cue - debt) / pot) * 100) {
 				int random = r.nextInt(10);
 				if (random > 9)
@@ -253,9 +260,9 @@ public class Alfi extends Player {
 		}
 		if (color != -1) // Wenn der Spieler 3 oder mehr Karten einer Farbe hat,
 							// werden die outs dazugerechnet
-			return 13 - color;
+			return 9;
 		else
-			return color;
+			return 0;
 
 	}
 }
