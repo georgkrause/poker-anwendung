@@ -142,6 +142,7 @@ public class Game {
 						raiseWorth = 100;
 						choice = ((Alfi) this.activePlayers[turnPlayer])
 								.decide(this.tableCards, this.getPot(), this.cue);
+						((Alfi) this.activePlayers[turnPlayer]).outs=0;
 					} else {
 						if (this.activePlayers[0].getCredit() > 0) {
 							int[] decision = this.activePlayers[turnPlayer]
@@ -156,16 +157,18 @@ public class Game {
 						switch (choice) {
 
 						case 0: // raise/erhöhen
-							if (this.activePlayers[turnPlayer].raise(cue
-									+ raiseWorth)) {
+							this.cue += raiseWorth;
+							if (this.activePlayers[turnPlayer].raise(cue)) {
 								// erhöht den Einsatz
-								this.cue += raiseWorth;
-								window.updateCredits();
+//								this.cue += raiseWorth;
+//								window.updateCredits();
+								System.out.println("Da");
 								this.raisePot(raiseWorth);
-								window.updatePot();
+//								window.updatePot();
 								movesWithoutRaise = 0;
 								activePlayers[turnPlayer].debt = cue;
 							} else
+								System.out.println("Ja");
 								this.cue = this.activePlayers[turnPlayer]
 										.getCredit();
 							// raiseWorth=this.activePlayers[turnPlayer].getCredit();

@@ -132,7 +132,7 @@ public class Window extends JFrame {
 				.showInputDialog("Um wie viel möchtest du erhöhen?");
 		if (inputValue != null) {
 			int intZahl = Integer.parseInt(inputValue);
-
+			
 			return intZahl;
 		}
 		return 0;
