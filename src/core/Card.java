@@ -15,7 +15,6 @@ public class Card {
 	Card(int color, int worth) {
 		this.worth = worth;
 		this.color = color;
-
 		this.name = allColors[color] + " " + allWorths[worth];
 	}
 

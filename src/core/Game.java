@@ -15,7 +15,6 @@ public class Game {
 
 	private int credit = 10000; // Startkapital des Spieler
 	private final int minimumBet = 100; // Mindesteinsatz
-	private int raiseWorth = 100; // TODO Testzweck, Wert des PC spielers fehlt
 
 	private Card[] cards = new Card[52]; // Array für die Spielkarten
 	private int givenCards = 0; // Anzahl der Karten die bereits ausgegeben
@@ -70,7 +69,7 @@ public class Game {
 			}
 
 			// beende das Spiel, wenn nur noch ein Spieler Geld hat
-			if (validPlayers == 1) {
+			if (validPlayers == 1 || this.activePlayers[0].getCredit() <= 0) {
 				end = true;
 				window.dispose(); // schließe das Fenster
 				return;
@@ -139,47 +138,46 @@ public class Game {
 					if (turnPlayer != 0) {
 						// Lässt KI entscheiden was getan werden soll
 						Thread.sleep(5009);
-						raiseWorth = 100;
+						// this.activePlayers[turnPlayer].raiseWorth = 100;
 						choice = ((Alfi) this.activePlayers[turnPlayer])
-								.decide(this.tableCards, this.getPot(), this.cue);
-						((Alfi) this.activePlayers[turnPlayer]).outs=0;
+								.decide(this.tableCards, this.getPot(),
+										this.cue);
+						((Alfi) this.activePlayers[turnPlayer]).outs = 0;
 					} else {
 						if (this.activePlayers[0].getCredit() > 0) {
 							int[] decision = this.activePlayers[turnPlayer]
 									.decide(window);
 							choice = decision[0];
-							raiseWorth = decision[1];
+							this.activePlayers[turnPlayer].raiseWorth = decision[1];
 						}
 					}
 
-					// TODO #27: Das muss hier unbedingt überarbeitet werden!
 					if (this.activePlayers[turnPlayer].getCredit() > 0) {
 						switch (choice) {
 
 						case 0: // raise/erhöhen
-							this.cue += raiseWorth;
+
+							this.cue += this.activePlayers[turnPlayer].raiseWorth;
 							if (this.activePlayers[turnPlayer].raise(cue)) {
 								// erhöht den Einsatz
-//								this.cue += raiseWorth;
-//								window.updateCredits();
-								System.out.println("Da");
-								this.raisePot(raiseWorth);
-//								window.updatePot();
+								window.updateCredits();
+								this.raisePot(this.activePlayers[turnPlayer].raiseWorth);
+								window.updatePot();
 								movesWithoutRaise = 0;
 								activePlayers[turnPlayer].debt = cue;
-							} else
-								System.out.println("Ja");
+							} else {
 								this.cue = this.activePlayers[turnPlayer]
 										.getCredit();
-							// raiseWorth=this.activePlayers[turnPlayer].getCredit();
-							this.activePlayers[turnPlayer]
-									.changeCredit(-this.activePlayers[turnPlayer]
-											.getCredit());
-							window.updateCredits();
-							this.raisePot(cue);
-							window.updatePot();
-							movesWithoutRaise = 0;
-							activePlayers[turnPlayer].debt = cue;
+								// raiseWorth=this.activePlayers[turnPlayer].getCredit();
+								this.activePlayers[turnPlayer]
+										.changeCredit(-this.activePlayers[turnPlayer]
+												.getCredit());
+								window.updateCredits();
+								this.raisePot(cue);
+								window.updatePot();
+								movesWithoutRaise = 0;
+								activePlayers[turnPlayer].debt = cue;
+							}
 							break;
 
 						case 1: // call

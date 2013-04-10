@@ -132,7 +132,7 @@ public class Window extends JFrame {
 				.showInputDialog("Um wie viel möchtest du erhöhen?");
 		if (inputValue != null) {
 			int intZahl = Integer.parseInt(inputValue);
-			
+
 			return intZahl;
 		}
 		return 0;
@@ -174,6 +174,14 @@ public class Window extends JFrame {
 			this.cards[id * 2 + 5].setIcon(new ImageIcon("nix"));
 			this.cards[id * 2 + 6].setIcon(new ImageIcon("nix"));
 		}
+	}
+
+	public void deleteDealer() {
+		marks[0].setBounds(0, 0, 0, 0);
+		marks[1].setBounds(0, 0, 0, 0);
+		marks[2].setBounds(0, 0, 0, 0);
+		repaint();
+
 	}
 
 	/**
@@ -251,11 +259,4 @@ public class Window extends JFrame {
 		repaint();
 	}
 
-	public void deleteDealer() {
-		marks[0].setBounds(0, 0, 0, 0);
-		marks[1].setBounds(0, 0, 0, 0);
-		marks[2].setBounds(0, 0, 0, 0);
-		repaint();
-		
-	}
 }

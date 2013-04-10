@@ -6,6 +6,7 @@ public class Player {
 	public String name; // Name
 	private int credit; // Kontostand
 	private int id; // ID
+	int raiseWorth = 100;
 	public boolean folded = false; // ob Spieler das Spiel verlassen hat
 	public int debt = 0; // Schulden (aktueller Einsatz - bereits gezahlter
 							// Einsatz)
@@ -25,9 +26,10 @@ public class Player {
 	Player(int credit) {
 		this.credit = credit;
 	}
-	
+
 	/**
 	 * Fragt den Spielzug des Spielers ab
+	 * 
 	 * @param window
 	 * @return
 	 */
@@ -37,7 +39,7 @@ public class Player {
 		do {
 			// Lässt Spieler entscheiden was getan werden soll
 			choice[0] = window.DialogBox();
-			if(choice[0] >= 0) {
+			if (choice[0] >= 0) {
 				valid = true;
 			}
 		} while (!valid);
@@ -49,7 +51,7 @@ public class Player {
 			} while (choice[1] == 0 || (choice[1] % 50 != 0));
 
 		}
-		
+
 		return choice;
 	}
 
@@ -90,7 +92,7 @@ public class Player {
 	 * @return Gibt zurück, ob die Aktion möglich ist oder nicht
 	 */
 	public boolean raise(int cue) {
-			this.debt = cue - debt;
+		this.debt = cue - debt;
 		if (this.credit >= debt) {
 			this.credit -= debt;
 			return true;
@@ -171,10 +173,10 @@ public class Player {
 				z = z - 1;
 			}
 		}
-//		for (int a = 0; a < 7; a++) {
-//			System.out.print(allCardsWorth[a]);
-//		}
-//		System.out.println();
+		// for (int a = 0; a < 7; a++) {
+		// System.out.print(allCardsWorth[a]);
+		// }
+		// System.out.println();
 		return allCardsWorth;
 
 	}
@@ -298,10 +300,10 @@ public class Player {
 					return 8;
 				} else {
 					if (sameWorth[0] == 3 && sameWorth[2] == 2) { // drilling+pair
-//						System.out
-//								.println(sameWorth[0] + " " + sameWorth[1]
-//										+ " " + sameWorth[2] + " "
-//										+ sameWorth[3] + " ");
+					// System.out
+					// .println(sameWorth[0] + " " + sameWorth[1]
+					// + " " + sameWorth[2] + " "
+					// + sameWorth[3] + " ");
 						return 7;
 					} else {
 						if (fiveColor != -30000) { // 5 from one color
@@ -311,17 +313,19 @@ public class Player {
 								return 5;
 							} else {
 								if (sameWorth[0] == 3 || sameWorth[2] == 3) { // drilling
-//									System.out.println(sameWorth[0] + " "
-//											+ sameWorth[1] + " " + sameWorth[2]
-//											+ " " + sameWorth[3] + " ");
+								// System.out.println(sameWorth[0] + " "
+								// + sameWorth[1] + " " + sameWorth[2]
+								// + " " + sameWorth[3] + " ");
 									return 4;
 								} else {
 									if (sameWorth[0] == 2 && sameWorth[2] == 2) { // two
 																					// pairs
-//										System.out.println(sameWorth[0] + " "
-//												+ sameWorth[1] + " "
-//												+ sameWorth[2] + " "
-//												+ sameWorth[3] + " ");
+																					// System.out.println(sameWorth[0]
+																					// +
+																					// " "
+										// + sameWorth[1] + " "
+										// + sameWorth[2] + " "
+										// + sameWorth[3] + " ");
 										return 3;
 									} else {
 										if (sameWorth[0] == 2

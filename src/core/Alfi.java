@@ -12,17 +12,22 @@ public class Alfi extends Player {
 
 	public int decide(Card[] tableCards, int pot, int cue) {
 		int choice;
-		if (!tableCards[1].isVisible())
+		if (!tableCards[1].isVisible()) {
 			choice = this.decideFirst(this.getCredit(), this.getCards());
-		else if (!tableCards[3].isVisible())
-			choice = this.decideSecond(this.getCredit(), tableCards,
-					this.getCards(), 5, pot, cue);
-		else if (!tableCards[4].isVisible())
-			choice = this.decideThird(this.getCredit(), tableCards,
-					this.getCards(), 6, pot, cue);
-		else
-			choice = this.decideLast(this.getCredit(), tableCards,
-					this.getCards(), 7, pot, cue);
+		} else {
+			if (!tableCards[3].isVisible()) {
+				choice = this.decideSecond(this.getCredit(), tableCards,
+						this.getCards(), 5, pot, cue);
+			} else {
+				if (!tableCards[4].isVisible()) {
+					choice = this.decideThird(this.getCredit(), tableCards,
+							this.getCards(), 6, pot, cue);
+				} else {
+					choice = this.decideLast(this.getCredit(), tableCards,
+							this.getCards(), 7, pot, cue);
+				}
+			}
+		}
 		return choice;
 	}
 
@@ -33,8 +38,12 @@ public class Alfi extends Player {
 		if (playerCards[1].getWorthID() == playerCards[0].getWorthID()
 				|| money > 15000) {
 			int random = r.nextInt(10);
-			if (random > 7)
+
+			if (random > 5) {
+				int raiseRandom = r.nextInt(5) + 1;
+				this.raiseWorth = 100 * raiseRandom;
 				return 0;
+			}
 		} else if (money < 3000) {
 			int random = r.nextInt(10);
 			if (random > 7)
@@ -51,41 +60,52 @@ public class Alfi extends Player {
 		int fiveColor = fiveColor(round, tableCards, playerCards);
 		pairWorth = sameWorth(round, sortedcards);
 		int followfive = followFive(round, sortedcards);
-		handWorth = handWorth(sortedcards, fiveColor, followfive, pairWorth);
-		if (handWorth > 3) {
-			int random = r.nextInt(10);
-			if (random > 6) {
+		this.handWorth = handWorth(sortedcards, fiveColor, followfive,
+				pairWorth);
+		if (this.handWorth > 3) {
+			int random = r.nextInt(12);
+			if (random > 10) {
+				this.raiseWorth = this.getCredit();
+				return 0;
+			}
+			if (random > 5) {
+				int raiseRandom = r.nextInt(10) + 1;
+				this.raiseWorth = 100 * raiseRandom;
 				return 0;
 			} else {
-				if (handWorth < 5 && (cue - debt) > money / 2)
+				if (this.handWorth < 5 && (cue - this.debt) > money / 2)
 					return 2;
 				else
 					return 1;
 			}
 		} else {
 			calculateOuts(5, fiveColor, tableCards, playerCards);
-			System.out.println("Outs: "+outs + " ");
-			System.out.println("PotOdds: "+((cue - debt) / pot) * 100);
-			if (outs > ((cue - debt) / pot) * 100) {
+			System.out.println("Outs: " + outs + " ");
+			System.out.println("PotOdds: " + ((cue - this.debt)*100 / pot)
+					+ " " + cue + " " + this.debt);
+			if (outs >= ((cue - this.debt)*100 / pot)) {
 				int random = r.nextInt(10);
 				if (random > 9)
 					return 2;
-				else if ((random > 7 && outs / 2 > ((cue - debt) / pot) * 100)
-						|| money > 15000)
+				else if ((random > 5 || outs / 2 >= ((cue - this.debt)*100 / pot)
+						|| money > 15000)) {
+					int raiseRandom = r.nextInt(8) + 1;
+					this.raiseWorth = 100 * raiseRandom;
 					return 0;
-				else
+				} else
 					return 1;
 			} else {
 				int random = r.nextInt(10);
-				if (random > 7 && outs * 1.5 > ((cue - debt) / pot) * 100
+				if (random > 5 && outs * 1.5 > ((cue - this.debt)*100 / pot)
 						&& money > 4000)
 					return 1;
-				else if(outs==0){
+				else if (outs == 0) {
 					int random1 = r.nextInt(10);
-					if(random1>5)
+					if (random1 > 4)
 						return 1;
-					else return 2;
-				}else
+					else
+						return 2;
+				} else
 					return 2;
 			}
 		}
@@ -98,33 +118,43 @@ public class Alfi extends Player {
 		int fiveColor = fiveColor(round, tableCards, playerCards);
 		pairWorth = sameWorth(round, sortedcards);
 		int followfive = followFive(round, sortedcards);
-		handWorth = handWorth(sortedcards, fiveColor, followfive, pairWorth);
-		if (handWorth > 3) {
-			int random = r.nextInt(10);
-			if (random > 7) {
+		this.handWorth = handWorth(sortedcards, fiveColor, followfive,
+				pairWorth);
+		if (this.handWorth > 4) {
+			int random = r.nextInt(12);
+			if (random > 10) {
+				this.raiseWorth = this.getCredit();
+				return 0;
+			}
+			if (random > 5) {
+				int raiseRandom = r.nextInt(10) + 1;
+				this.raiseWorth = 100 * raiseRandom;
 				return 0;
 			} else {
-				if (handWorth < 5 && (cue - debt) > money / 2)
+				if (this.handWorth < 5 && (cue - this.debt) > money / 2)
 					return 2;
 				else
 					return 1;
 			}
 		} else {
 			calculateOuts(5, fiveColor, tableCards, playerCards);
-			System.out.println("Outs: "+outs + " ");
-			System.out.println("PotOdds: "+((cue - debt) / pot) * 100);
-			if (outs > ((cue - debt) / pot) * 100) {
+			System.out.println("Outs: " + outs + " ");
+			System.out.println("PotOdds: " + ((cue - this.debt)*100 / pot) 
+					+ " " + cue + " " + this.debt);
+			if (outs >= ((cue - this.debt)*100 / pot)) {
 				int random = r.nextInt(10);
 				if (random > 9)
 					return 2;
-				else if ((random > 7 && outs / 2 > ((cue - debt) / pot) * 100)
-						|| money > 15000)
+				else if ((random > 5 && outs / 2 >= ((cue - this.debt)*100 / pot))
+						|| money > 15000) {
+					int raiseRandom = r.nextInt(10) + 1;
+					this.raiseWorth = 100 * raiseRandom;
 					return 0;
-				else
+				} else
 					return 1;
 			} else {
 				int random = r.nextInt(10);
-				if (random > 7 && outs * 1.5 > ((cue - debt) / pot) * 100
+				if (random > 7 && outs * 1.5 > ((cue - this.debt)*100 / pot)
 						&& money > 4000)
 					return 1;
 				else
@@ -140,19 +170,29 @@ public class Alfi extends Player {
 		int fiveColor = fiveColor(round, tableCards, playerCards);
 		pairWorth = sameWorth(round, sortedcards);
 		int followfive = followFive(round, sortedcards);
-		handWorth = handWorth(sortedcards, fiveColor, followfive, pairWorth);
-		 int random = 0;
-		if (handWorth > 6){
-			 random = r.nextInt(10);
-			 if(random > 5)
-				 return 0;
-			 else return 1;
-		 }else if(handWorth < 6 && cue-debt > money * 0.75)
-			 random = r.nextInt(10);
-		 if(random > 6)
-			 return 2;
-		 else return 1;
-}
+		this.handWorth = handWorth(sortedcards, fiveColor, followfive,
+				pairWorth);
+		int random = 0;
+		if (this.handWorth > 5) {
+			random = r.nextInt(12);
+			if (random > 10) {
+				this.raiseWorth = this.getCredit();
+				return 0;
+			} else {
+				if (random > 5) {
+					int raiseRandom = r.nextInt(10) + 1;
+					this.raiseWorth = 100 * raiseRandom;
+					return 0;
+				} else
+					return 1;
+			}
+		} else if (this.handWorth < 5 && cue - this.debt > money * 0.75)
+			random = r.nextInt(10);
+		if (random > 6)
+			return 2;
+		else
+			return 1;
+	}
 
 	private void calculateOuts(int round, int fiveColor, Card[] tableCards,
 			Card[] playerCards) {
