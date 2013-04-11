@@ -281,9 +281,9 @@ public class Game {
 				for (int i = 0; i < 4; i++) {
 					if (!activePlayers[i].isFolded()) {
 						int[] sortedcards = this.activePlayers[i].sortWorth(7,
-								tableCards, activePlayers[i].getCards());
+								tableCards);
 						int fiveColor = this.activePlayers[i].fiveColor(7,
-								tableCards, activePlayers[i].getCards());
+								tableCards);
 						this.activePlayers[i].pairWorth = this.activePlayers[i]
 								.sameWorth(7, sortedcards);
 						int followfive = this.activePlayers[i].followFive(7,
@@ -586,41 +586,6 @@ public class Game {
 	}
 
 	/**
-	 * TODO wechselt Blinds nach jeder Runde
-	 */
-	void changeBlinds() {
-
-	}
-
-	/**
-	 * TODO welchselt den Dealer nach jeder Runde
-	 */
-	void changeDealer() {
-
-	}
-
-	/**
-	 * @return Mindesteinsatz
-	 */
-	public int getMinimumBet() {
-		return minimumBet;
-	}
-
-	/**
-	 * @return Spieler, der SmallBlind ist
-	 */
-	public int getSmallBlind() {
-		return smallBlind;
-	}
-
-	/**
-	 * @return Spieler, der BigBlind ist
-	 */
-	public int getBigBlind() {
-		return bigBlind;
-	}
-
-	/**
 	 * @return Pot-Betrag
 	 */
 	public int getPot() {
@@ -642,13 +607,6 @@ public class Game {
 	 */
 	public int getDealer() {
 		return dealer;
-	}
-
-	/**
-	 * @return Anzahl der aktiven Spieler
-	 */
-	public int getActivePlayerNumber() {
-		return activePlayerNumber;
 	}
 
 }

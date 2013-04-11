@@ -147,12 +147,18 @@ public class Player {
 		return folded;
 	}
 
-	public int[] sortWorth(int r, Card[] tableCards, Card[] cards) {
-		// TODO Auto-generated method stub
+	/**
+	 * Sortiert die Karten nach Wert
+	 * 
+	 * @param r
+	 * @param tableCards
+	 * @return
+	 */
+	public int[] sortWorth(int r, Card[] tableCards) {
 
 		int[] allCardsWorth = new int[7];
-		allCardsWorth[0] = cards[0].getWorthID();
-		allCardsWorth[1] = cards[1].getWorthID();
+		allCardsWorth[0] = this.getCards()[0].getWorthID();
+		allCardsWorth[1] = this.getCards()[1].getWorthID();
 		allCardsWorth[2] = tableCards[0].getWorthID();
 		allCardsWorth[3] = tableCards[1].getWorthID();
 		allCardsWorth[4] = tableCards[2].getWorthID();
@@ -173,33 +179,24 @@ public class Player {
 				z = z - 1;
 			}
 		}
-		// for (int a = 0; a < 7; a++) {
-		// System.out.print(allCardsWorth[a]);
-		// }
-		// System.out.println();
+
 		return allCardsWorth;
 
 	}
 
 	/**
-	 * returns the color id where are 5 cards in the cards or 30000
+	 * Gibt Farbe zurück, die 5 Karten haben. Ansonsten wird -30000
+	 * zurückgegeben.
 	 * 
-	 * @param ccard0
-	 * @param ccard1
-	 * @param ccard2
-	 * @param ccard3
-	 * @param ccard4
-	 * @param pcard0
-	 * @param pcard1
+	 * @param r
+	 * @param tableCards
 	 * @return
 	 */
-	// public int fivecolor(int ccard0, int ccard1, int ccard2, int ccard3,
-	// int ccard4, int pcard0, int pcard1) {
-	public int fiveColor(int r, Card[] tableCards, Card[] playerCards) {
+	public int fiveColor(int r, Card[] tableCards) {
 		Card[] allCards = new Card[7];
 
-		allCards[0] = playerCards[0];
-		allCards[1] = playerCards[1];
+		allCards[0] = this.getCards()[0];
+		allCards[1] = this.getCards()[1];
 		allCards[2] = tableCards[0];
 		allCards[3] = tableCards[1];
 		allCards[4] = tableCards[2];
@@ -221,7 +218,7 @@ public class Player {
 	}
 
 	/**
-	 * counts pairs, threelings and fourlings
+	 * Zählt Paare, Drillinge und Vierlinge
 	 * 
 	 * @param cardWorth
 	 * @return
@@ -270,6 +267,13 @@ public class Player {
 		return sameWorth;
 	}
 
+	/**
+	 * TODO
+	 * 
+	 * @param r
+	 * @param cardWorth
+	 * @return
+	 */
 	public int followFive(int r, int[] cardWorth) {
 		int follow = 1;
 		for (int a = 0; a < r; a++) {
@@ -287,6 +291,15 @@ public class Player {
 
 	}
 
+	/**
+	 * Berechnet den Wert der Hand
+	 * 
+	 * @param cardWorth
+	 * @param fiveColor
+	 * @param followFive
+	 * @param sameWorth
+	 * @return
+	 */
 	public int handWorth(int[] cardWorth, int fiveColor, int followFive,
 			int[] sameWorth) {
 
@@ -300,10 +313,10 @@ public class Player {
 					return 8;
 				} else {
 					if (sameWorth[0] == 3 && sameWorth[2] == 2) { // drilling+pair
-					// System.out
-					// .println(sameWorth[0] + " " + sameWorth[1]
-					// + " " + sameWorth[2] + " "
-					// + sameWorth[3] + " ");
+						// System.out
+						// .println(sameWorth[0] + " " + sameWorth[1]
+						// + " " + sameWorth[2] + " "
+						// + sameWorth[3] + " ");
 						return 7;
 					} else {
 						if (fiveColor != -30000) { // 5 from one color
@@ -313,9 +326,9 @@ public class Player {
 								return 5;
 							} else {
 								if (sameWorth[0] == 3 || sameWorth[2] == 3) { // drilling
-								// System.out.println(sameWorth[0] + " "
-								// + sameWorth[1] + " " + sameWorth[2]
-								// + " " + sameWorth[3] + " ");
+									// System.out.println(sameWorth[0] + " "
+									// + sameWorth[1] + " " + sameWorth[2]
+									// + " " + sameWorth[3] + " ");
 									return 4;
 								} else {
 									if (sameWorth[0] == 2 && sameWorth[2] == 2) { // two
@@ -341,9 +354,6 @@ public class Player {
 					}
 				}
 			}
-
 		}
-
 	}
-
 }
