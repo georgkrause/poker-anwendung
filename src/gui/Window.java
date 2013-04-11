@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import core.Game;
+import core.Player;
 
 public class Window extends JFrame {
 
@@ -134,7 +135,8 @@ public class Window extends JFrame {
 	/**
 	 * zeigt Markierung für Dealer und Blinds an
 	 * 
-	 * @param ID des Spielers, der Dealer ist
+	 * @param ID
+	 *            des Spielers, der Dealer ist
 	 */
 	private void Dealer() {
 		ImageIcon background1 = new ImageIcon("img/dealerbutton.png");
@@ -166,7 +168,7 @@ public class Window extends JFrame {
 	}
 
 	/**
-	 * Zeigt eine Dialog-Box an, mit der der Spieler seinen Zug auswählt
+	 * Zeigt eine Dialog-Box an, mit der der Spieler seinen Zug auswählt/ Was er tun möchte
 	 * 
 	 * @return
 	 */
@@ -192,9 +194,9 @@ public class Window extends JFrame {
 
 	/**
 	 * Zeigt eine Dialog-Box an, mit der der Spieler angibt, wie viel erhöhen
-	 * möchte
+	 * möchte und returnt den Wert, um den erhöht wird
 	 * 
-	 * @return
+	 * @return 
 	 */
 	public int RaiseDialogBox() {
 
@@ -261,6 +263,20 @@ public class Window extends JFrame {
 		marks[1].setBounds(0, 0, 0, 0);
 		marks[2].setBounds(0, 0, 0, 0);
 		repaint();
+
+	}
+	/*
+	 * Gibt den Gewinner in einem Textfeld aus
+	 */
+	public void doWinDialog(int player) {
+		final JTextField winner = new JTextField("Der Gewinner ist Spieler "
+				+ player);
+
+		winner.setBounds(200, 150, 400, 300);
+		winner.setBorder(BorderFactory.createEmptyBorder());
+		winner.setHorizontalAlignment(JTextField.CENTER);
+		winner.setEditable(false);
+		add(winner);
 
 	}
 

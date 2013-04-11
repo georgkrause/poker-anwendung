@@ -19,35 +19,35 @@ public class Card {
 	}
 
 	/**
-	 * turns card
+	 * macht die Karte sichtbar
 	 */
 	public void discover() {
 		this.visible = true;
 	}
 
 	/**
-	 * @return if the card is visible
+	 * @return gibt zurück, ob die Karte sichtbar ist
 	 */
 	public boolean isVisible() {
 		return this.visible;
 	}
 
 	/**
-	 * @return the name
+	 * @return gibt den Namen der Karte zurück
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * @return the ID of the worth
+	 * @return gibt den Wert der Karte zurück
 	 */
 	public int getWorthID() {
 		return worth;
 	}
 
 	/**
-	 * @return the worth
+	 * @return gibt den Namen des Wertes der Karte zurück
 	 */
 	@SuppressWarnings("static-access")
 	public String getWorthName() {
@@ -55,7 +55,7 @@ public class Card {
 	}
 
 	/**
-	 * @return the color
+	 * @return gibt den Namen der Farbe der Karte zurück
 	 */
 	@SuppressWarnings("static-access")
 	public String getColorName() {
@@ -64,14 +64,14 @@ public class Card {
 
 	/**
 	 * 
-	 * @return the ID of the color
+	 * @return gibt die Farbe der Karte zurück
 	 */
 	public int getColorID() {
 		return color;
 	}
 
 	/**
-	 * @return the picture of the card
+	 * @return gibt das Bild der Karte zurück
 	 */
 	@SuppressWarnings("static-access")
 	public String getPicture() {

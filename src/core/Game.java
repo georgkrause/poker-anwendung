@@ -54,7 +54,7 @@ public class Game {
 		// Main-Loop bis Spiel beendet ist
 		while (!end) {
 			activePlayerNumber = 4; // Anzahl der Spieler, die noch in der Runde
-									// haben
+									// sind
 			validPlayers = 4; // Anzahl der Spieler, die noch Geld haben
 
 			// durchläuft alle Spieler und prüft ihren Kontostand
@@ -70,7 +70,12 @@ public class Game {
 
 			// beende das Spiel, wenn nur noch ein Spieler Geld hat
 			if (validPlayers == 1 || this.activePlayers[0].getCredit() <= 0) {
-				end = true;
+				end = true; // Spiel endet, wenn nur noch ein Spieler Geld hat
+							// oder der menschliche Spieler kein Geld hat
+				for (int i = 0; i < 4; i++) {
+					if (this.activePlayers[i].getCredit() > 0)
+						window.doWinDialog(this.activePlayers[i].getId());
+				} // Zeigt Gewinnerbildschirm
 				window.dispose(); // schließe das Fenster
 				return;
 			}
@@ -94,14 +99,14 @@ public class Game {
 		this.preparePlayers();
 
 		// verteilt Blinds, Dealer und TurnPlayer
-		if (validPlayers > 3) {
-			this.assignRoles();
+		this.assignRoles();
 
+		if (validPlayers > 3) {
 			// Aktualisiert die Anzeige der Rollen
 			window.updateDealer();
 		} else
 			window.deleteDealer();
-		// gebe Community-Cards
+		// gebe/wähle Community-Cards
 		this.tableCards[0] = this.deal();
 		this.tableCards[1] = this.deal();
 		this.tableCards[2] = this.deal();
@@ -111,7 +116,8 @@ public class Game {
 		// aktualisiere Anzeige der Community-Karten
 		window.updateCommunityCards();
 
-		// zieht den Spielern die Blinds ab
+		// zieht den Spielern die Blinds ab, wenn mehr als 3 Spieler im Spiel
+		// sind
 		if (validPlayers > 3) {
 			this.collectBlinds();
 		}
@@ -138,22 +144,31 @@ public class Game {
 					if (turnPlayer != 0) {
 						// Lässt KI entscheiden was getan werden soll
 						Thread.sleep(5009);
-						// this.activePlayers[turnPlayer].raiseWorth = 100;
+						// führe KI aus, siehe Alfi Klasse
 						choice = ((Alfi) this.activePlayers[turnPlayer])
 								.decide(this.tableCards, this.getPot(),
 										this.cue);
 						((Alfi) this.activePlayers[turnPlayer]).outs = 0;
 					} else {
-						if (this.activePlayers[0].getCredit() > 0) {
+						// Lässt menschl. Spieler entscheiden, was er tut ...
+						if (this.activePlayers[0].getCredit() > 0) { // ...sofern
+																		// er
+																		// genug
+																		// Geld
+																		// hat
 							int[] decision = this.activePlayers[turnPlayer]
-									.decide(window);
+									.decide(window); // Ruft das
+														// Entscheidungsfenster
+														// auf,siehe window
 							choice = decision[0];
 							this.activePlayers[turnPlayer].raiseWorth = decision[1];
 						}
 					}
 
 					if (this.activePlayers[turnPlayer].getCredit() > 0) {
-						switch (choice) {
+
+						switch (choice) { // Unterscheidet die Entscheidungen
+											// der Spieler
 
 						case 0: // raise/erhöhen
 
@@ -168,7 +183,6 @@ public class Game {
 							} else {
 								this.cue = this.activePlayers[turnPlayer]
 										.getCredit();
-								// raiseWorth=this.activePlayers[turnPlayer].getCredit();
 								this.activePlayers[turnPlayer]
 										.changeCredit(-this.activePlayers[turnPlayer]
 												.getCredit());
@@ -216,15 +230,13 @@ public class Game {
 							+ "; aktueller Einsatz" + cue + "; Pot: "
 							+ this.pot);
 				}
-
 				// Ermittelt Spieler, der als nächstes dran ist
 				if ((turnPlayer + 1) > 3)
 					turnPlayer = turnPlayer + 1 - 4;
 				else
 					turnPlayer = turnPlayer + 1;
 			}
-
-			// Decke die ersten 3 Karten auf falls noch nicht erledigt
+			// Decke die ersten 3 Karten auf falls diese noch verdeckt liegen
 			if (!this.tableCards[2].isVisible()) {
 				for (int i = 0; i < 3; i++) {
 					this.tableCards[i].discover();
@@ -234,7 +246,7 @@ public class Game {
 				// TODO: Vor der Abgabe entfernen
 				System.out.println("neue Karte");
 
-				// Decke 4 Karte auf falls noch nicht erledigt
+				// Decke 4 Karte auf
 			} else if (!this.tableCards[3].isVisible()) {
 				this.tableCards[3].discover();
 				window.updateCommunityCards();
@@ -242,7 +254,7 @@ public class Game {
 				// TODO: Vor der Abgabe entfernen
 				System.out.println("neue Karte");
 
-				// Decke 5. Karte auf falls noch nicht erledigt
+				// Decke 5. Karte auf
 			} else if (!this.tableCards[4].isVisible()) {
 				this.tableCards[4].discover();
 				window.updateCommunityCards();
@@ -275,11 +287,13 @@ public class Game {
 			window.updateCredits(); // Aktualisiere die Anzeige der
 									// Spieler-Guthaben
 
-		} else {
+		} else { // Wenn mehrere Spieler noch im Spiel sind, kommt es zum
+					// Showdown
 			if (this.tableCards[4].isVisible()) {
-
 				for (int i = 0; i < 4; i++) {
 					if (!activePlayers[i].isFolded()) {
+						// Die folgenden Funktionen dienen dazu den Wert des
+						// Blattes des jeweiligen Spielers zu ermitteln
 						int[] sortedcards = this.activePlayers[i].sortWorth(7,
 								tableCards);
 						int fiveColor = this.activePlayers[i].fiveColor(7,
@@ -306,12 +320,13 @@ public class Game {
 					}
 				}
 
-				int[] z = getWinner();
+				int[] z = getWinner(); // Gewinner wird ermittelt ...
 
 				System.out.println("Winner: " + z[0] + " "
 						+ activePlayers[z[0]].handWorth + " Es gibt " + z[1]
 						+ " Gewinner.");
-				disburseAsset(activePlayers[z[0]]);
+				disburseAsset(activePlayers[z[0]]); // ... und der Gewinn an
+													// diesen ausgeschüttet
 				window.updatePot();
 				window.updateCredits();
 				this.givenCards = 0;

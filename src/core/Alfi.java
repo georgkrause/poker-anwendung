@@ -3,6 +3,7 @@ package core;
 import java.util.Random;
 
 public class Alfi extends Player {
+	//Wir haben uns dazu entschlossen, die PC-Spieler Alfi zu nennen
 	float outs = 0;
 
 	/**
@@ -44,7 +45,7 @@ public class Alfi extends Player {
 	}
 
 	/** 
-	 * TODO
+	 * KI für die erste Wettrunde (0 Community Cards sichtbar)
 	 * @param money
 	 * @return
 	 */
@@ -70,7 +71,7 @@ public class Alfi extends Player {
 	}
 
 	/**
-	 * TODO
+	 * KI für die zweite Wettrunde (3 Community Cards sichtbar)
 	 * @param money
 	 * @param tableCards
 	 * @param round
@@ -140,7 +141,7 @@ public class Alfi extends Player {
 	}
 
 	/**
-	 * TODO
+	 * KI für die dritte Wettrunde (4 Community Cards sichtbar)
 	 * @param money
 	 * @param tableCards
 	 * @param playerCards
@@ -203,7 +204,7 @@ public class Alfi extends Player {
 	}
 
 	/**
-	 * TODO
+	 * KI für die letzte Wettrunde (5 Community Cards sichtbar)
 	 * @param money
 	 * @param tableCards
 	 * @param playerCards
@@ -245,7 +246,7 @@ public class Alfi extends Player {
 	}
 
 	/**
-	 * TODO
+	 * Berechnet die Outs des jeweiligen PC-Spielers
 	 * @param round
 	 * @param fiveColor
 	 * @param tableCards
@@ -264,7 +265,7 @@ public class Alfi extends Player {
 	}
 
 	/**
-	 * TODO
+	 * Prüft, ob ein Spieler Paare/Drillinge hat und wie viel Outs er somit hat
 	 * @param round
 	 * @param cardWorth
 	 * @return
@@ -317,7 +318,7 @@ public class Alfi extends Player {
 	}
 
 	/**
-	 * TODO
+	 * Überprüft, ob ein Spieler beinahe 5 Karten in einer Reihe (Straße) hat und gibt entsprechend die Outs zurück
 	 * @param cardWorth
 	 * @param round
 	 * @return
@@ -343,7 +344,7 @@ public class Alfi extends Player {
 	}
 
 	/**
-	 * TODO
+	 * Prüft, ob ein Spieler beinahe 5 Karten einer Farbe (Flush) hat und gibt entsprechend die Outs zurück
 	 * @param round
 	 * @param tableCards
 	 * @return
