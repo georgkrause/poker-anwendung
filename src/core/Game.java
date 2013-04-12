@@ -330,6 +330,7 @@ public class Game {
 
 	/**
 	 * gibt Handkarten
+	 * 
 	 * @author georg
 	 */
 	private void preparePlayers() {
@@ -361,6 +362,7 @@ public class Game {
 
 	/**
 	 * verteilt die Rollen an die Spieler
+	 * 
 	 * @author georg
 	 */
 	private void assignRoles() {
@@ -392,7 +394,8 @@ public class Game {
 	}
 
 	/**
-	 * ermittelt den Spieler, der zuerst dran ist
+	 * ermittelt den Spieler, der zuerst dran ist (immer derjenige, der rechts
+	 * vom Dealer sitzt)
 	 * 
 	 * @author georg
 	 * @return
@@ -407,6 +410,7 @@ public class Game {
 
 	/**
 	 * erzeugt für jeden Spieler ein Objekt
+	 * 
 	 * @author georg
 	 */
 	private void generatePlayers() {
@@ -422,6 +426,7 @@ public class Game {
 
 	/**
 	 * Zieht den Blinds das Geld ab und schiebt es in den Pot
+	 * 
 	 * @author georg
 	 */
 	private void collectBlinds() {
@@ -434,6 +439,7 @@ public class Game {
 
 	/**
 	 * erzeugt die Spielkarten und schreibt sie in ein Array
+	 * 
 	 * @author georg
 	 */
 	private void generateCards() {
@@ -475,6 +481,7 @@ public class Game {
 
 	/**
 	 * Zahlt den Gewinn aus
+	 * 
 	 * @author georg
 	 */
 	void disburseAsset(Player winner) {
@@ -487,14 +494,21 @@ public class Game {
 	 * @return Spieler, der die Runde gewonnen hat
 	 */
 	int[] getWinner() {
-		int[] winnerArray = new int[2];
-		int winnerAmount = 1;
-		int winners = 0;
+		int[] winnerArray = new int[2]; // Gewinnerarray
+		int winnerAmount = 1; // Erklärung siehe unten
+		int winners = 0; // Der menschl. Spieler wird zuerst als Gewinner
+							// eingesetzt und dann ...
 
-		for (int a = 1; a < 4; a++) {
+		for (int a = 1; a < 4; a++) { // werden die Blätter der Spieler
+										// durchlaufen
+			// Wenn der Wert des Blattes über dem Wert des derzeitigen
+			// Gewinnerblattes liegt, ist dies das neue Gewinnerblatt
 			if (activePlayers[a].handWorth > activePlayers[winners].handWorth) {
 				winners = a;
-			} else {
+			} else { // Wenn die Werte der beiden Blätter gleich sind, aber die
+						// Highcard des aktuellen Spielers höher ist, als die
+						// des derzeitigen Gewinners, so ist der derzeitige
+						// Spieler der neue Gewinner, außer ...
 				if (activePlayers[a].handWorth == activePlayers[winners].handWorth
 						&& activePlayers[a].highCard > activePlayers[winners].highCard
 						&& activePlayers[a].handWorth != 2
@@ -503,13 +517,25 @@ public class Game {
 						&& activePlayers[a].handWorth != 7
 						&& activePlayers[a].handWorth != 8) {
 					winners = a;
-				} else if (activePlayers[a].handWorth == activePlayers[winners].handWorth
+				} else // ... wenn die Blätter den Wert eines Vierlings,
+						// FullHouse, Drillings, 2 Paare oder Paar haben. Denn
+						// dann...
+				if (activePlayers[a].handWorth == activePlayers[winners].handWorth
 						&& (activePlayers[a].handWorth == 2
 								|| activePlayers[a].handWorth == 3
 								|| activePlayers[a].handWorth == 4
 								|| activePlayers[a].handWorth == 7 || activePlayers[a].handWorth == 8)) {
 
-					switch (activePlayers[a].handWorth) {
+					switch (activePlayers[a].handWorth) { // ...wird das
+															// pairWorth-Array
+															// zu Rate gezogen
+															// und geguckt,
+															// welches Blatt den
+															// höheren
+															// Kartenwert hat
+															// (z.B: 10er
+															// Vierling schlägt
+															// 5er Vierling)
 
 					case 8: // Vierling
 						if (activePlayers[a].pairWorth[1] > activePlayers[winners].pairWorth[1])
@@ -569,9 +595,13 @@ public class Game {
 				}
 			}
 		}
-		winnerArray[0] = winners;
-		winnerArray[1] = winnerAmount;
-		return winnerArray;
+		winnerArray[0] = winners; // Hier wird gespeichert, wer der GEwinner ist
+		winnerArray[1] = winnerAmount; // Dies soll dazu dienen, den Gewinn an
+										// mehrere Spieler auszuschütten, wenn
+										// diese genau das gleiche Blatt haben.
+										// Dies ist jedoch noch nicht
+										// implementiert
+		return winnerArray; // Anschließend wird das Gewinnerarray returnt
 	}
 
 	/**

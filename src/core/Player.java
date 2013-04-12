@@ -13,8 +13,8 @@ public class Player {
 	public int[] pairWorth = new int[4]; // wird für
 											// Vierling,Drilling,Pair,ZweiPairs
 											// und FullHouse verwendet
-	public int highCard = 0;
-	public int handWorth = 0;
+	public int highCard = 0; // HighCard des Spielers
+	public int handWorth = 0; // Wert des derzeitigen Blattes des Spielers
 
 	private Card[] cards = new Card[2]; // Handkarten
 
@@ -39,7 +39,7 @@ public class Player {
 		int[] choice = new int[2];
 		boolean valid = false;
 		do {
-			// Lässt Spieler entscheiden was getan werden soll
+			// Lässt menschlichen Spieler entscheiden was getan werden soll
 			choice[0] = window.DialogBox();
 			if (choice[0] >= 0) {
 				valid = true;
@@ -59,6 +59,7 @@ public class Player {
 
 	/**
 	 * Spieler checkt
+	 * 
 	 * @author Georg
 	 */
 	public void check() {
@@ -67,6 +68,7 @@ public class Player {
 
 	/**
 	 * Spieler verlässt die aktuelle Runde
+	 * 
 	 * @author Georg
 	 */
 	public void fold() {
@@ -144,6 +146,7 @@ public class Player {
 
 	/**
 	 * Handkarten
+	 * 
 	 * @author georg
 	 * @param Setzt
 	 */
@@ -185,7 +188,8 @@ public class Player {
 			allCardsWorth[6] = -20;
 		for (int a = 0; a < 7; a++) {
 			int z = a;
-			while ((z > 0) && (allCardsWorth[z] < allCardsWorth[z - 1])) {
+			while ((z > 0) && (allCardsWorth[z] < allCardsWorth[z - 1])) { // "stinknormales"
+																			// Sortieren
 				int hilf = allCardsWorth[z];
 				allCardsWorth[z] = allCardsWorth[z - 1];
 				allCardsWorth[z - 1] = hilf;
@@ -219,13 +223,14 @@ public class Player {
 
 		int[] colors = { 0, 0, 0, 0 };
 
-		for (int i = 0; i < r; i++) {
+		for (int i = 0; i < r; i++) { // liest die Farben der Karten aus ...
 			colors[allCards[i].getColorID()]++;
 		}
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 4; i++) { // ... und prüft, ob der Spieler 5 Karten
+										// einer Farbe (Flush) hat
 			if (colors[i] >= 5) {
-				return i;
+				return i; // Wenn ja wird der Farbindex zurückgegeben
 			}
 		}
 		return -30000;
@@ -249,17 +254,50 @@ public class Player {
 			if (a != 0 && cardWorth[a] == cardWorth[a - 1]) {
 				same = same + 1;
 			}
-			if (same >= 4 && cardWorth[a] == cardWorth[a - 3]) {
-				sameWorth[0] = same;
-				sameWorth[1] = cardWorth[a - 1];
+			if (same >= 4 && cardWorth[a] == cardWorth[a - 3]) { // Wenn ein
+																	// Vierling
+																	// (4 Karten
+																	// eines
+																	// Wertes)
+																	// dabei
+																	// ist, wird
+																	// sofort
+																	// returnt
+				sameWorth[0] = same; // In sameWorth[0] wird je die Anzahl der
+										// vorkommenden Karten mit gleichem
+										// Wert, z.B. bei Vierling =
+										// 4,gespeichert
+				sameWorth[1] = cardWorth[a - 1]; // In sameWorth[1] wird der
+													// Wert der Karten mit
+													// gleichem Wert gespeichert
 				return sameWorth;
 			} else {
-				if (same == 3 && a != r - 1 && cardWorth[a] != cardWorth[a + 1]
+				if (same == 3 && a != r - 1 && cardWorth[a] != cardWorth[a + 1] // Wenn
+																				// es
+																				// keinen
+																				// Vierling
+																				// gibt,wird
+																				// gesucht,
+																				// ob
+																				// es
+																				// einen
+																				// Drilling
+																				// gibt
+																				// ...
 						&& cardWorth[a] == cardWorth[a - 2]) {
 					sameWorth[0] = same;
 					sameWorth[1] = cardWorth[a - 1];
 				} else {
-					if ((same == 2) && (a != r - 1) && (twins == 0)
+					if ((same == 2) && (a != r - 1) && (twins == 0) // Und wenn
+																	// es keinen
+																	// Drilling
+																	// gibt,
+																	// wird
+																	// gesucht,
+																	// ob es
+																	// einen
+																	// Zwilling/Paar
+																	// gibt
 							&& (cardWorth[a] != cardWorth[a + 1])) {
 						twins = 1;
 						sameWorth[0] = same;
@@ -270,16 +308,18 @@ public class Player {
 			}
 		}
 
-		for (int a = 0; a < r; a++) {
+		for (int a = 0; a < r; a++) { // Hier wird gesucht,ob es noch ein
+										// zweites Paar gibt ...
 			if (a != 0 && cardWorth[a] == cardWorth[a - 1]
 					&& sameWorth[1] != cardWorth[a]) {
 				same2 = same2 + 1;
-				sameWorth[2] = same2;
-				sameWorth[3] = cardWorth[a];
+				sameWorth[2] = same2; // und dieses wird entsprechend in
+										// sameWorth[2] ...
+				sameWorth[3] = cardWorth[a]; // und [3] gespeichert
 
 			}
 		}
-		return sameWorth;
+		return sameWorth; // anschließend wird das Array returnt
 	}
 
 	/**
@@ -292,18 +332,25 @@ public class Player {
 	 */
 	public int followFive(int r, int[] cardWorth) {
 		int follow = 1;
-		for (int a = 0; a < r; a++) {
+		for (int a = 0; a < r; a++) { // Prüft, ob die sortierten Karten in
+										// einer Wertreihenfolge liegen z.B:
+										// 1-2-3-4-5
 			if ((a != 0 && a != r - 1 && cardWorth[a] == cardWorth[a - 1] + 1 && cardWorth[a] == cardWorth[a + 1] - 1)
 					|| (a == r - 1 && cardWorth[r - 1] == cardWorth[r - 2] + 1)) {
-				follow = follow + 1;
+				follow = follow + 1; // Für jede weitere anliegende Zahl, wird
+										// die Variable follow um eins erhöht
+										// ...
 
-				if (follow >= 5) {
+				if (follow >= 5) { // und wenn diese größergleich 5 ist, also
+									// eine Straße vorliegt, wird der höchste
+									// Wert returnt, der somit die Highcard des
+									// Blattes ist
 
 					return cardWorth[a];
 				}
 			}
 		}
-		return 0;
+		return 0; // Ansonsten wird 0 returnt
 
 	}
 
@@ -319,7 +366,10 @@ public class Player {
 	 */
 	public int handWorth(int[] cardWorth, int fiveColor, int followFive,
 			int[] sameWorth) {
-
+		// Die verschiedenen möglichen Gewinnhände werden in absteigender
+		// Reihenfolge geprüft, d.h. es wird geprüft, ob diese vorhanden sind.
+		// Dazu werden die Ergebnisse aus den vorherigen Funktionen
+		// sortWorth,fiveColor,sameWorth und followFive benutzt
 		if ((followFive == 12) & (fiveColor != -30000)) { // RoyalFlush
 			return 10;
 		} else {
@@ -330,22 +380,25 @@ public class Player {
 					return 8;
 				} else {
 					if (sameWorth[0] == 3 && sameWorth[2] == 2) { // drilling+Paar
+																	// (Full
+																	// House)
 						return 7;
 					} else {
-						if (fiveColor != -30000) { // 5 from one color
+						if (fiveColor != -30000) { // 5 from one color (Flush)
 							return 6;
 						} else {
-							if (followFive != 0) { // street
+							if (followFive != 0) { // street/Straße
 								return 5;
 							} else {
 								if (sameWorth[0] == 3 || sameWorth[2] == 3) { // drilling
 									return 4;
 								} else {
-									if (sameWorth[0] == 2 && sameWorth[2] == 2) { // zwei Paare
+									if (sameWorth[0] == 2 && sameWorth[2] == 2) { // zwei
+																					// Paare
 										return 3;
 									} else {
 										if (sameWorth[0] == 2
-												|| sameWorth[2] == 2) { // pair
+												|| sameWorth[2] == 2) { // paar
 											return 2;
 										} else
 											return 1; // Highcard

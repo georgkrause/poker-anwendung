@@ -33,7 +33,7 @@ public class Window extends JFrame {
 	 * @param game
 	 */
 	public Window(Game game) {
-
+		// Erzeugung des Fensters + Anlegen des Games
 		super("Window");
 		this.game = game;
 
@@ -157,6 +157,7 @@ public class Window extends JFrame {
 
 	/**
 	 * Aktualisiert die Anzeige des Dealers
+	 * 
 	 * @author georg, sebastian
 	 */
 	public void updateDealer() {
@@ -212,6 +213,7 @@ public class Window extends JFrame {
 
 	/**
 	 * Aktualisiert die Anzeige der Guthaben-Stände
+	 * 
 	 * @author georg, sebastian
 	 */
 	public void updateCredits() {
@@ -223,6 +225,7 @@ public class Window extends JFrame {
 
 	/**
 	 * Aktualisiert die Anzeige des Pots
+	 * 
 	 * @author georg, sebastian
 	 */
 	public void updatePot() {
@@ -231,6 +234,7 @@ public class Window extends JFrame {
 
 	/**
 	 * Aktualisiert die Anzeige der Tisch-Karten
+	 * 
 	 * @author georg, sebastian
 	 */
 	public void updateCommunityCards() {
@@ -264,6 +268,7 @@ public class Window extends JFrame {
 
 	/**
 	 * Löscht den Dealer-Button und die Blind-Markierungen
+	 * 
 	 * @author georg, sebastian
 	 */
 	public void deleteDealer() {
@@ -275,7 +280,8 @@ public class Window extends JFrame {
 	}
 
 	/*
-	 * Gibt den Gewinner in einem Textfeld aus
+	 * Gibt den Gewinner in einem Textfeld aus (nicht getestet)
+	 * 
 	 * @author georg, sebastian
 	 */
 	public void doWinDialog(int player) {
