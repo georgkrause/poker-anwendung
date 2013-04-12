@@ -5,11 +5,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
 import javax.swing.JTextField;
 
 import core.Game;
-import core.Player;
 
 public class Window extends JFrame {
 
@@ -101,6 +99,7 @@ public class Window extends JFrame {
 	/**
 	 * zeigt eine Karte
 	 * 
+	 * @author georg, sebastian
 	 * @param x
 	 * @param y
 	 * @param cardfile
@@ -116,6 +115,7 @@ public class Window extends JFrame {
 	/**
 	 * zeigt das Guthaben eines Spielers an
 	 * 
+	 * @author georg, sebastian
 	 * @param x
 	 * @param y
 	 * @param money
@@ -135,8 +135,7 @@ public class Window extends JFrame {
 	/**
 	 * zeigt Markierung für Dealer und Blinds an
 	 * 
-	 * @param ID
-	 *            des Spielers, der Dealer ist
+	 * @author georg, sebastian
 	 */
 	private void Dealer() {
 		ImageIcon background1 = new ImageIcon("img/dealerbutton.png");
@@ -158,6 +157,7 @@ public class Window extends JFrame {
 
 	/**
 	 * Aktualisiert die Anzeige des Dealers
+	 * @author georg, sebastian
 	 */
 	public void updateDealer() {
 		int dealer = game.getDealer();
@@ -168,8 +168,10 @@ public class Window extends JFrame {
 	}
 
 	/**
-	 * Zeigt eine Dialog-Box an, mit der der Spieler seinen Zug auswählt/ Was er tun möchte
+	 * Zeigt eine Dialog-Box an, mit der der Spieler seinen Zug auswählt/ Was er
+	 * tun möchte
 	 * 
+	 * @author georg, sebastian
 	 * @return
 	 */
 	public int DialogBox() {
@@ -196,7 +198,8 @@ public class Window extends JFrame {
 	 * Zeigt eine Dialog-Box an, mit der der Spieler angibt, wie viel erhöhen
 	 * möchte und returnt den Wert, um den erhöht wird
 	 * 
-	 * @return 
+	 * @author georg, sebastian
+	 * @return
 	 */
 	public int RaiseDialogBox() {
 
@@ -209,6 +212,7 @@ public class Window extends JFrame {
 
 	/**
 	 * Aktualisiert die Anzeige der Guthaben-Stände
+	 * @author georg, sebastian
 	 */
 	public void updateCredits() {
 		for (int i = 0; i < 4; i++) {
@@ -219,6 +223,7 @@ public class Window extends JFrame {
 
 	/**
 	 * Aktualisiert die Anzeige des Pots
+	 * @author georg, sebastian
 	 */
 	public void updatePot() {
 		this.pot.setText(game.getPot() + " $");
@@ -226,6 +231,7 @@ public class Window extends JFrame {
 
 	/**
 	 * Aktualisiert die Anzeige der Tisch-Karten
+	 * @author georg, sebastian
 	 */
 	public void updateCommunityCards() {
 		for (int i = 0; i < 5; i++) {
@@ -239,6 +245,7 @@ public class Window extends JFrame {
 	/**
 	 * Aktualisiert die Anzeige der Spieler-Karten
 	 * 
+	 * @author georg, sebastian
 	 * @param id
 	 */
 	public void updatePlayerCards(int id) {
@@ -257,6 +264,7 @@ public class Window extends JFrame {
 
 	/**
 	 * Löscht den Dealer-Button und die Blind-Markierungen
+	 * @author georg, sebastian
 	 */
 	public void deleteDealer() {
 		marks[0].setBounds(0, 0, 0, 0);
@@ -265,8 +273,10 @@ public class Window extends JFrame {
 		repaint();
 
 	}
+
 	/*
 	 * Gibt den Gewinner in einem Textfeld aus
+	 * @author georg, sebastian
 	 */
 	public void doWinDialog(int player) {
 		final JTextField winner = new JTextField("Der Gewinner ist Spieler "

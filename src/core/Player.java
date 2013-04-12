@@ -21,6 +21,7 @@ public class Player {
 	/**
 	 * erzeugt neuen Spieler
 	 * 
+	 * @author Georg
 	 * @param credit
 	 */
 	Player(int credit) {
@@ -30,6 +31,7 @@ public class Player {
 	/**
 	 * Fragt den Spielzug des Spielers ab
 	 * 
+	 * @author Georg
 	 * @param window
 	 * @return
 	 */
@@ -57,6 +59,7 @@ public class Player {
 
 	/**
 	 * Spieler checkt
+	 * @author Georg
 	 */
 	public void check() {
 		return;
@@ -64,6 +67,7 @@ public class Player {
 
 	/**
 	 * Spieler verlässt die aktuelle Runde
+	 * @author Georg
 	 */
 	public void fold() {
 		this.setCards(null); // Karten werden gelöscht
@@ -74,6 +78,7 @@ public class Player {
 	/**
 	 * Spieler bezahlt den aktuellen Einsatz
 	 * 
+	 * @author georg
 	 * @return Gibt zurück ob möglich oder nicht
 	 */
 	public boolean call(int cue) {
@@ -89,6 +94,7 @@ public class Player {
 	/**
 	 * Spieler erhöht den aktuellen Einsatz
 	 * 
+	 * @author georg
 	 * @return Gibt zurück, ob die Aktion möglich ist oder nicht
 	 */
 	public boolean raise(int cue) {
@@ -102,6 +108,7 @@ public class Player {
 	}
 
 	/**
+	 * @author georg
 	 * @return aktueller Kontostand
 	 */
 	public int getCredit() {
@@ -111,6 +118,7 @@ public class Player {
 	/**
 	 * ändert den Kontostand
 	 * 
+	 * @author georg
 	 * @param value
 	 */
 	public void changeCredit(int value) {
@@ -119,6 +127,7 @@ public class Player {
 	}
 
 	/**
+	 * @author georg
 	 * @return Spieler-ID
 	 */
 	public int getId() {
@@ -126,6 +135,7 @@ public class Player {
 	}
 
 	/**
+	 * @author georg
 	 * @return Handkarten
 	 */
 	public Card[] getCards() {
@@ -133,14 +143,16 @@ public class Player {
 	}
 
 	/**
+	 * Handkarten
+	 * @author georg
 	 * @param Setzt
-	 *            Handkarten
 	 */
 	public void setCards(Card[] cards) {
 		this.cards = cards;
 	}
 
 	/**
+	 * @author georg
 	 * @return ob Spieler die Runde verlassen hat
 	 */
 	public boolean isFolded() {
@@ -150,6 +162,7 @@ public class Player {
 	/**
 	 * Sortiert die Karten nach Wert
 	 * 
+	 * @author Sebastian
 	 * @param r
 	 * @param tableCards
 	 * @return
@@ -188,6 +201,7 @@ public class Player {
 	 * Gibt Farbe zurück, die 5 Karten haben. Ansonsten wird -30000
 	 * zurückgegeben.
 	 * 
+	 * @author Sebastian
 	 * @param r
 	 * @param tableCards
 	 * @return
@@ -220,6 +234,7 @@ public class Player {
 	/**
 	 * Zählt Paare, Drillinge und Vierlinge
 	 * 
+	 * @author Sebastian
 	 * @param cardWorth
 	 * @return
 	 */
@@ -268,8 +283,9 @@ public class Player {
 	}
 
 	/**
-	 * TODO
+	 * prüft, ob ein Spieler fünf Karten in einer Wertreihenfolge (Straße) hat
 	 * 
+	 * @author Sebastian
 	 * @param r
 	 * @param cardWorth
 	 * @return
@@ -294,6 +310,7 @@ public class Player {
 	/**
 	 * Berechnet den Wert der Hand
 	 * 
+	 * @author Sebastian
 	 * @param cardWorth
 	 * @param fiveColor
 	 * @param followFive
@@ -312,11 +329,7 @@ public class Player {
 				if (sameWorth[0] == 4) { // Vierling
 					return 8;
 				} else {
-					if (sameWorth[0] == 3 && sameWorth[2] == 2) { // drilling+pair
-						// System.out
-						// .println(sameWorth[0] + " " + sameWorth[1]
-						// + " " + sameWorth[2] + " "
-						// + sameWorth[3] + " ");
+					if (sameWorth[0] == 3 && sameWorth[2] == 2) { // drilling+Paar
 						return 7;
 					} else {
 						if (fiveColor != -30000) { // 5 from one color
@@ -326,19 +339,9 @@ public class Player {
 								return 5;
 							} else {
 								if (sameWorth[0] == 3 || sameWorth[2] == 3) { // drilling
-									// System.out.println(sameWorth[0] + " "
-									// + sameWorth[1] + " " + sameWorth[2]
-									// + " " + sameWorth[3] + " ");
 									return 4;
 								} else {
-									if (sameWorth[0] == 2 && sameWorth[2] == 2) { // two
-																					// pairs
-																					// System.out.println(sameWorth[0]
-																					// +
-																					// " "
-										// + sameWorth[1] + " "
-										// + sameWorth[2] + " "
-										// + sameWorth[3] + " ");
+									if (sameWorth[0] == 2 && sameWorth[2] == 2) { // zwei Paare
 										return 3;
 									} else {
 										if (sameWorth[0] == 2

@@ -41,6 +41,7 @@ public class Game {
 	 * initialisiert ein neues Spiel - bringt Spieler neu ins Spiel - startet
 	 * die Main-Loop
 	 * 
+	 * @author georg
 	 * @throws InterruptedException
 	 */
 	Game() throws InterruptedException {
@@ -59,7 +60,6 @@ public class Game {
 
 			// durchläuft alle Spieler und prüft ihren Kontostand
 			for (int i = 0; i < 4; i++) {
-				System.out.println(this.activePlayers[i].getCredit() + " ");
 				if (activePlayers[i].getCredit() <= 0) {
 
 					this.activePlayers[i].fold();
@@ -88,6 +88,7 @@ public class Game {
 	/**
 	 * eine Spielrunde
 	 * 
+	 * @author Georg, Sebastian
 	 * @throws InterruptedException
 	 */
 	private void round() throws InterruptedException {
@@ -224,11 +225,6 @@ public class Game {
 					else {
 						movesWithoutRaise++;
 					}
-
-					// TODO: Vor der Abgabe entfernen
-					System.out.println(turnPlayer + ": " + choice
-							+ "; aktueller Einsatz" + cue + "; Pot: "
-							+ this.pot);
 				}
 				// Ermittelt Spieler, der als nächstes dran ist
 				if ((turnPlayer + 1) > 3)
@@ -243,24 +239,15 @@ public class Game {
 					window.updateCommunityCards();
 				}
 
-				// TODO: Vor der Abgabe entfernen
-				System.out.println("neue Karte");
-
 				// Decke 4 Karte auf
 			} else if (!this.tableCards[3].isVisible()) {
 				this.tableCards[3].discover();
 				window.updateCommunityCards();
 
-				// TODO: Vor der Abgabe entfernen
-				System.out.println("neue Karte");
-
 				// Decke 5. Karte auf
 			} else if (!this.tableCards[4].isVisible()) {
 				this.tableCards[4].discover();
 				window.updateCommunityCards();
-
-				// TODO: Vor der Abgabe entfernen
-				System.out.println("neue Karte");
 			} else {
 				endOfBetRound = true;
 			}
@@ -322,9 +309,6 @@ public class Game {
 
 				int[] z = getWinner(); // Gewinner wird ermittelt ...
 
-				System.out.println("Winner: " + z[0] + " "
-						+ activePlayers[z[0]].handWorth + " Es gibt " + z[1]
-						+ " Gewinner.");
 				disburseAsset(activePlayers[z[0]]); // ... und der Gewinn an
 													// diesen ausgeschüttet
 				window.updatePot();
@@ -346,6 +330,7 @@ public class Game {
 
 	/**
 	 * gibt Handkarten
+	 * @author georg
 	 */
 	private void preparePlayers() {
 
@@ -376,6 +361,7 @@ public class Game {
 
 	/**
 	 * verteilt die Rollen an die Spieler
+	 * @author georg
 	 */
 	private void assignRoles() {
 		// wählt Dealer aus
@@ -408,6 +394,7 @@ public class Game {
 	/**
 	 * ermittelt den Spieler, der zuerst dran ist
 	 * 
+	 * @author georg
 	 * @return
 	 */
 	private int getTurnPlayer() {
@@ -420,6 +407,7 @@ public class Game {
 
 	/**
 	 * erzeugt für jeden Spieler ein Objekt
+	 * @author georg
 	 */
 	private void generatePlayers() {
 		for (int i = 0; i < 4; i++) {
@@ -434,6 +422,7 @@ public class Game {
 
 	/**
 	 * Zieht den Blinds das Geld ab und schiebt es in den Pot
+	 * @author georg
 	 */
 	private void collectBlinds() {
 		this.activePlayers[this.bigBlind].raise(minimumBet);
@@ -445,6 +434,7 @@ public class Game {
 
 	/**
 	 * erzeugt die Spielkarten und schreibt sie in ein Array
+	 * @author georg
 	 */
 	private void generateCards() {
 		// durchläuft alle Farben
@@ -464,6 +454,7 @@ public class Game {
 	}
 
 	/**
+	 * @author georg
 	 * @return zufällige Karte
 	 */
 	public Card deal() {
@@ -484,6 +475,7 @@ public class Game {
 
 	/**
 	 * Zahlt den Gewinn aus
+	 * @author georg
 	 */
 	void disburseAsset(Player winner) {
 		winner.changeCredit(this.pot);
@@ -491,12 +483,12 @@ public class Game {
 	}
 
 	/**
+	 * @author Sebastian
 	 * @return Spieler, der die Runde gewonnen hat
 	 */
 	int[] getWinner() {
 		int[] winnerArray = new int[2];
 		int winnerAmount = 1;
-		int multipleWinners = -1;
 		int winners = 0;
 
 		for (int a = 1; a < 4; a++) {
@@ -522,78 +514,60 @@ public class Game {
 					case 8: // Vierling
 						if (activePlayers[a].pairWorth[1] > activePlayers[winners].pairWorth[1])
 							winners = a;
-						System.out.println("Gewinn durch"
-								+ activePlayers[a].pairWorth[1]);
 						if (activePlayers[a].pairWorth[1] == activePlayers[winners].pairWorth[1])
 							if (activePlayers[a].highCard > activePlayers[winners].highCard)
 								winners = a;
 							else {
 								winnerAmount++;
-								multipleWinners = 8;
 							}
 						break;
 
 					case 7: // FullHouse
 						if (activePlayers[a].pairWorth[1] > activePlayers[winners].pairWorth[1])
 							winners = a;
-						System.out.println("Gewinn durch"
-								+ activePlayers[a].pairWorth[1]);
 						if (activePlayers[a].pairWorth[1] == activePlayers[winners].pairWorth[1])
 							if (activePlayers[a].pairWorth[3] > activePlayers[winners].pairWorth[3])
 								winners = a;
 							else {
 								winnerAmount++;
-								multipleWinners = 7;
 							}
 						break;
 
 					case 4: // Drilling
 						if (activePlayers[a].pairWorth[1] > activePlayers[winners].pairWorth[1])
 							winners = a;
-						System.out.println("Gewinn durch"
-								+ activePlayers[a].pairWorth[1]);
 						if (activePlayers[a].pairWorth[1] == activePlayers[winners].pairWorth[1])
 							if (activePlayers[a].highCard > activePlayers[winners].highCard)
 								winners = a;
 							else {
 								winnerAmount++;
-								multipleWinners = 8;
 							}
 						break;
 
 					case 3: // Zwei Paare
 						if (activePlayers[a].pairWorth[3] > activePlayers[winners].pairWorth[3])
 							winners = a;
-						System.out.println("Gewinn durch"
-								+ activePlayers[a].pairWorth[1]);
 						if (activePlayers[a].pairWorth[3] == activePlayers[winners].pairWorth[3])
 							if (activePlayers[a].pairWorth[1] > activePlayers[winners].pairWorth[1])
 								winners = a;
 							else {
 								winnerAmount++;
-								multipleWinners = 3;
 							}
 						break;
 
 					case 2: // Paar
 						if (activePlayers[a].pairWorth[1] > activePlayers[winners].pairWorth[1])
 							winners = a;
-						System.out.println("Gewinn durch"
-								+ activePlayers[a].pairWorth[1]);
 						if (activePlayers[a].pairWorth[1] == activePlayers[winners].pairWorth[1])
 							if (activePlayers[a].highCard > activePlayers[winners].highCard)
 								winners = a;
 							else {
 								winnerAmount++;
-								multipleWinners = 8;
 							}
 						break;
 					}
 				}
 			}
-		}
-		if (activePlayers[winners].handWorth == multipleWinners) {
-			System.out.println("Es gibt " + winnerAmount + " Gewinner");
 		}
 		winnerArray[0] = winners;
 		winnerArray[1] = winnerAmount;
@@ -601,6 +575,7 @@ public class Game {
 	}
 
 	/**
+	 * @author Georg
 	 * @return Pot-Betrag
 	 */
 	public int getPot() {
@@ -610,6 +585,7 @@ public class Game {
 	/**
 	 * erhöht den Pot
 	 * 
+	 * @author Georg
 	 * @param Pot
 	 */
 	public void raisePot(int pot) {
@@ -618,6 +594,7 @@ public class Game {
 	}
 
 	/**
+	 * @author Georg
 	 * @return Spieler, der Dealer ist
 	 */
 	public int getDealer() {

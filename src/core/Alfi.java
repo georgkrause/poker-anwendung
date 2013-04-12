@@ -2,8 +2,13 @@ package core;
 
 import java.util.Random;
 
+/**
+ * 
+ * @author sebastian
+ *
+ */
 public class Alfi extends Player {
-	//Wir haben uns dazu entschlossen, die PC-Spieler Alfi zu nennen
+	// Wir haben uns dazu entschlossen, die PC-Spieler Alfi zu nennen
 	float outs = 0;
 
 	/**
@@ -18,6 +23,7 @@ public class Alfi extends Player {
 	/**
 	 * entscheidet, welchen Zug die KI ausführt
 	 * 
+	 * @author sebastian
 	 * @param tableCards
 	 * @param pot
 	 * @param cue
@@ -44,8 +50,10 @@ public class Alfi extends Player {
 		return choice;
 	}
 
-	/** 
+	/**
 	 * KI für die erste Wettrunde (0 Community Cards sichtbar)
+	 * 
+	 * @author sebastian
 	 * @param money
 	 * @return
 	 */
@@ -72,6 +80,8 @@ public class Alfi extends Player {
 
 	/**
 	 * KI für die zweite Wettrunde (3 Community Cards sichtbar)
+	 * 
+	 * @author sebastian
 	 * @param money
 	 * @param tableCards
 	 * @param round
@@ -108,9 +118,7 @@ public class Alfi extends Player {
 			}
 		} else {
 			calculateOuts(5, fiveColor, tableCards);
-			System.out.println("Outs: " + outs + " ");
-			System.out.println("PotOdds: " + ((cue - this.debt) * 100 / pot)
-					+ " " + cue + " " + this.debt);
+
 			if (outs >= ((cue - this.debt) * 100 / pot)) {
 				int random = r.nextInt(10);
 				if (random > 9)
@@ -142,6 +150,8 @@ public class Alfi extends Player {
 
 	/**
 	 * KI für die dritte Wettrunde (4 Community Cards sichtbar)
+	 * 
+	 * @author sebastian
 	 * @param money
 	 * @param tableCards
 	 * @param playerCards
@@ -178,9 +188,7 @@ public class Alfi extends Player {
 			}
 		} else {
 			calculateOuts(5, fiveColor, tableCards);
-			System.out.println("Outs: " + outs + " ");
-			System.out.println("PotOdds: " + ((cue - this.debt) * 100 / pot)
-					+ " " + cue + " " + this.debt);
+
 			if (outs >= ((cue - this.debt) * 100 / pot)) {
 				int random = r.nextInt(10);
 				if (random > 9)
@@ -205,6 +213,8 @@ public class Alfi extends Player {
 
 	/**
 	 * KI für die letzte Wettrunde (5 Community Cards sichtbar)
+	 * 
+	 * @author sebastian
 	 * @param money
 	 * @param tableCards
 	 * @param playerCards
@@ -247,6 +257,8 @@ public class Alfi extends Player {
 
 	/**
 	 * Berechnet die Outs des jeweiligen PC-Spielers
+	 * 
+	 * @author sebastian
 	 * @param round
 	 * @param fiveColor
 	 * @param tableCards
@@ -266,6 +278,8 @@ public class Alfi extends Player {
 
 	/**
 	 * Prüft, ob ein Spieler Paare/Drillinge hat und wie viel Outs er somit hat
+	 * 
+	 * @author sebastian
 	 * @param round
 	 * @param cardWorth
 	 * @return
@@ -318,7 +332,10 @@ public class Alfi extends Player {
 	}
 
 	/**
-	 * Überprüft, ob ein Spieler beinahe 5 Karten in einer Reihe (Straße) hat und gibt entsprechend die Outs zurück
+	 * Überprüft, ob ein Spieler beinahe 5 Karten in einer Reihe (Straße) hat
+	 * und gibt entsprechend die Outs zurück
+	 * 
+	 * @author sebastian
 	 * @param cardWorth
 	 * @param round
 	 * @return
@@ -344,7 +361,10 @@ public class Alfi extends Player {
 	}
 
 	/**
-	 * Prüft, ob ein Spieler beinahe 5 Karten einer Farbe (Flush) hat und gibt entsprechend die Outs zurück
+	 * Prüft, ob ein Spieler beinahe 5 Karten einer Farbe (Flush) hat und gibt
+	 * entsprechend die Outs zurück
+	 * 
+	 * @author sebastian
 	 * @param round
 	 * @param tableCards
 	 * @return
